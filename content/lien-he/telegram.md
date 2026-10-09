@@ -2,10 +2,10 @@
 title: "✈️ Telegram"
 description: "Kết nối qua Telegram"
 icon: "✈️"
-weight: 3
-link: "https://t.me/vanhiotc"
+weight: 4
+link: "https://t.me/VanThuongHi"
 ---
 
-✈️ **Telegram:** [@vanhiotc](https://t.me/vanhiotc)
+✈️ **Telegram:** [@VanThuongHi](https://t.me/VanThuongHi)
 
 Kênh cập nhật nhanh nhất.
