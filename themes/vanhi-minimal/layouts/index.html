@@ -1,0 +1,109 @@
+{{ define "main" }}
+<section class="hero">
+  <h1>Xin chào, tôi là <span style="color:var(--accent)">Văn Hỉ</span></h1>
+  <p class="lead">
+    Tôi giúp chủ doanh nghiệp nhỏ và SME tại Việt Nam xây dựng đội ngũ AI Agent
+    để tự động hoá công việc, tăng năng suất mà không cần biết code.
+  </p>
+  <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+    <a href="#dang-ky" class="cta">🎯 Nhận tài liệu miễn phí</a>
+    <a href="{{ "youtube" | relURL }}" class="cta-ghost">🎬 Xem trên YouTube</a>
+  </div>
+  <div class="stats">
+    <div class="stat-card">
+      <span class="num">20+</span>
+      <span class="label">Video hướng dẫn</span>
+    </div>
+    <div class="stat-card">
+      <span class="num">1</span>
+      <span class="label">Khóa học AI Agent</span>
+    </div>
+    <div class="stat-card">
+      <span class="num">10</span>
+      <span class="label">Profile AI trong đội</span>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <h2 class="section-title">🧠 Giải pháp của tôi</h2>
+  <p class="section-sub">Những công cụ và hệ thống tôi đang xây dựng để giúp bạn làm việc thông minh hơn</p>
+  <div class="grid-3">
+    <div class="card">
+      <div class="emoji">🤖</div>
+      <h3>Hermes AI Agent</h3>
+      <p>Xây dựng đội ngũ AI nhân sự toàn năng — tự động hóa marketing, sales, content ngay trên máy tính của bạn.</p>
+      <a href="https://ai.vanhi.id.vn" class="link">Tìm hiểu →</a>
+    </div>
+    <div class="card">
+      <div class="emoji">⚡</div>
+      <h3>AI Automation Blog</h3>
+      <p>Hệ thống tự động viết & đăng blog hàng ngày bằng AI Agent — giúp bạn có content đều đặn mà không tốn công.</p>
+      <a href="{{ "blog" | relURL }}" class="link">Xem blog →</a>
+    </div>
+    <div class="card">
+      <div class="emoji">📧</div>
+      <h3>Email Marketing tự động</h3>
+      <p>Kết hợp Hermes Agent với WordPress + FluentCRM Pro để chạy email automation bán hàng tự động.</p>
+      <a href="{{ "cong-cu-ai" | relURL }}" class="link">Khám phá →</a>
+    </div>
+  </div>
+</section>
+
+<section class="section" style="text-align:center">
+  <h2 class="section-title">🎬 YouTube — Học miễn phí mỗi ngày</h2>
+  <p class="section-sub">Kênh Văn Hỉ Official chia sẻ kiến thức về AI Agent, tự động hóa và năng suất làm việc</p>
+  <div class="yt-grid" style="text-align:left">
+    <div class="yt-card">
+      <img class="thumb" src="https://img.youtube.com/vi/tR_30HgF-_k/hqdefault.jpg" alt="Hermes Agent là gì?" loading="lazy" />
+      <div class="info">
+        <h3>Hermes Agent Là Gì? AI Agent Miễn Phí Chạy Ngay Trên Máy Tính</h3>
+        <div class="meta">8.2K lượt xem</div>
+      </div>
+    </div>
+    <div class="yt-card">
+      <img class="thumb" src="https://img.youtube.com/vi/xo9wOjnywjw/hqdefault.jpg" alt="ChatGPT vs Hermes" loading="lazy" />
+      <div class="info">
+        <h3>ChatGPT vs Hermes: AI Agent Khác Chatbot Thế Nào?</h3>
+        <div class="meta">4.5K lượt xem</div>
+      </div>
+    </div>
+  </div>
+  <div style="margin-top:20px">
+    <a href="https://www.youtube.com/@vanhi2024" target="_blank" class="cta-ghost">📺 Xem tất cả video</a>
+  </div>
+</section>
+
+<section class="section" id="dang-ky">
+  <div class="card cta-card">
+    <h3>📩 Nhận tài liệu AI Agent miễn phí</h3>
+    <p>Để lại email — tôi sẽ gửi bạn hướng dẫn xây dựng đội AI Agent đầu tiên</p>
+    {{ partial "email-form.html" . }}
+  </div>
+</section>
+
+<section class="section">
+  <h2 class="section-title">🎁 Quà tặng miễn phí</h2>
+  <p class="section-sub">Tài nguyên tôi đã chuẩn bị sẵn cho bạn</p>
+  <div class="grid-3">
+    <div class="gift-card">
+      <div class="icon">📄</div>
+      <h3>Checklist AI Agent</h3>
+      <p>Danh sách 10 bước để xây dựng đội AI Agent đầu tiên</p>
+      <a href="{{ "qua-tang" | relURL }}" class="dl-btn">Tải về</a>
+    </div>
+    <div class="gift-card">
+      <div class="icon">📋</div>
+      <h3>Template Workflow</h3>
+      <p>Các mẫu quy trình làm việc với Hermes Agent sẵn có</p>
+      <a href="{{ "qua-tang" | relURL }}" class="dl-btn">Tải về</a>
+    </div>
+    <div class="gift-card">
+      <div class="icon">🎓</div>
+      <h3>Khóa học 239K</h3>
+      <p>Nhân Sự Toàn Năng Hermes — mở bán sớm giá đặc biệt</p>
+      <a href="https://speedreading.vn/ahermes" target="_blank" class="dl-btn">Đăng ký →</a>
+    </div>
+  </div>
+</section>
+{{ end }}

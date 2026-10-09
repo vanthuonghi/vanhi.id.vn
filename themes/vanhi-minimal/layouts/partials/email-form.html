@@ -1,0 +1,35 @@
+<form class="lead-form" id="leadForm" action="https://crm.speedreading.vn/wp-json/vanhi/v1/subscribe" method="POST">
+  <input type="hidden" name="source" value="vanhi.id.vn" />
+  <input type="email" name="email" placeholder="Nhập email của bạn..." required />
+  <button type="submit">Đăng ký</button>
+</form>
+<p class="lead-note">📩 Không spam. Hủy bất cứ lúc nào.</p>
+
+<script>
+document.getElementById('leadForm')?.addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const btn = this.querySelector('button');
+  const email = this.querySelector('input[name="email"]');
+  const originalText = btn.textContent;
+  btn.textContent = 'Đang gửi...';
+  btn.disabled = true;
+
+  try {
+    const resp = await fetch(this.action, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: email.value, source: this.querySelector('input[name="source"]').value })
+    });
+    if (resp.ok) {
+      btn.textContent = '✅ Đã đăng ký!';
+      email.value = '';
+    } else {
+      btn.textContent = '❌ Lỗi, thử lại';
+      setTimeout(() => { btn.textContent = originalText; btn.disabled = false; }, 2000);
+    }
+  } catch(e) {
+    btn.textContent = '❌ Lỗi kết nối';
+    setTimeout(() => { btn.textContent = originalText; btn.disabled = false; }, 2000);
+  }
+});
+</script>

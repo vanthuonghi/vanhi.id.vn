@@ -1,0 +1,14 @@
+<header class="site-header">
+  <div class="header-inner">
+    <a href="{{ "" | relURL }}" class="logo">Văn <span>Hỉ</span></a>
+    <nav class="nav">
+      <a href="{{ "" | relURL }}" {{ if .IsHome }}class="active"{{ end }}>🏠 Trang chủ</a>
+      <a href="{{ "giai-phap" | relURL }}" {{ if eq .Section "giai-phap" }}class="active"{{ end }}>🧠 Giải pháp</a>
+      <a href="{{ "blog" | relURL }}" {{ if eq .Section "blog" }}class="active"{{ end }}>📝 Blog</a>
+      <a href="{{ "youtube" | relURL }}" {{ if eq .Section "youtube" }}class="active"{{ end }}>🎬 YouTube</a>
+      <a href="{{ "qua-tang" | relURL }}" {{ if eq .Section "qua-tang" }}class="active"{{ end }}>🎁 Quà tặng</a>
+      <a href="{{ "cong-cu-ai" | relURL }}" {{ if eq .Section "cong-cu-ai" }}class="active"{{ end }}>🔧 Công Cụ AI</a>
+      <a href="{{ "lien-he" | relURL }}" {{ if eq .Section "lien-he" }}class="active"{{ end }}>📞 Liên hệ</a>
+    </nav>
+  </div>
+</header>

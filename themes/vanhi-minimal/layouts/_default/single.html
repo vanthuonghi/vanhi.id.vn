@@ -1,0 +1,16 @@
+{{ define "main" }}
+<article class="post-content">
+  <h1>{{ .Title }}</h1>
+  {{ with .Date }}<p class="post-meta">{{ .Format "02/01/2006" }}</p>{{ end }}
+  <div class="post-body">
+    {{ .Content }}
+  </div>
+  {{ if in .Site.Params.mainSections .Section }}
+    <div class="cta-box">
+      <h3>📩 Muốn biết thêm?</h3>
+      <p>Đăng ký email để nhận hướng dẫn AI Agent mới nhất từ Văn Hỉ</p>
+      {{ partial "email-form.html" . }}
+    </div>
+  {{ end }}
+</article>
+{{ end }}

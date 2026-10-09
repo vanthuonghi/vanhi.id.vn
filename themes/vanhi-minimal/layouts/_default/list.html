@@ -1,0 +1,50 @@
+{{ define "main" }}
+<h1 class="section-title">{{ .Title }}</h1>
+{{ with .Content }}<div class="section-sub" style="margin-bottom:24px">{{ . }}</div>{{ end }}
+
+{{ if eq .Section "blog" }}
+  <ul class="post-list">
+  {{ range .Pages.ByDate.Reverse }}
+    <li>
+      <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+      <span class="date">{{ .Date.Format "02/01/2006" }}</span>
+    </li>
+  {{ end }}
+  </ul>
+{{ else if eq .Section "youtube" }}
+  <div class="yt-grid">
+  {{ range .Pages.ByDate.Reverse }}
+    <div class="yt-card">
+      {{ with .Params.thumbnail }}
+        <img class="thumb" src="{{ . }}" alt="{{ $.Title }}" loading="lazy" />
+      {{ else }}
+        <div class="thumb" style="background:var(--border);display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:13px">🎬</div>
+      {{ end }}
+      <div class="info">
+        <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
+        <div class="meta">{{ with .Params.views }}{{ . }} lượt xem • {{ end }}{{ .Date.Format "02/01/2006" }}</div>
+      </div>
+    </div>
+  {{ end }}
+  </div>
+{{ else if eq .Section "cong-cu-ai" }}
+  <div class="grid-3">
+  {{ range .Pages.ByWeight }}
+    <div class="card">
+      <div class="emoji">{{ with .Params.icon }}{{ . }}{{ else }}🔧{{ end }}</div>
+      <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
+      <p>{{ .Description }}</p>
+    </div>
+  {{ end }}
+  </div>
+{{ else }}
+  <div class="grid-2">
+  {{ range .Pages.ByWeight }}
+    <div class="card">
+      <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
+      <p>{{ .Description }}</p>
+    </div>
+  {{ end }}
+  </div>
+{{ end }}
+{{ end }}

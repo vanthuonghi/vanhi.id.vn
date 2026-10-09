@@ -1,0 +1,53 @@
+baseURL = "https://vanhi.id.vn/"
+languageCode = "vi-vn"
+title = "Văn Hỉ — AI Agent, Tự động hóa & Năng suất cho SME Việt Nam"
+theme = "vanhi-minimal"
+buildFuture = true
+enableRobotsTXT = true
+
+[params]
+  description = "Văn Hỉ chia sẻ kiến thức về AI Agent, tự động hóa công việc, Hermes Agent và công cụ năng suất cho chủ doanh nghiệp nhỏ tại Việt Nam."
+  author = "Văn Hỉ"
+  ogImage = "https://vanhi.id.vn/og-image.webp"
+  favicon = "favicon.svg"
+  mainSections = ["blog", "youtube"]
+
+[menu]
+  [[menu.main]]
+    name = "Trang chủ"
+    url = "/"
+    weight = 1
+  [[menu.main]]
+    name = "Giải pháp"
+    url = "/giai-phap/"
+    weight = 2
+  [[menu.main]]
+    name = "Blog"
+    url = "/blog/"
+    weight = 3
+  [[menu.main]]
+    name = "YouTube"
+    url = "/youtube/"
+    weight = 4
+  [[menu.main]]
+    name = "Quà tặng"
+    url = "/qua-tang/"
+    weight = 5
+  [[menu.main]]
+    name = "Công Cụ AI"
+    url = "/cong-cu-ai/"
+    weight = 6
+  [[menu.main]]
+    name = "Liên hệ"
+    url = "/lien-he/"
+    weight = 7
+
+[pagination]
+  pagerSize = 10
+
+[markup.goldmark.renderer]
+  unsafe = true
+
+[services]
+  [services.googleAnalytics]
+    # ID = "G-XXXXXXX"

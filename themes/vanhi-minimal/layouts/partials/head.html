@@ -1,0 +1,20 @@
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title }} – {{ .Site.Title }}{{ end }}</title>
+<meta name="description" content="{{ with .Description }}{{ . }}{{ else }}{{ .Site.Params.description }}{{ end }}" />
+{{ with .Site.Params.author }}<meta name="author" content="{{ . }}" />{{ end }}
+{{ $css := "css/style.css" | relURL }}
+<link rel="stylesheet" href="{{ $css }}" />
+<link rel="icon" href="{{ "favicon.svg" | relURL }}" type="image/svg+xml" />
+{{ if .IsHome }}
+  <meta property="og:title" content="{{ .Site.Title }}" />
+  <meta property="og:description" content="{{ .Site.Params.description }}" />
+  <meta property="og:image" content="{{ .Site.Params.ogImage }}" />
+  <meta property="og:url" content="{{ .Site.BaseURL }}" />
+  <meta property="og:type" content="website" />
+{{ else }}
+  <meta property="og:title" content="{{ .Title }}" />
+  <meta property="og:description" content="{{ .Description }}" />
+  <meta property="og:url" content="{{ .Permalink }}" />
+  <meta property="og:type" content="article" />
+{{ end }}
