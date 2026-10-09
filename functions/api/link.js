@@ -58,8 +58,14 @@ export async function onRequest(context) {
       });
     }
     try {
-      await env.URL_SHORTENER.put(slug, turl);
-      var data = await env.URL_SHORTENER.get('_links_list');
+      var kv = env.URL_SHORTENER;
+      if (!kv) {
+        return new Response(JSON.stringify({ error: 'kv binding missing', check: typeof env, keys: Object.keys(env).join(',') }), {
+          status: 500, headers: cors
+        });
+      }
+      await kv.put(slug, turl);
+      var data = await kv.get('_links_list');
       var links = data ? JSON.parse(data) : {};
       var now = new Date().toISOString();
       if (links[slug]) {
