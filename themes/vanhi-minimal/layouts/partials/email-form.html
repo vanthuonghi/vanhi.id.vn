@@ -1,6 +1,7 @@
-<form class="lead-form" id="leadForm" action="https://crm.speedreading.vn/wp-json/vanhi/v1/subscribe" method="POST">
+<form class="lead-form" id="leadForm" action="https://crm.speedreading.vn/?fluentcrm=1&route=contact&hash=8542ba92-3bca-46fb-baee-1371d1899a36" method="POST">
   <input type="hidden" name="source" value="vanhi.id.vn" />
   <input type="email" name="email" placeholder="Nhập email của bạn..." required />
+  <input type="hidden" name="first_name" value="" />
   <button type="submit">Đăng ký</button>
 </form>
 <p class="lead-note">📩 Không spam. Hủy bất cứ lúc nào.</p>
@@ -18,9 +19,15 @@ document.getElementById('leadForm')?.addEventListener('submit', async function(e
     const resp = await fetch(this.action, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email: email.value, source: this.querySelector('input[name="source"]').value })
+      body: JSON.stringify({
+        email: email.value,
+        source: 'vanhi.id.vn',
+        first_name: '',
+        status: 'subscribed'
+      })
     });
-    if (resp.ok) {
+    const data = await resp.json();
+    if (data.success) {
       btn.textContent = '✅ Đã đăng ký!';
       email.value = '';
     } else {
