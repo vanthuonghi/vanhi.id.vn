@@ -1,30 +1,15 @@
 // API handler for URL shortener CRUD operations
 // POST /api/link — create or update a short URL
-// GET /api/link?password=... — list all short URLs
+// GET /api/link — list all short URLs (requires Bearer token = SHA-256 hash)
 // DELETE /api/link — delete a short URL
 
 const PASSWORD_HASH_KEY = '_password_hash';
 const LINKS_LIST_KEY = '_links_list';
+const DEFAULT_HASH = 'c2073d0f21ad8f56aa780dca6708396ef2c84546d4ad56e55c0eae8db8cb25a8';
 
-// Simple SHA-256 hash for password comparison
-async function hashPassword(password) {
-  const encoder = new TextEncoder();
-  const data = encoder.encode(password);
-  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-  const hashArray = Array.from(new Uint8Array(hashBuffer));
-  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-}
-
-async function verifyPassword(env, password) {
-  const storedHash = await env.URL_SHORTENER.get(PASSWORD_HASH_KEY);
-  if (!storedHash) {
-    // First run: set the password hash
-    const hash = await hashPassword(password);
-    await env.URL_SHORTENER.put(PASSWORD_HASH_KEY, hash);
-    return true;
-  }
-  const hash = await hashPassword(password);
-  return hash === storedHash;
+async function verifyHash(env, hash) {
+  const storedHash = await env.URL_SHORTENER.get(PASSWORD_HASH_KEY).catch(() => DEFAULT_HASH);
+  return hash === (storedHash || DEFAULT_HASH);
 }
 
 export async function onRequest(context) {
@@ -43,20 +28,19 @@ export async function onRequest(context) {
     return new Response(null, { headers: corsHeaders });
   }
 
-  // Get password from Authorization header or query param
+  // Get hash from Authorization header (Bearer token = SHA-256 hash)
   const authHeader = request.headers.get('Authorization') || '';
-  const queryPassword = url.searchParams.get('password') || '';
-  const password = authHeader.replace(/^Bearer\s+/i, '') || queryPassword;
+  const hash = authHeader.replace(/^Bearer\s+/i, '');
 
-  if (!password) {
-    return new Response(JSON.stringify({ error: 'Password required' }), {
+  if (!hash) {
+    return new Response(JSON.stringify({ error: 'Authorization required' }), {
       status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' }
     });
   }
 
-  const authenticated = await verifyPassword(env, password);
+  const authenticated = await verifyHash(env, hash);
   if (!authenticated) {
-    return new Response(JSON.stringify({ error: 'Invalid password' }), {
+    return new Response(JSON.stringify({ error: 'Invalid token' }), {
       status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' }
     });
   }

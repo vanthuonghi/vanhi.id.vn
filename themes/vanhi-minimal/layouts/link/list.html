@@ -54,7 +54,14 @@
 
 <script>
 const API = '/api/link';
+// SHA-256 pre-computed hash of 'Demoncrazy1!'
+const EXPECTED_HASH = 'c2073d0f21ad8f56aa780dca6708396ef2c84546d4ad56e55c0eae8db8cb25a8';
 let token = '';
+
+async function sha256(str) {
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+}
 
 async function unlock() {
   const input = document.getElementById('password-input');
@@ -62,12 +69,18 @@ async function unlock() {
   const pw = input.value.trim();
   if (!pw) { err.textContent = 'Nhập password'; err.style.display = 'block'; return; }
 
-  // Verify against server
+  // Hash client-side, send hash only to server
+  const pwHash = await sha256(pw);
+  if (pwHash !== EXPECTED_HASH) {
+    err.textContent = '❌ Sai password'; err.style.display = 'block'; return;
+  }
+
+  // Verify against server too
   try {
-    const resp = await fetch(API + '/verify?password=' + encodeURIComponent(pw));
+    const resp = await fetch(API + '/verify?hash=' + encodeURIComponent(pwHash));
     const data = await resp.json();
     if (data.valid) {
-      token = pw;
+      token = pwHash; // store hash as token
       document.getElementById('login-screen').style.display = 'none';
       document.getElementById('dashboard').style.display = 'block';
       err.style.display = 'none';
