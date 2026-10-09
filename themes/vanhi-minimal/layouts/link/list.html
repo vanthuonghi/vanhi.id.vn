@@ -1,0 +1,159 @@
+{{ define "main" }}
+<div id="link-app">
+  <!-- Password gate -->
+  <div id="login-screen" style="display:block;text-align:center;padding:60px 0">
+    <h1 class="section-title">🔗 URL Shortener</h1>
+    <p style="color:var(--muted);margin-bottom:20px">Nhập password để quản lý short URL</p>
+    <div style="max-width:320px;margin:0 auto">
+      <input type="password" id="password-input" placeholder="Password..."
+        style="width:100%;padding:12px 14px;border-radius:8px;border:1px solid var(--border);background:#0b0d11;color:var(--fg);font-size:15px;margin-bottom:12px" />
+      <button onclick="unlock()" class="cta" style="width:100%">Mở khóa</button>
+      <p id="login-error" style="color:#ff6b6b;font-size:14px;margin-top:8px;display:none"></p>
+    </div>
+  </div>
+
+  <!-- Dashboard (hidden until unlocked) -->
+  <div id="dashboard" style="display:none">
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:24px">
+      <h1 class="section-title" style="margin:0">🔗 URL Shortener</h1>
+      <button onclick="lock()" class="cta-ghost" style="font-size:13px;padding:6px 14px">🔒 Khóa</button>
+    </div>
+    <p style="color:var(--muted);margin-bottom:20px">
+      Tạo short URL dạng <code style="color:var(--accent)">vanhi.id.vn/slug</code> cho bất kỳ link nào.
+    </p>
+
+    <!-- Add form -->
+    <div class="card" style="margin-bottom:24px;padding:20px">
+      <h3 style="margin-bottom:12px;font-size:17px">➕ Thêm short URL mới</h3>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+        <span style="color:var(--muted)">vanhi.id.vn/</span>
+        <input type="text" id="slug-input" placeholder="hosting"
+          style="flex:1;min-width:100px;padding:10px 12px;border-radius:6px;border:1px solid var(--border);background:#0b0d11;color:var(--fg);font-size:14px" />
+        <span style="color:var(--muted)">→</span>
+        <input type="url" id="url-input" placeholder="https://affiliate.com/ref=abc"
+          style="flex:2;min-width:200px;padding:10px 12px;border-radius:6px;border:1px solid var(--border);background:#0b0d11;color:var(--fg);font-size:14px" />
+        <button onclick="addLink()" class="cta" style="padding:10px 18px">Tạo</button>
+      </div>
+    </div>
+
+    <!-- Link list -->
+    <div id="links-container">
+      <div style="text-align:center;padding:40px;color:var(--muted)">Đang tải...</div>
+    </div>
+
+    <!-- Quick guide -->
+    <div class="card" style="margin-top:24px;background:var(--gradient);border-color:var(--accent)">
+      <h3 style="font-size:16px;margin-bottom:6px">💡 Cách dùng</h3>
+      <p style="color:var(--muted);font-size:14px">
+        Tạo short URL → dùng link <code style="color:var(--accent)">vanhi.id.vn/slug</code> ở bất cứ đâu.<br />
+        Ví dụ: affiliate hosting → <strong>vanhi.id.vn/hosting</strong> → tự động redirect.
+      </p>
+    </div>
+  </div>
+</div>
+
+<script>
+const API = '/api/link';
+let token = '';
+
+async function unlock() {
+  const input = document.getElementById('password-input');
+  const err = document.getElementById('login-error');
+  const pw = input.value.trim();
+  if (!pw) { err.textContent = 'Nhập password'; err.style.display = 'block'; return; }
+
+  // Verify against server
+  try {
+    const resp = await fetch(API + '/verify?password=' + encodeURIComponent(pw));
+    const data = await resp.json();
+    if (data.valid) {
+      token = pw;
+      document.getElementById('login-screen').style.display = 'none';
+      document.getElementById('dashboard').style.display = 'block';
+      err.style.display = 'none';
+      loadLinks();
+    } else {
+      err.textContent = '❌ Sai password'; err.style.display = 'block';
+    }
+  } catch(e) {
+    err.textContent = '❌ Lỗi kết nối: ' + e.message; err.style.display = 'block';
+  }
+}
+
+function lock() {
+  token = '';
+  document.getElementById('dashboard').style.display = 'none';
+  document.getElementById('login-screen').style.display = 'block';
+  document.getElementById('password-input').value = '';
+}
+
+async function apiCall(method, body = null) {
+  const opts = { method, headers: { 'Authorization': `Bearer ${token}` } };
+  if (body) { opts.headers['Content-Type'] = 'application/json'; opts.body = JSON.stringify(body); }
+  const resp = await fetch(API, opts);
+  return await resp.json();
+}
+
+async function loadLinks() {
+  const container = document.getElementById('links-container');
+  try {
+    const data = await apiCall('GET');
+    if (!data.success) { container.innerHTML = `<p style="color:var(--muted);text-align:center">Lỗi: ${data.error}</p>`; return; }
+    const links = data.links || {};
+    const entries = Object.entries(links);
+    if (entries.length === 0) {
+      container.innerHTML = '<p style="text-align:center;padding:30px;color:var(--muted)">Chưa có short URL nào. Tạo cái đầu tiên bên trên ☝️</p>';
+      return;
+    }
+    let html = '<h3 style="margin-bottom:12px;font-size:17px">📋 Danh sách short URL</h3>';
+    entries.reverse().forEach(([slug, info]) => {
+      const shortUrl = `https://vanhi.id.vn/${slug}`;
+      html += `<div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 16px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
+        <div style="flex:1;min-width:150px">
+          <a href="${shortUrl}" target="_blank" style="font-weight:600;font-size:15px">/${slug}</a>
+          <div style="font-size:13px;color:var(--muted);word-break:break-all;margin-top:2px">→ ${info.url}</div>
+        </div>
+        <div style="display:flex;gap:6px;flex-shrink:0">
+          <button onclick="navigator.clipboard.writeText('${shortUrl}').then(()=>this.textContent='✅ Copied!').catch(()=>{});setTimeout(()=>this.innerHTML='📋 Copy',2000)" style="background:transparent;color:var(--accent);border:1px solid var(--accent);padding:5px 12px;border-radius:6px;cursor:pointer;font-size:13px">📋 Copy</button>
+          <button onclick="deleteLink('${slug}')" style="background:transparent;color:#ff6b6b;border:1px solid #ff6b6b;padding:5px 12px;border-radius:6px;cursor:pointer;font-size:13px">🗑️</button>
+        </div>
+      </div>`;
+    });
+    container.innerHTML = html;
+  } catch(e) {
+    container.innerHTML = `<p style="color:#ff6b6b;text-align:center">Lỗi kết nối: ${e.message}</p>`;
+  }
+}
+
+async function addLink() {
+  const slug = document.getElementById('slug-input').value.trim();
+  const url = document.getElementById('url-input').value.trim();
+  if (!slug || !url) { alert('Nhập đủ slug và URL'); return; }
+  const btn = document.querySelector('#link-app .cta');
+  btn.textContent = 'Đang tạo...'; btn.disabled = true;
+  try {
+    const data = await apiCall('POST', { slug, url });
+    if (data.success) {
+      document.getElementById('slug-input').value = '';
+      document.getElementById('url-input').value = '';
+      loadLinks();
+    } else {
+      alert('Lỗi: ' + (data.error || 'Không rõ'));
+    }
+  } catch(e) {
+    alert('Lỗi: ' + e.message);
+  }
+  btn.textContent = 'Tạo'; btn.disabled = false;
+}
+
+async function deleteLink(slug) {
+  if (!confirm(`Xóa /${slug}?`)) return;
+  try {
+    const data = await apiCall('DELETE', { slug });
+    if (data.success) loadLinks();
+  } catch(e) {
+    alert('Lỗi: ' + e.message);
+  }
+}
+</script>
+{{ end }}
