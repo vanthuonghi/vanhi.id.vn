@@ -5,10 +5,15 @@ theme = "vanhi-minimal"
 buildFuture = true
 enableRobotsTXT = true
 
+[outputs]
+  [outputs.RSS]
+    enabled = true
+    limit = 20
+
 [params]
   description = "Văn Hỉ chia sẻ kiến thức về AI Agent, tự động hóa công việc, Hermes Agent và công cụ năng suất cho chủ doanh nghiệp nhỏ tại Việt Nam."
   author = "Văn Hỉ"
-  ogImage = "https://vanhi.id.vn/og-image.webp"
+  ogImage = "https://vanhi.id.vn/og-image.svg"
   favicon = "favicon.svg"
   mainSections = ["blog", "youtube"]
 

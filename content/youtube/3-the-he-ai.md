@@ -5,6 +5,8 @@ thumbnail: "https://img.youtube.com/vi/6yS9bllc0c4/hqdefault.jpg"
 views: "3.1K"
 date: 2026-04-01
 video_id: "6yS9bllc0c4"
+layout: "redirect"
+redirect_url: "https://youtu.be/6yS9bllc0c4"
 ---
 
 📺 **Xem video:** [https://youtu.be/6yS9bllc0c4](https://youtu.be/6yS9bllc0c4)

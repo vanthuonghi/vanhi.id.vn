@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Redirecting... – {{ .Site.Title }}</title>
+  {{ with .Params.redirect_url }}
+  <meta http-equiv="refresh" content="0; url={{ . }}" />
+  <script>window.location.href = "{{ . }}";</script>
+  <a href="{{ . }}">Click here if not redirected</a>
+  {{ end }}
+</head>
+<body>
+  <p>Redirecting...</p>
+</body>
+</html>

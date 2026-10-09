@@ -5,6 +5,8 @@ thumbnail: "https://img.youtube.com/vi/tR_30HgF-_k/hqdefault.jpg"
 views: "8.2K"
 date: 2026-03-15
 video_id: "tR_30HgF-_k"
+layout: "redirect"
+redirect_url: "https://youtu.be/tR_30HgF-_k"
 ---
 
 Hermes Agent là một AI Agent mã nguồn mở của Nous Research, có thể chạy trên máy tính Windows, macOS hoặc Linux.  
