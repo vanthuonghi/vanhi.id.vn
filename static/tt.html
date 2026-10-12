@@ -40,10 +40,34 @@
         <span>Hermes Hub</span>
       </a>
 
+      <!-- MENU NAVIGATION (DESKTOP) -->
       <nav class="hidden md:flex items-center gap-6 text-sm font-semibold text-slate-600">
         <a href="#ba-con-duong" class="hover:text-blue-600 transition">3 Cách bắt đầu</a>
         <a href="#bat-dau-tu-dau" class="hover:text-blue-600 transition">Bạn đang ở đâu?</a>
         <a href="#ve-toi" class="hover:text-blue-600 transition">Về tôi</a>
+
+        <!-- DROPDOWN MENU DỊCH VỤ -->
+        <div class="relative group">
+          <button type="button" class="flex items-center gap-1 hover:text-blue-600 transition py-2 font-semibold text-slate-700 group-hover:text-blue-600">
+            <span>Dịch vụ</span>
+            <svg class="w-4 h-4 transition duration-200 group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+            </svg>
+          </button>
+          
+          <div class="absolute left-0 top-full pt-1.5 w-64 hidden group-hover:block z-50">
+            <div class="bg-white rounded-2xl shadow-xl border border-slate-200/90 p-2 space-y-1">
+              <a href="https://vanhi.id.vn/club" class="block px-3.5 py-2.5 rounded-xl hover:bg-blue-50 text-slate-800 hover:text-blue-600 transition">
+                <span class="block font-bold text-sm">Đăng ký Club</span>
+                <span class="text-xs text-slate-500 font-normal">Mỗi tháng một trợ lý AI mới (99k/tháng)</span>
+              </a>
+              <a href="https://vanhi.id.vn/sp" class="block px-3.5 py-2.5 rounded-xl hover:bg-blue-50 text-slate-800 hover:text-blue-600 transition">
+                <span class="block font-bold text-sm">Dịch vụ cài đặt trọn gói</span>
+                <span class="text-xs text-slate-500 font-normal">Cài xong và chạy thử trong 1 buổi chiều</span>
+              </a>
+            </div>
+          </div>
+        </div>
       </nav>
 
       <div class="flex items-center gap-3">
@@ -67,7 +91,7 @@
         Nền tảng tài nguyên Hermes Agent tiếng Việt
       </div>
 
-      <!-- Headline chính (Phương án 1) -->
+      <!-- Headline chính -->
       <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-[52px] font-extrabold text-slate-950 tracking-tight leading-[1.25] mb-6">
         Học dùng Hermes miễn phí trên YouTube — <span class="text-blue-600">hoặc để tôi cài cho bạn</span>
       </h1>
@@ -88,7 +112,7 @@
         </a>
       </div>
 
-      <!-- Hero Visual: Màn hình Hermes chạy việc thật (Tông tối, trung thực) -->
+      <!-- Hero Visual -->
       <div class="mt-14 max-w-3xl mx-auto rounded-2xl overflow-hidden border border-slate-300 bg-slate-900 shadow-2xl text-left">
         <div class="bg-slate-800 px-4 py-3 flex items-center justify-between border-b border-slate-700">
           <div class="flex items-center gap-2">
@@ -156,7 +180,7 @@
             </a>
           </div>
 
-          <!-- CỘT 2: DỊCH VỤ CÀI ĐẶT -->
+          <!-- CỘT 2: DỊCH VỤ CÀI ĐẶT (Trỏ về https://vanhi.id.vn/sp) -->
           <div class="border border-slate-200 rounded-2xl p-7 bg-white flex flex-col justify-between shadow-sm hover:border-slate-300 transition">
             <div>
               <div class="text-xs font-bold uppercase tracking-wider text-blue-700 bg-blue-50 inline-block px-2.5 py-1 rounded-md mb-4 border border-blue-200">
@@ -177,12 +201,12 @@
               </div>
             </div>
 
-            <a href="https://zalo.me/0899320202" target="_blank" rel="noopener noreferrer" class="w-full text-center py-3.5 px-4 rounded-xl font-bold text-sm bg-blue-600 hover:bg-blue-700 text-white shadow-md shadow-blue-500/20 transition">
-              Xem dịch vụ cài đặt (Nhắn Zalo) →
+            <a href="https://vanhi.id.vn/sp" class="w-full text-center py-3.5 px-4 rounded-xl font-bold text-sm bg-blue-600 hover:bg-blue-700 text-white shadow-md shadow-blue-500/20 transition">
+              Xem dịch vụ cài đặt trọn gói →
             </a>
           </div>
 
-          <!-- CỘT 3: THAM GIA CLUB -->
+          <!-- CỘT 3: THAM GIA CLUB (Trỏ về https://vanhi.id.vn/club) -->
           <div class="border border-slate-200 rounded-2xl p-7 bg-white flex flex-col justify-between shadow-sm hover:border-slate-300 transition">
             <div>
               <div class="text-xs font-bold uppercase tracking-wider text-purple-700 bg-purple-50 inline-block px-2.5 py-1 rounded-md mb-4 border border-purple-200">
@@ -204,8 +228,8 @@
               </div>
             </div>
 
-            <a href="https://zalo.me/0899320202" target="_blank" rel="noopener noreferrer" class="w-full text-center py-3.5 px-4 rounded-xl font-bold text-sm bg-slate-900 hover:bg-slate-800 text-white transition">
-              Xem thông tin Club →
+            <a href="https://vanhi.id.vn/club" class="w-full text-center py-3.5 px-4 rounded-xl font-bold text-sm bg-slate-900 hover:bg-slate-800 text-white transition">
+              Xem thông tin Club (Đăng ký) →
             </a>
           </div>
 
@@ -257,7 +281,7 @@
             <h3 class="text-lg font-bold text-slate-900">CÀI HOÀI KHÔNG ĐƯỢC, HOẶC KHÔNG CÓ THỜI GIAN</h3>
           </div>
           <p class="text-slate-600 text-sm md:text-base leading-relaxed pl-9">
-            Đó là lý do dịch vụ cài đặt tồn tại. Nhắn tin cho tôi, tôi gọi điện tư vấn 15 phút miễn phí để xem bạn cần gói nào — hoặc phát hiện ra bạn không cần mua gì cả. Trường hợp thứ hai cũng hay xảy ra.
+            Đó là lý do <a href="https://vanhi.id.vn/sp" class="text-blue-600 font-semibold underline">dịch vụ cài đặt tồn tại</a>. Nhắn tin cho tôi qua Zalo 0899.320.202, tôi gọi điện tư vấn 15 phút miễn phí để xem bạn cần gói nào — hoặc phát hiện ra bạn không cần mua gì cả. Trường hợp thứ hai cũng hay xảy ra.
           </p>
         </div>
 
@@ -268,7 +292,7 @@
             <h3 class="text-lg font-bold text-slate-900">MÁY ĐÃ CHẠY RỒI, KHÔNG BIẾT GIAO VIỆC GÌ TIẾP</h3>
           </div>
           <p class="text-slate-600 text-sm md:text-base leading-relaxed pl-9">
-            Vào Club. Mỗi tháng tôi giao bạn một việc cụ thể để bảo Hermes làm, kèm file cấu hình sẵn. Bắt đầu bằng việc lặp lại nhiều nhất trong tuần của bạn — nhắc việc, email, hay báo cáo, đều được.
+            <a href="https://vanhi.id.vn/club" class="text-blue-600 font-semibold underline">Vào Club</a>. Mỗi tháng tôi giao bạn một việc cụ thể để bảo Hermes làm, kèm file cấu hình sẵn. Bắt đầu bằng việc lặp lại nhiều nhất trong tuần của bạn — nhắc việc, email, hay báo cáo, đều được.
           </p>
         </div>
 
@@ -320,12 +344,12 @@
         </p>
       </div>
 
-      <!-- Action Buttons -->
+      <!-- Action Buttons (Đã trỏ về https://vanhi.id.vn/club) -->
       <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-6">
         <a href="https://www.youtube.com" target="_blank" rel="noopener noreferrer" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-slate-900 hover:bg-slate-800 text-white font-bold text-base px-8 py-4 rounded-xl shadow transition">
           Vào kênh YouTube (Học miễn phí)
         </a>
-        <a href="https://zalo.me/0899320202" target="_blank" rel="noopener noreferrer" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-bold text-base px-8 py-4 rounded-xl shadow transition">
+        <a href="https://vanhi.id.vn/club" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-bold text-base px-8 py-4 rounded-xl shadow transition">
           Vào Club — 99.000đ/tháng →
         </a>
       </div>
@@ -345,8 +369,10 @@
         <div class="font-bold text-white text-base mb-1">Hermes Hub Vietnam</div>
         <p class="text-slate-400">Tự học miễn phí trên YouTube • Dịch vụ cài đặt 1 buổi • Club thành viên</p>
       </div>
-      <div class="flex items-center gap-4">
-        <a href="https://www.youtube.com" target="_blank" class="hover:text-white transition">Kênh YouTube</a>
+      <div class="flex flex-wrap items-center justify-center md:justify-end gap-4">
+        <a href="https://vanhi.id.vn/club" class="hover:text-white transition">Đăng ký Club</a>
+        <span class="text-slate-700">•</span>
+        <a href="https://vanhi.id.vn/sp" class="hover:text-white transition">Dịch vụ cài đặt</a>
         <span class="text-slate-700">•</span>
         <a href="https://zalo.me/0899320202" target="_blank" class="hover:text-white transition">Zalo: 0899.320.202</a>
       </div>
