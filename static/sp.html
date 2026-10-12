@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="vi" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dịch Vụ Cài Đặt Hermes & 17 Trợ Lý AI Trong 1 Buổi Chiều</title>
+  <!-- Google Fonts: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50: '#eff6ff',
+              100: '#dbeafe',
+              500: '#3b82f6',
+              600: '#2563eb',
+              700: '#1d4ed8',
+              800: '#1e40af',
+              900: '#1e3a8a',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* Custom subtle styling */
+    .glass-card {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(12px);
+    }
+  </style>
+</head>
+<body class="bg-[#F8FAFC] text-slate-800 font-sans antialiased selection:bg-blue-500 selection:text-white">
+
+  <!-- TOP BAR: THÔNG BÁO GIỚI HẠN CHỖ -->
+  <div class="bg-slate-900 text-white text-xs md:text-sm py-2.5 px-4 text-center font-medium sticky top-0 z-50 shadow-sm flex items-center justify-center gap-2">
+    <span class="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+    <span>Tháng này chỉ nhận tối đa <strong>5 khách</strong> (Còn lại: <span class="text-amber-400 font-bold underline">2 chỗ trống</span>)</span>
+  </div>
+
+  <!-- HEADER -->
+  <header class="border-b border-slate-200 bg-white/90 backdrop-blur sticky top-9 z-40">
+    <div class="max-w-5xl mx-auto px-5 h-16 flex items-center justify-between">
+      <div class="font-extrabold text-lg md:text-xl tracking-tight text-slate-900 flex items-center gap-2">
+        <span class="w-7 h-7 bg-blue-600 rounded-lg flex items-center justify-center text-white text-sm shadow-md shadow-blue-500/20">H</span>
+        Hermes Setup
+      </div>
+      <a href="https://zalo.me" target="_blank" class="text-sm font-semibold text-blue-600 hover:text-blue-700 transition flex items-center gap-1">
+        Tư vấn nhanh 15 phút
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+  </header>
+
+  <main class="overflow-hidden">
+
+    <!-- ==========================================
+         SECTION 1: HERO & HEADLINE
+    ========================================== -->
+    <section class="pt-12 md:pt-20 pb-16 px-5 max-w-4xl mx-auto text-center">
+      
+      <!-- Tagline -->
+      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-200 text-blue-700 text-xs md:text-sm font-semibold mb-6 shadow-sm">
+        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+        Dịch vụ cài đặt 1-1 • Tận nơi hoặc Từ xa
+      </div>
+
+      <!-- Headline chính (Phương án 1) -->
+      <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-[54px] font-extrabold text-slate-950 tracking-tight leading-[1.2] mb-6">
+        Hermes cài xong, chạy được ngay chiều nay — <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">không cần bạn biết gõ lệnh</span>
+      </h1>
+
+      <!-- Subheadline -->
+      <p class="text-lg md:text-xl text-slate-600 leading-relaxed font-normal max-w-3xl mx-auto mb-8">
+        Bạn đã xem video. Bạn đã hiểu Hermes làm được gì. Nhưng giờ là 11 giờ đêm, bạn mở terminal ra và không biết gõ gì tiếp theo. Để tôi ngồi vào máy bạn — cài đặt, dựng 3 hệ thống, dựng sẵn 17 trợ lý AI, dạy bạn 60 phút cuối. <strong class="text-slate-900 font-semibold">Chiều nay máy bạn đã có đội trợ lý chạy.</strong>
+      </p>
+
+      <!-- Đoạn mở đầu -->
+      <div class="bg-white border border-slate-200/80 rounded-2xl p-6 md:p-8 text-left shadow-sm mb-10 text-slate-700 leading-relaxed text-base space-y-4">
+        <p>
+          Bạn đọc tới đây vì một trong ba lý do sau: <em>bạn đã thử cài Hermes và kẹt giữa đường</em>; <em>bạn chưa thử nhưng biết mình sẽ bỏ cuộc ở bước API key</em>; hoặc <em>bạn cài được rồi nhưng không biết dùng nó làm việc gì cụ thể cho mình</em>.
+        </p>
+        <p>
+          Cả ba đều là lý do chính đáng. Cài Hermes cho người đã quen terminal thì mất mười lăm phút. Cho người chưa từng mở terminal — thì đó là <strong>bốn buổi tối</strong>, và buổi tối thứ hai thường bị ngắt giữa chừng vì con gọi, vì khách nhắn, hoặc vì lỗi đỏ lòm hiện ra và bạn không rõ mình vừa làm hỏng cái gì.
+        </p>
+        <p class="text-slate-900 font-medium">
+          Dịch vụ này dành cho bạn. Không phải khóa học — bạn không phải ngồi nghe giảng. Tôi vào máy bạn, làm xong, dạy bạn dùng, rồi rời máy. Xong trong một buổi chiều.
+        </p>
+      </div>
+
+      <!-- CTA Section 1 -->
+      <div class="flex flex-col items-center gap-3">
+        <a href="https://zalo.me" target="_blank" class="w-full sm:w-auto inline-flex items-center justify-center gap-3 bg-blue-600 hover:bg-blue-700 text-white font-bold text-lg px-8 py-4 rounded-xl shadow-lg shadow-blue-600/25 transition duration-200 transform hover:-translate-y-0.5">
+          Nhắn Zalo đặt lịch tư vấn miễn phí 15 phút
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+        </a>
+        <a href="#youtube" class="text-sm text-slate-500 hover:text-slate-700 underline decoration-slate-300 transition mt-1">
+          Tôi muốn tự học miễn phí trước — dẫn tôi tới YouTube
+        </a>
+      </div>
+
+      <!-- Visual Placeholder: Video / Timelapse mockup -->
+      <div class="mt-14 max-w-3xl mx-auto rounded-2xl overflow-hidden border border-slate-300/80 bg-slate-900 shadow-2xl relative">
+        <div class="bg-slate-800 px-4 py-3 flex items-center justify-between border-b border-slate-700">
+          <div class="flex items-center gap-2">
+            <span class="w-3 h-3 rounded-full bg-red-500 inline-block"></span>
+            <span class="w-3 h-3 rounded-full bg-yellow-500 inline-block"></span>
+            <span class="w-3 h-3 rounded-full bg-green-500 inline-block"></span>
+          </div>
+          <div class="text-xs font-mono text-slate-400">Terminal & Setup Live Record (Timelapse)</div>
+          <div class="text-xs bg-emerald-500/20 text-emerald-400 font-mono px-2 py-0.5 rounded">03:45:00 → Done</div>
+        </div>
+        <div class="p-8 text-left font-mono text-xs sm:text-sm text-slate-300 space-y-2 bg-gradient-to-b from-slate-900 to-slate-950">
+          <p class="text-emerald-400">✔ Node.js runtime configured successfully.</p>
+          <p class="text-emerald-400">✔ Hermes Portal connected [Model API verified].</p>
+          <p class="text-blue-400">ℹ Initializing 3 Core Workflows...</p>
+          <p class="text-slate-400 pl-4">↳ [1] Trả lời & báo giá tự động cho khách hàng: READY</p>
+          <p class="text-slate-400 pl-4">↳ [2] Tổng hợp báo cáo & phân loại email: READY</p>
+          <p class="text-slate-400 pl-4">↳ [3] Lập lịch nhắc việc & sổ chi tiêu: READY</p>
+          <p class="text-emerald-400 font-bold">✔ 17 AI Specialized Agents loaded into your machine.</p>
+          <p class="text-amber-400 pt-3">// "Bàn giao máy hoàn tất — 60 phút hướng dẫn bắt đầu ngay bây giờ."</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         SECTION 2: VẤN ĐỀ
+    ========================================== -->
+    <section class="py-16 md:py-24 bg-white border-y border-slate-200">
+      <div class="max-w-4xl mx-auto px-5">
+        <div class="text-center max-w-2xl mx-auto mb-12">
+          <h2 class="text-2xl sm:text-3xl md:text-4xl font-extrabold text-slate-950 tracking-tight mb-4">
+            "Bạn đã xem video nhưng vẫn chưa dùng được"
+          </h2>
+          <p class="text-slate-600 text-base md:text-lg">
+            Nếu bạn xem video của tôi mà gật gù "hay quá", rồi tối về nằm nghịch điện thoại — bài này viết cho bạn.
+          </p>
+        </div>
+
+        <p class="text-slate-700 leading-relaxed mb-8">
+          Tôi đọc được comment dưới mọi video, và năm khó khăn này lặp đi lặp lại hoài. Không ai trong số này là người "kém công nghệ". Họ chỉ bị kẹt ở năm chỗ này:
+        </p>
+
+        <!-- 5 Pain Points Cards -->
+        <div class="space-y-4 mb-10">
+          <!-- 1 -->
+          <div class="p-5 md:p-6 rounded-xl border border-rose-100 bg-rose-50/40 flex items-start gap-4">
+            <div class="w-8 h-8 rounded-full bg-rose-600 text-white font-bold text-sm flex items-center justify-center shrink-0 mt-0.5">1</div>
+            <div>
+              <h3 class="font-bold text-slate-900 text-lg mb-1">Cài tới đâu đó thì lỗi đỏ hiện ra, và không biết lỗi đó có nguy hiểm không</h3>
+              <p class="text-slate-600 text-sm md:text-base leading-relaxed">
+                Cài tới bước Node, hoặc bước API key, màn hình hiện một đống chữ đỏ. Bạn copy lỗi dán vào Google, tìm thấy một bài forum từ ba năm trước, làm theo thì hỏng thêm. Lần thứ ba bạn tắt máy và nghĩ: thôi, để tuần sau.
+              </p>
+            </div>
+          </div>
+          <!-- 2 -->
+          <div class="p-5 md:p-6 rounded-xl border border-slate-200 bg-slate-50 flex items-start gap-4">
+            <div class="w-8 h-8 rounded-full bg-slate-700 text-white font-bold text-sm flex items-center justify-center shrink-0 mt-0.5">2</div>
+            <div>
+              <h3 class="font-bold text-slate-900 text-lg mb-1">Không biết chọn model nào, và sợ chọn sai là mất tiền oan</h3>
+              <p class="text-slate-600 text-sm md:text-base leading-relaxed">
+                Nghe nói có model free, có model trả phí, model này thông minh hơn model kia. Bạn không phân biệt được đâu là quảng cáo, đâu là sự thật. Mà chọn sai thì không biết hao bao nhiêu tiền một tháng — nên thà không dùng.
+              </p>
+            </div>
+          </div>
+          <!-- 3 -->
+          <div class="p-5 md:p-6 rounded-xl border border-slate-200 bg-slate-50 flex items-start gap-4">
+            <div class="w-8 h-8 rounded-full bg-slate-700 text-white font-bold text-sm flex items-center justify-center shrink-0 mt-0.5">3</div>
+            <div>
+              <h3 class="font-bold text-slate-900 text-lg mb-1">Sợ cấu hình sai làm hại máy, hoặc làm lộ dữ liệu</h3>
+              <p class="text-slate-600 text-sm md:text-base leading-relaxed">
+                Đây là nỗi sợ ít người nói ra nhất. Trên báo đọc đầy chuyện AI lừa người, AI gửi nhầm email, AI "tự ý" làm việc người ta không dặn. Bạn tự hỏi: thứ này nối vào máy tôi, nó đọc được file của tôi không? Nó gửi được email thay tôi không? Mà gửi sai thì sao?
+              </p>
+            </div>
+          </div>
+          <!-- 4 -->
+          <div class="p-5 md:p-6 rounded-xl border border-slate-200 bg-slate-50 flex items-start gap-4">
+            <div class="w-8 h-8 rounded-full bg-slate-700 text-white font-bold text-sm flex items-center justify-center shrink-0 mt-0.5">4</div>
+            <div>
+              <h3 class="font-bold text-slate-900 text-lg mb-1">Không có hai tiếng liền nào trong tuần</h3>
+              <p class="text-slate-600 text-sm md:text-base leading-relaxed">
+                Cài Hermes cần một buổi chiều liền tụ. Bạn là chủ tiệm, giờ nào cũng có khách. Bạn là nhân viên văn phòng, tối về phải lo con. Buổi tối thứ nhất cài được một nửa, buổi tối thứ hai mở lại thì quên mất hôm qua đang làm gì.
+              </p>
+            </div>
+          </div>
+          <!-- 5 -->
+          <div class="p-5 md:p-6 rounded-xl border border-slate-200 bg-slate-50 flex items-start gap-4">
+            <div class="w-8 h-8 rounded-full bg-slate-700 text-white font-bold text-sm flex items-center justify-center shrink-0 mt-0.5">5</div>
+            <div>
+              <h3 class="font-bold text-slate-900 text-lg mb-1">Hoặc: cài xong rồi, nhưng không biết bảo nó làm gì</h3>
+              <p class="text-slate-600 text-sm md:text-base leading-relaxed">
+                Hermes chạy được. Rồi sao nữa? Bạn ngồi trước màn hình, gõ "viết cho t một bài đăng Facebook" — xong. Bạn cảm giác mình vừa trả công một thứ mình cũng làm được bằng ChatGPT, và không hiểu mọi người phấn khích cái gì.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-amber-50 border-l-4 border-amber-500 p-5 rounded-r-xl text-slate-800 text-sm md:text-base mb-8">
+          Nếu bạn thấy mình trong ít nhất một chỗ trên — <strong>đừng tự trách. Vấn đề không phải bạn.</strong> Vấn đề là cách dạy miễn phí trên YouTube giả định bạn có thời gian và có kiên nhẫn sửa lỗi. Nhiều người có, nhưng không phải ai cũng có.
+        </div>
+
+        <!-- CTA Section 2 -->
+        <div class="text-center">
+          <a href="https://zalo.me" target="_blank" class="inline-flex items-center gap-2 bg-slate-900 hover:bg-slate-800 text-white font-bold text-base md:text-lg px-7 py-3.5 rounded-xl shadow-md transition">
+            Để tôi cài hộ — nhắn Zalo
+            <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         SECTION 3: GIẢI PHÁP
+    ========================================== -->
+    <section class="py-16 md:py-24 max-w-4xl mx-auto px-5">
+      <div class="text-center max-w-2xl mx-auto mb-14">
+        <h2 class="text-2xl sm:text-3xl md:text-4xl font-extrabold text-slate-950 tracking-tight mb-4">
+          "Để tôi cài cho bạn, xong trong một buổi"
+        </h2>
+        <p class="text-slate-600 text-base md:text-lg">
+          Quy trình chỉ có bốn bước. Bạn không phải học gì trước buổi cài.
+        </p>
+      </div>
+
+      <!-- 4 Steps Timeline -->
+      <div class="relative border-l-2 border-blue-500/30 ml-4 md:ml-6 space-y-10 pl-6 md:pl-8">
+        
+        <!-- Bước 1 -->
+        <div class="relative">
+          <span class="absolute -left-[35px] md:-left-[43px] top-0 w-8 h-8 rounded-full bg-blue-600 text-white font-bold flex items-center justify-center text-sm shadow">1</span>
+          <h3 class="text-xl font-bold text-slate-900 mb-2">Bước 1 — Bạn nhắn Zalo (5 phút)</h3>
+          <div class="text-slate-600 leading-relaxed space-y-2 text-base">
+            <p>
+              Bạn nhắn cho tôi một tin ngắn: bạn làm nghề gì, dùng máy gì (Windows hay Mac), và việc gì trên máy bạn làm nhiều nhất trong ngày.
+            </p>
+            <p class="p-3 bg-slate-100 rounded-lg text-slate-700 italic border border-slate-200">
+              Ví dụ: "em chủ tiệm may, dùng Windows, ngày nào cũng trả lời khách đặt hàng qua Zalo và tin nhắn."
+            </p>
+            <p>
+              Chừng đó là đủ. Nếu bạn không biết mô tả nhu cầu, tôi hỏi dần — đây là buổi tư vấn 15 phút miễn phí, qua Zalo hoặc gọi điện, tùy bạn thích cái nào.
+            </p>
+            <p class="font-medium text-slate-800">
+              Sau buổi tư vấn, tôi nói rõ bạn cần gói nào. Và nếu tôi thấy bạn không cần gói nào — bạn tự cài theo video là được — tôi sẽ nói thẳng như vậy. Trường hợp đó xảy ra thường xuyên hơn bạn nghĩ.
+            </p>
+          </div>
+        </div>
+
+        <!-- Bước 2 -->
+        <div class="relative">
+          <span class="absolute -left-[35px] md:-left-[43px] top-0 w-8 h-8 rounded-full bg-blue-600 text-white font-bold flex items-center justify-center text-sm shadow">2</span>
+          <h3 class="text-xl font-bold text-slate-900 mb-2">Bước 2 — Chọn giờ, tôi vào máy bạn (một buổi chiều)</h3>
+          <p class="text-slate-600 leading-relaxed text-base mb-2">
+            Bạn chọn một buổi chiều rảnh. Tôi vào máy bạn qua phần mềm điều khiển từ xa (hoặc tới tận nơi nếu bạn ở gần và thích ngồi cạnh). Trong suốt buổi, màn hình bạn hiện đúng những gì tôi đang làm — bạn xem được, không phải ngồi chơi. Bạn có thể hỏi bất cứ lúc nào.
+          </p>
+          <p class="text-slate-600 leading-relaxed text-base italic">
+            Nếu bạn chỉ muốn "làm xong thì gọi tôi dậy" — cũng được. Nhưng tôi khuyên bạn ngồi xem ít nhất phần đầu, để về sau không thấy cái máy mình đang dùng là của người khác.
+          </p>
+        </div>
+
+        <!-- Bước 3 -->
+        <div class="relative">
+          <span class="absolute -left-[35px] md:-left-[43px] top-0 w-8 h-8 rounded-full bg-blue-600 text-white font-bold flex items-center justify-center text-sm shadow">3</span>
+          <h3 class="text-xl font-bold text-slate-900 mb-2">Bước 3 — Cài Hermes + 3 hệ thống + 17 trợ lý, chạy thử trước khi tôi rời máy</h3>
+          <p class="text-slate-600 leading-relaxed text-base">
+            Tôi cài Hermes lên máy bạn, nối Portal, cấu hình model (chọn đúng loại không hao tiền oan cho việc bạn làm). Sau đó tôi dựng 3 hệ thống bạn dùng nhiều nhất — chọn theo công việc thật của bạn, không phải bộ mẫu in sẵn cho mọi người. Và tôi dựng sẵn đội 17 trợ lý AI theo đúng việc của bạn: tiệm may thì có trợ lý trả lời khách, tính giá vải, nhắc việc mỗi sáng; văn phòng thì có trợ lý gộp báo cáo, soạn email, quản lý lịch.
+          </p>
+          <p class="text-slate-900 font-semibold mt-2">
+            Trước khi tôi rời máy, mọi thứ phải chạy thử thành công trước mắt bạn. Không phải "về nhà test rồi báo lại".
+          </p>
+        </div>
+
+        <!-- Bước 4 -->
+        <div class="relative">
+          <span class="absolute -left-[35px] md:-left-[43px] top-0 w-8 h-8 rounded-full bg-blue-600 text-white font-bold flex items-center justify-center text-sm shadow">4</span>
+          <h3 class="text-xl font-bold text-slate-900 mb-2">Bước 4 — Tôi dạy bạn 60 phút cuối</h3>
+          <div class="text-slate-600 leading-relaxed text-base space-y-2">
+            <p>Phần quan trọng nhất của buổi chiều. Tôi dạy bạn:</p>
+            <ul class="list-disc pl-5 space-y-1 text-slate-700">
+              <li>Gõ việc đầu tiên bằng tiếng Việt thường, không cần nhớ cú pháp.</li>
+              <li>Cách đọc kết quả AI đưa ra để biết nó làm đúng hay làm sai.</li>
+              <li>Khi AI làm sai thì sửa thế nào, nói với nó ra sao.</li>
+              <li>Hỏng thì sửa ai — việc gì tự sửa được, việc gì phải nhờ tôi.</li>
+            </ul>
+            <p class="pt-1 font-medium text-slate-900">
+              Hết 60 phút đó, bạn tự gõ được việc đầu tiên, tận mắt thấy nó chạy. Từ đó về sau máy bạn đi một mình — tôi chỉ còn hỗ trợ qua Zalo khi bạn cần.
+            </p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Real Timeline Mockup Card -->
+      <div class="mt-12 bg-slate-50 border border-slate-200 rounded-2xl p-6">
+        <div class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-4">Nhật ký một buổi cài đặt thực tế:</div>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
+          <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm">
+            <div class="text-sm font-extrabold text-blue-600">14:00</div>
+            <div class="text-xs text-slate-600 mt-1">Kết nối vào máy</div>
+          </div>
+          <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm">
+            <div class="text-sm font-extrabold text-blue-600">14:40</div>
+            <div class="text-xs text-slate-600 mt-1">Cài xong Hermes</div>
+          </div>
+          <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm">
+            <div class="text-sm font-extrabold text-blue-600">15:30</div>
+            <div class="text-xs text-slate-600 mt-1">Dựng xong 3 hệ thống</div>
+          </div>
+          <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm">
+            <div class="text-sm font-extrabold text-emerald-600">16:30</div>
+            <div class="text-xs text-slate-600 mt-1">Khách tự gõ lệnh test</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CTA Section 3 -->
+      <div class="mt-10 text-center">
+        <a href="https://zalo.me" target="_blank" class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-bold text-lg px-8 py-4 rounded-xl shadow-lg shadow-blue-600/25 transition">
+          Đặt lịch buổi cài
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+        </a>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         SECTION 4: BẠN NHẬN ĐƯỢC GÌ
+    ========================================== -->
+    <section class="py-16 md:py-24 bg-white border-y border-slate-200">
+      <div class="max-w-4xl mx-auto px-5">
+        <div class="text-center max-w-2xl mx-auto mb-14">
+          <h2 class="text-2xl sm:text-3xl md:text-4xl font-extrabold text-slate-950 tracking-tight mb-4">
+            BẠN NHẬN ĐƯỢC GÌ
+          </h2>
+          <p class="text-slate-600 text-base md:text-lg">
+            Đây là danh sách đầy đủ những gì có trong buổi cài. Tôi liệt kê hết để bạn tự đối chiếu, không giữ lại gì:
+          </p>
+        </div>
+
+        <!-- Deliverables List -->
+        <div class="space-y-4 mb-12">
+          <div class="flex items-start gap-3.5 p-4 rounded-xl hover:bg-slate-50 transition border border-transparent hover:border-slate-200">
+            <span class="text-emerald-600 text-lg font-bold shrink-0">✓</span>
+            <div>
+              <strong class="text-slate-900 block text-base font-bold">Hermes cài đặt hoàn chỉnh trên máy bạn</strong>
+              <span class="text-slate-600 text-sm md:text-base">Windows hoặc Mac đều được. Chạy thử thành công, tôi mới rời máy.</span>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-3.5 p-4 rounded-xl hover:bg-slate-50 transition border border-transparent hover:border-slate-200">
+            <span class="text-emerald-600 text-lg font-bold shrink-0">✓</span>
+            <div>
+              <strong class="text-slate-900 block text-base font-bold">Portal nối xong, model cấu hình xong</strong>
+              <span class="text-slate-600 text-sm md:text-base">Tôi chọn loại model phù hợp việc bạn làm, để bạn không phải đoán và không hao tiền oan. Tôi chỉ rõ cho bạn biết cái gì miễn phí, cái gì có phí, phí bao nhiêu.</span>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-3.5 p-4 rounded-xl hover:bg-slate-50 transition border border-transparent hover:border-slate-200">
+            <span class="text-emerald-600 text-lg font-bold shrink-0">✓</span>
+            <div>
+              <strong class="text-slate-900 block text-base font-bold">3 hệ thống chạy được ngay</strong>
+              <span class="text-slate-600 text-sm md:text-base">Dựng theo công việc thật của bạn, không phải bộ mẫu chung. Bạn gõ việc đầu tiên ngay trong buổi chiều hôm đó.</span>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-3.5 p-4 rounded-xl hover:bg-slate-50 transition border border-transparent hover:border-slate-200">
+            <span class="text-emerald-600 text-lg font-bold shrink-0">✓</span>
+            <div>
+              <strong class="text-slate-900 block text-base font-bold">Đội 17 trợ lý AI cá nhân hóa</strong>
+              <span class="text-slate-600 text-sm md:text-base">17 trợ lý, mỗi trợ lý một việc, dựng theo đúng nhu cầu của bạn. Đây là phần thay bạn làm việc lặp lại mỗi ngày.</span>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-3.5 p-4 rounded-xl hover:bg-slate-50 transition border border-transparent hover:border-slate-200">
+            <span class="text-emerald-600 text-lg font-bold shrink-0">✓</span>
+            <div>
+              <strong class="text-slate-900 block text-base font-bold">File cấu hình sẵn</strong>
+              <span class="text-slate-600 text-sm md:text-base">Toàn bộ cách tôi dựng máy bạn nằm trong file cấu hình. Sau này bạn đổi máy, hoặc cài thêm cho người nhà, có thể dùng lại. Bạn không bị khóa vào tôi.</span>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-3.5 p-4 rounded-xl hover:bg-slate-50 transition border border-transparent hover:border-slate-200">
+            <span class="text-emerald-600 text-lg font-bold shrink-0">✓</span>
+            <div>
+              <strong class="text-slate-900 block text-base font-bold">Buổi hướng dẫn 1-1</strong>
+              <span class="text-slate-600 text-sm md:text-base">60 phút (gói Gia đình và Doanh nghiệp là 2 buổi) — dạy bạn dùng, sửa, và tự cứu mình khi hỏng.</span>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-3.5 p-4 rounded-xl hover:bg-slate-50 transition border border-transparent hover:border-slate-200">
+            <span class="text-emerald-600 text-lg font-bold shrink-0">✓</span>
+            <div>
+              <strong class="text-slate-900 block text-base font-bold">Hỗ trợ qua Zalo sau buổi cài</strong>
+              <span class="text-slate-600 text-sm md:text-base">30 ngày (gói Cơ bản), 60 ngày (Gia đình), 90 ngày (Doanh nghiệp). Hỏi lỗi, hỏi cách làm thêm việc mới, tôi trả lời bằng người thật, ký tên thật.</span>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-3.5 p-4 rounded-xl hover:bg-slate-50 transition border border-transparent hover:border-slate-200">
+            <span class="text-emerald-600 text-lg font-bold shrink-0">✓</span>
+            <div>
+              <strong class="text-slate-900 block text-base font-bold">1 buổi đồng hành sau 30 ngày (Chỉ áp dụng gói Doanh nghiệp)</strong>
+              <span class="text-slate-600 text-sm md:text-base">Dùng một tháng rồi thấy chỗ nào chưa ổn, tôi vào lại máy chỉnh và hướng dẫn thêm.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- What is NOT included -->
+        <div class="bg-slate-50 border border-slate-200/90 rounded-2xl p-6 md:p-7 mb-10">
+          <div class="font-bold text-slate-900 text-base mb-3 flex items-center gap-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-slate-400"></span>
+            Những gì KHÔNG có trong buổi cài — tôi nói trước cho rõ:
+          </div>
+          <ul class="text-slate-600 text-sm md:text-base space-y-2 list-disc pl-5">
+            <li><strong>Không có khóa học video quay sẵn:</strong> Bạn không xem giảng, bạn ngồi cạnh người làm.</li>
+            <li><strong>Không có chứng chỉ:</strong> Không ai cần chứng chỉ này.</li>
+            <li><strong>Tôi không quản lý máy bạn hàng ngày sau buổi cài:</strong> (Trừ gói Doanh nghiệp có 1 buổi đồng hành sau 30 ngày). Tôi dựng xong, dạy xong, bạn tự chạy.</li>
+          </ul>
+        </div>
+
+        <!-- CTA Section 4 -->
+        <div class="text-center">
+          <a href="https://zalo.me" target="_blank" class="inline-flex items-center gap-2 bg-slate-900 hover:bg-slate-800 text-white font-bold text-base md:text-lg px-7 py-3.5 rounded-xl shadow transition">
+            Nhắn Zalo để được tư vấn chọn gói →
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         SECTION 5: AN TOÀN
+    ========================================== -->
+    <section class="py-16 md:py-24 max-w-4xl mx-auto px-5">
+      <div class="text-center max-w-2xl mx-auto mb-12">
+        <span class="text-emerald-700 bg-emerald-50 border border-emerald-200 text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full">Bảo Mật & Kiểm Soát</span>
+        <h2 class="text-2xl sm:text-3xl md:text-4xl font-extrabold text-slate-950 tracking-tight mt-3 mb-4">
+          "AI chỉ nháp, bạn mới là người duyệt"
+        </h2>
+        <p class="text-slate-600 text-base md:text-lg">
+          Tôi viết section này dài ra, vì đây là nỗi sợ tôi gặp nhiều nhất khi nói chuyện với khách. Nhiều người không sợ AI dốt. Họ sợ AI liều.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-10">
+        <!-- Nguyên tắc 1 -->
+        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+          <div class="font-bold text-slate-900 text-lg mb-2 flex items-center gap-2">
+            <span class="w-6 h-6 rounded bg-blue-100 text-blue-600 text-xs flex items-center justify-center font-bold">1</span>
+            Không có gì tự gửi đi mà không qua mắt bạn
+          </div>
+          <p class="text-slate-600 text-sm leading-relaxed">
+            Hermes tôi dựng cho bạn soạn email, soạn tin nhắn, viết bài — <strong>xong thì DỪNG</strong>. Nó đưa bạn xem. Bạn đọc. Bạn bấm gửi. Nếu bạn không bấm, không có gì được gửi. Tôi cấu hình đúng kiểu đó: <em>trợ lý nháp, con người duyệt</em>.
+          </p>
+        </div>
+
+        <!-- Nguyên tắc 2 -->
+        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+          <div class="font-bold text-slate-900 text-lg mb-2 flex items-center gap-2">
+            <span class="w-6 h-6 rounded bg-blue-100 text-blue-600 text-xs flex items-center justify-center font-bold">2</span>
+            AI không tự chi tiền, không tự mua gì
+          </div>
+          <p class="text-slate-600 text-sm leading-relaxed">
+            Không có chế độ "tự động trả tiền". Tôi không thiết lập quyền đó cho Hermes trên máy bạn, và tôi sẽ chỉ bạn cách kiểm tra để chắc chắn nó không có quyền đó.
+          </p>
+        </div>
+
+        <!-- Nguyên tắc 3 -->
+        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+          <div class="font-bold text-slate-900 text-lg mb-2 flex items-center gap-2">
+            <span class="w-6 h-6 rounded bg-blue-100 text-blue-600 text-xs flex items-center justify-center font-bold">3</span>
+            Dữ liệu của bạn nằm trên máy bạn
+          </div>
+          <p class="text-slate-600 text-sm leading-relaxed">
+            Hermes chạy ngay trên máy bạn. File, ghi chú, sổ gia đình, danh sách khách — nằm trên ổ đĩa máy bạn, không nằm trên server của tôi. Tôi không thu thập, không sao lưu, không xem dữ liệu của bạn sau buổi cài. Buổi cài xong là xong.
+          </p>
+        </div>
+
+        <!-- Nguyên tắc 4 -->
+        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+          <div class="font-bold text-slate-900 text-lg mb-2 flex items-center gap-2">
+            <span class="w-6 h-6 rounded bg-blue-100 text-blue-600 text-xs flex items-center justify-center font-bold">4</span>
+            AI sai thì ai chịu?
+          </div>
+          <p class="text-slate-600 text-sm leading-relaxed">
+            Nếu AI làm sai trong lần chạy đầu — soạn sai email, tính sai số — kết quả đó nằm lại trong bản nháp cho bạn thấy trước. Và trong 30–90 ngày hỗ trợ, nếu do cách tôi dựng mà nó hay sai, tôi vào sửa lại hoàn toàn miễn phí.
+          </p>
+        </div>
+      </div>
+
+      <!-- Nói thật -->
+      <div class="bg-slate-100 border border-slate-300 rounded-2xl p-6 md:p-8 mb-10 text-slate-700">
+        <h3 class="font-bold text-slate-900 text-base md:text-lg mb-3">Nói thật về những chỗ AI KHÔNG làm được:</h3>
+        <ul class="space-y-2 text-sm md:text-base list-disc pl-5 mb-5">
+          <li><strong>Nó không hiểu ngữ cảnh cảm xúc của khách:</strong> Nó nháp lời chữa lành hay, nhưng quyết định có gửi hay không là của bạn.</li>
+          <li><strong>Nó không thay bạn quyết định kinh doanh:</strong> Nó gộp số, soạn báo cáo, nhắc việc — không tự ý đổi giá, không tự ý hứa với khách.</li>
+          <li><strong>Nó không hoàn hảo:</strong> Nó sai, và bạn sẽ thấy nó sai trong buổi dạy 60 phút — tôi cố tình cho bạn xem nó sai một lần, để bạn biết lần sau nhận ra.</li>
+        </ul>
+        <div class="p-4 bg-white rounded-xl border border-slate-200 text-slate-900 font-medium text-sm md:text-base leading-relaxed">
+          Công nghệ AI đáng sợ nhất không phải khi nó làm sai. Mà là khi người ta bán cho bạn câu chuyện "cứ để AI lo hết" — và bạn giao hết, rồi một hôm phát hiện mình không kiểm soát được gì. Hermes tôi dựng cho bạn đi ngược lại: <strong>bạn nắm quyền duyệt, AI lo phần chân tay.</strong>
+        </div>
+      </div>
+
+      <!-- CTA Section 5 -->
+      <div class="text-center">
+        <a href="https://zalo.me" target="_blank" class="inline-flex items-center gap-2 text-blue-600 hover:text-blue-800 font-bold text-base md:text-lg underline underline-offset-4 transition">
+          Tôi muốn hiểu thêm trước khi quyết — nhắn Zalo hỏi →
+        </a>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         SECTION 6: BA GÓI DỊCH VỤ
+    ========================================== -->
+    <section class="py-16 md:py-24 bg-white border-y border-slate-200" id="pricing">
+      <div class="max-w-6xl mx-auto px-5">
+        <div class="text-center max-w-2xl mx-auto mb-14">
+          <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-950 tracking-tight mb-4">
+            BẢNG GIÁ DỊCH VỤ
+          </h2>
+          <p class="text-slate-600 text-base md:text-lg">
+            Mỗi gói đều gồm: Hermes cài xong chạy được + Portal nối xong + 3 hệ thống chạy được ngay + đội 17 trợ lý AI + file cấu hình sẵn. Khác nhau ở mức độ cá nhân hóa và thời gian đồng hành.
+          </p>
+        </div>
+
+        <!-- 3 Pricing Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch mb-12">
+          
+          <!-- Gói 1: Cơ bản -->
+          <div class="border border-slate-200 rounded-2xl p-7 bg-white flex flex-col justify-between shadow-sm hover:shadow-md transition">
+            <div>
+              <h3 class="text-xl font-bold text-slate-900">Cơ bản</h3>
+              <p class="text-slate-500 text-sm mt-1 mb-4">Một người dùng một máy cá nhân</p>
+              <div class="mb-6">
+                <span class="text-3xl font-extrabold text-slate-900">1.500.000đ</span>
+                <span class="text-slate-500 text-xs block mt-1">Thanh toán sau khi máy chạy xong</span>
+              </div>
+              <ul class="text-sm space-y-3 text-slate-700 mb-8 border-t border-slate-100 pt-6">
+                <li class="flex items-start gap-2">✓ Hermes + Portal + model cấu hình</li>
+                <li class="flex items-start gap-2">✓ 3 hệ thống + 17 trợ lý AI chuẩn việc bạn</li>
+                <li class="flex items-start gap-2">✓ Buổi hướng dẫn 1-1 (1 buổi - 60 phút)</li>
+                <li class="flex items-start gap-2">✓ Hỗ trợ Zalo <strong>30 ngày</strong></li>
+                <li class="flex items-start gap-2 text-slate-400">✕ Tích hợp email/Zalo đội ngũ</li>
+                <li class="flex items-start gap-2 text-slate-400">✕ Buổi đồng hành sau 30 ngày</li>
+              </ul>
+            </div>
+            <a href="https://zalo.me" target="_blank" class="w-full text-center py-3 px-4 rounded-xl font-bold text-sm bg-slate-100 hover:bg-slate-200 text-slate-800 transition">
+              Chọn Gói Cơ Bản
+            </a>
+          </div>
+
+          <!-- Gói 2: Gia đình (Featured) -->
+          <div class="border-2 border-blue-600 rounded-2xl p-7 bg-white relative flex flex-col justify-between shadow-xl scale-100 md:-translate-y-2">
+            <span class="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-blue-600 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide shadow">
+              Được chọn nhiều nhất
+            </span>
+            <div>
+              <h3 class="text-xl font-bold text-slate-900">Gia đình</h3>
+              <p class="text-slate-500 text-sm mt-1 mb-4">Dùng chung hoặc nhiều vai trò trong nhà</p>
+              <div class="mb-6">
+                <span class="text-3xl font-extrabold text-blue-600">2.500.000đ</span>
+                <span class="text-slate-500 text-xs block mt-1">Thanh toán sau khi máy chạy xong</span>
+              </div>
+              <ul class="text-sm space-y-3 text-slate-700 mb-8 border-t border-slate-100 pt-6">
+                <li class="flex items-start gap-2">✓ Hermes + Portal + model cấu hình</li>
+                <li class="flex items-start gap-2 font-medium">✓ 3 hệ thống + 17 trợ lý (theo việc cả nhà)</li>
+                <li class="flex items-start gap-2 font-medium">✓ Buổi hướng dẫn 1-1: <strong>2 buổi</strong></li>
+                <li class="flex items-start gap-2">✓ Hỗ trợ Zalo <strong>60 ngày</strong></li>
+                <li class="flex items-start gap-2">✓ File cấu hình chia sẻ cho người thân</li>
+                <li class="flex items-start gap-2 text-slate-400">✕ Buổi đồng hành sau 30 ngày</li>
+              </ul>
+            </div>
+            <a href="https://zalo.me" target="_blank" class="w-full text-center py-3.5 px-4 rounded-xl font-bold text-sm bg-blue-600 hover:bg-blue-700 text-white shadow-md shadow-blue-500/20 transition">
+              Chọn Gói Gia Đình
+            </a>
+          </div>
+
+          <!-- Gói 3: Doanh nghiệp -->
+          <div class="border border-slate-200 rounded-2xl p-7 bg-white flex flex-col justify-between shadow-sm hover:shadow-md transition">
+            <div>
+              <h3 class="text-xl font-bold text-slate-900">Doanh nghiệp</h3>
+              <p class="text-slate-500 text-sm mt-1 mb-4">Công ty nhỏ 2–10 người</p>
+              <div class="mb-6">
+                <span class="text-3xl font-extrabold text-slate-900">3.500.000đ</span>
+                <span class="text-slate-500 text-xs block mt-1">Thanh toán sau khi máy chạy xong</span>
+              </div>
+              <ul class="text-sm space-y-3 text-slate-700 mb-8 border-t border-slate-100 pt-6">
+                <li class="flex items-start gap-2">✓ Mọi thứ có ở gói Gia đình</li>
+                <li class="flex items-start gap-2">✓ Tích hợp email & Zalo làm việc thật</li>
+                <li class="flex items-start gap-2">✓ Profile AI riêng cho 2–3 nhân viên</li>
+                <li class="flex items-start gap-2">✓ Buổi hướng dẫn 1-1: <strong>2 buổi</strong></li>
+                <li class="flex items-start gap-2">✓ Hỗ trợ Zalo <strong>90 ngày</strong></li>
+                <li class="flex items-start gap-2 font-bold text-blue-600">✓ 1 buổi vào lại máy sau 30 ngày</li>
+              </ul>
+            </div>
+            <a href="https://zalo.me" target="_blank" class="w-full text-center py-3 px-4 rounded-xl font-bold text-sm bg-slate-900 hover:bg-slate-800 text-white transition">
+              Chọn Gói Doanh Nghiệp
+            </a>
+          </div>
+
+        </div>
+
+        <!-- Note & Consultation advice -->
+        <div class="max-w-2xl mx-auto text-center bg-blue-50/70 border border-blue-200 rounded-2xl p-6 text-slate-700 text-sm md:text-base">
+          <p class="mb-4">
+            Nếu bạn không chắc gói nào, đừng chọn bừa. Nhắn Zalo tư vấn 15 phút — tôi hỏi vài câu là biết bạn cần gói nào. Cũng có thể bạn chỉ cần gói Cơ bản, dù ban đầu bạn định mua gói đắt hơn.
+          </p>
+          <a href="https://zalo.me" target="_blank" class="inline-flex items-center gap-2 text-blue-700 font-bold hover:underline">
+            Nhắn Zalo tư vấn chọn gói chuẩn →
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         SECTION 7: CAM KẾT HOÀN TIỀN
+    ========================================== -->
+    <section class="py-16 md:py-24 max-w-4xl mx-auto px-5">
+      <div class="bg-gradient-to-br from-slate-900 to-slate-950 text-white rounded-3xl p-8 md:p-12 shadow-2xl relative overflow-hidden">
+        
+        <!-- Decorative accent -->
+        <div class="absolute -right-16 -top-16 w-64 h-64 bg-blue-600/20 rounded-full blur-3xl pointer-events-none"></div>
+
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-400 text-xs font-bold uppercase tracking-wider mb-6">
+          Cam Kết 100% Rủi Ro Về Phía Tôi
+        </div>
+
+        <h2 class="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight mb-6">
+          "Bạn sẽ thấy kết quả trong buổi đầu tiên"
+        </h2>
+
+        <p class="text-slate-300 leading-relaxed text-base md:text-lg mb-6">
+          Tôi không đăng review khách hàng ở đây. Review thì ai cũng viết được, và bạn cũng không thể kiểm chứng. Thay vào đó, tôi đưa ra cam kết này, và tôi thực hiện đúng:
+        </p>
+
+        <div class="border-l-4 border-emerald-400 bg-white/5 p-5 md:p-6 rounded-r-xl mb-8">
+          <p class="text-lg md:text-xl font-bold text-white leading-relaxed">
+            Nếu hết buổi cài, Hermes trên máy bạn không chạy được — tôi hoàn tiền 100%. Không hỏi thêm, không giữ lại phí gì.
+          </p>
+          <p class="text-slate-300 text-sm mt-2">
+            Nghĩa là cuộc rủi ro nằm về phía tôi. Bạn có thể trả tiền sau khi thấy mọi thứ chạy trước mắt mình — tôi không đòi trước. Nếu tôi làm không xong trong buổi chiều đó, bạn không mất đồng nào và tôi mất một buổi chiều của tôi.
+          </p>
+        </div>
+
+        <div class="text-slate-400 text-sm space-y-2 mb-8">
+          <p class="font-semibold text-slate-300">Ba điều kiện duy nhất của cam kết này:</p>
+          <p>1. Buổi cài phải diễn ra trên máy bạn đủ mạnh để chạy Hermes — nếu máy quá cũ, tôi nói trước ở buổi tư vấn, bạn không mất gì.</p>
+          <p>2. Máy bạn phải có kết nối internet trong buổi cài — điều này hiển nhiên, tôi nói để đầy đủ.</p>
+          <p>3. Nếu buổi cài bị hỏng vì lý do ở phía bạn (đổi ý, bận đột xuất, mất mạng kéo dài), buổi đó tính là đã dùng.</p>
+        </div>
+
+        <p class="text-slate-300 text-sm italic mb-8">
+          Ngoài ba điều trên, tôi không nghĩ ra trường hợp nào tôi giữ tiền cả. Tôi làm nghề này vì tôi cần tiền, nhưng tôi cần tiền của người hài lòng hơn là tiền của người hối hận.
+        </p>
+
+        <!-- CTA Section 7 -->
+        <a href="https://zalo.me" target="_blank" class="inline-flex items-center gap-3 bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-extrabold text-base md:text-lg px-8 py-4 rounded-xl shadow-lg transition duration-200">
+          Đặt lịch buổi cài đầu tiên →
+        </a>
+
+      </div>
+    </section>
+
+    <!-- ==========================================
+         SECTION 8: FAQ ACCORDION
+    ========================================== -->
+    <section class="py-16 md:py-24 bg-white border-y border-slate-200">
+      <div class="max-w-3xl mx-auto px-5">
+        <div class="text-center mb-12">
+          <h2 class="text-3xl font-extrabold text-slate-950 tracking-tight mb-3">
+            CÂU HỎI THƯỜNG GẶP (FAQ)
+          </h2>
+          <p class="text-slate-600 text-base">Những thắc mắc thường gặp nhất trước khi bạn quyết định đặt lịch.</p>
+        </div>
+
+        <div class="space-y-3" id="faq-container">
+
+          <!-- FAQ Item 1 -->
+          <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+            <button class="faq-btn w-full px-6 py-4 text-left font-bold text-slate-900 flex justify-between items-center hover:bg-slate-50 transition">
+              <span>1. Tôi không rành công nghệ một chút gì — có dùng được không?</span>
+              <svg class="w-5 h-5 text-slate-400 shrink-0 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </button>
+            <div class="faq-content hidden px-6 pb-4 text-slate-600 text-sm leading-relaxed border-t border-slate-100 pt-3">
+              Được, và nói thật: phần lớn khách của tôi thuộc nhóm này. Buổi cài xong, việc của bạn chỉ là gõ tiếng Việt như nhắn Zalo. Tôi dạy bạn 60 phút cuối buổi đủ để tự dùng việc hằng ngày. Việc nâng cao hơn — nếu sau này bạn cần — có video miễn phí trên kênh, và tôi vẫn trả lời Zalo trong thời gian hỗ trợ.
+            </div>
+          </div>
+
+          <!-- FAQ Item 2 -->
+          <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+            <button class="faq-btn w-full px-6 py-4 text-left font-bold text-slate-900 flex justify-between items-center hover:bg-slate-50 transition">
+              <span>2. Có phải trả phí hằng tháng không?</span>
+              <svg class="w-5 h-5 text-slate-400 shrink-0 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </button>
+            <div class="faq-content hidden px-6 pb-4 text-slate-600 text-sm leading-relaxed border-t border-slate-100 pt-3">
+              Hermes dùng miễn phí — không có phí license, không phí thuê bao hằng tháng với tôi. Chi phí duy nhất có thể phát sinh là tiền gọi model AI (API), và tôi cấu hình để bạn dùng trong ngưỡng miễn phí/phí thấp cho việc thường ngày. Ở buổi tư vấn tôi chỉ rõ bạn sẽ tốn khoảng bao nhiêu một tháng với khối lượng việc của bạn — trước khi bạn trả đồng nào.
+            </div>
+          </div>
+
+          <!-- FAQ Item 3 -->
+          <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+            <button class="faq-btn w-full px-6 py-4 text-left font-bold text-slate-900 flex justify-between items-center hover:bg-slate-50 transition">
+              <span>3. Dữ liệu của tôi có an toàn không? Ai xem được?</span>
+              <svg class="w-5 h-5 text-slate-400 shrink-0 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </button>
+            <div class="faq-content hidden px-6 pb-4 text-slate-600 text-sm leading-relaxed border-t border-slate-100 pt-3">
+              Dữ liệu nằm trên máy bạn. Tôi không sao lưu về máy tôi, không thu thập, không xem lại sau buổi cài. Khi tôi điều khiển từ xa trong buổi cài, mọi thao tác hiện trên màn hình bạn — bạn xem được tôi đang làm gì. Xem thêm Section 5 ở trên, tôi viết riêng về chuyện này.
+            </div>
+          </div>
+
+          <!-- FAQ Item 4 -->
+          <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+            <button class="faq-btn w-full px-6 py-4 text-left font-bold text-slate-900 flex justify-between items-center hover:bg-slate-50 transition">
+              <span>4. Nếu sau này tôi cần thêm trợ lý, hoặc cần thay đổi hệ thống thì sao?</span>
+              <svg class="w-5 h-5 text-slate-400 shrink-0 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </button>
+            <div class="faq-content hidden px-6 pb-4 text-slate-600 text-sm leading-relaxed border-t border-slate-100 pt-3">
+              Trong thời gian hỗ trợ (30–90 ngày tùy gói), thêm việc nhỏ thì nhắn Zalo, tôi hướng dẫn hoặc làm thêm miễn phí nếu nhanh. Sau thời gian hỗ trợ, nếu cần tôi vào làm thêm thì tính phí theo buổi — tôi báo giá trước khi làm. Và vì bạn có file cấu hình sẵn, nhiều việc bạn tự làm lại được, hoặc nhờ người khác làm theo đúng cấu hình đó.
+            </div>
+          </div>
+
+          <!-- FAQ Item 5 -->
+          <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+            <button class="faq-btn w-full px-6 py-4 text-left font-bold text-slate-900 flex justify-between items-center hover:bg-slate-50 transition">
+              <span>5. Làm việc từ xa hay đến tận nơi?</span>
+              <svg class="w-5 h-5 text-slate-400 shrink-0 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </button>
+            <div class="faq-content hidden px-6 pb-4 text-slate-600 text-sm leading-relaxed border-t border-slate-100 pt-3">
+              Mặc định là từ xa, qua phần mềm điều khiển màn hình — nhanh và không mất công đi lại. Nếu bạn ở gần và thích ngồi cạnh xem, tôi có thể đến tận nơi, miễn phí trong phạm vi hợp lý; đi xa thì trao đổi thêm chi phí đi lại. Bạn chọn, tùy bạn thấy yên tâm kiểu nào.
+            </div>
+          </div>
+
+          <!-- FAQ Item 6 -->
+          <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+            <button class="faq-btn w-full px-6 py-4 text-left font-bold text-slate-900 flex justify-between items-center hover:bg-slate-50 transition">
+              <span>6. Máy Mac và Windows đều được không?</span>
+              <svg class="w-5 h-5 text-slate-400 shrink-0 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </button>
+            <div class="faq-content hidden px-6 pb-4 text-slate-600 text-sm leading-relaxed border-t border-slate-100 pt-3">
+              Cả hai. Tôi cài cho cả Mac và Windows, không ưu tiên cái nào. Nếu máy bạn quá cũ để chạy Hermes ổn định, tôi nói thẳng ở buổi tư vấn — tôi không lấy tiền rồi mới phát hiện ra máy không chạy nổi.
+            </div>
+          </div>
+
+          <!-- FAQ Item 7 -->
+          <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+            <button class="faq-btn w-full px-6 py-4 text-left font-bold text-slate-900 flex justify-between items-center hover:bg-slate-50 transition">
+              <span>7. Mất bao lâu thì xong?</span>
+              <svg class="w-5 h-5 text-slate-400 shrink-0 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </button>
+            <div class="faq-content hidden px-6 pb-4 text-slate-600 text-sm leading-relaxed border-t border-slate-100 pt-3">
+              Một buổi chiều, thường 3–4 tiếng. Tôi hẹn giờ trước, tôi vào đúng giờ, và tôi rời máy khi mọi thứ đã chạy thử thành công trước mắt bạn — không phải "về test rồi báo lại sau".
+            </div>
+          </div>
+
+          <!-- FAQ Item 8 -->
+          <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+            <button class="faq-btn w-full px-6 py-4 text-left font-bold text-slate-900 flex justify-between items-center hover:bg-slate-50 transition">
+              <span>8. Nếu tôi đổi ý sau khi đã đặt lịch thì sao?</span>
+              <svg class="w-5 h-5 text-slate-400 shrink-0 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </button>
+            <div class="faq-content hidden px-6 pb-4 text-slate-600 text-sm leading-relaxed border-t border-slate-100 pt-3">
+              Nhắn Zalo huỷ trước buổi cài, không mất gì, không cần lý do. Nếu đã trả tiền rồi mà buổi cài chưa diễn ra — hoàn đủ. Tôi chỉ không hoàn cho buổi đã làm xong mà bạn không dùng nữa (vì thời gian buổi chiều đó đã qua).
+            </div>
+          </div>
+
+          <!-- FAQ Item 9 -->
+          <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+            <button class="faq-btn w-full px-6 py-4 text-left font-bold text-slate-900 flex justify-between items-center hover:bg-slate-50 transition">
+              <span>9. Tôi có thể tự học miễn phí thay vì mua dịch vụ không?</span>
+              <svg class="w-5 h-5 text-slate-400 shrink-0 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </button>
+            <div class="faq-content hidden px-6 pb-4 text-slate-600 text-sm leading-relaxed border-t border-slate-100 pt-3" id="youtube">
+              Có, và nếu bạn chịu khó thì nên tự học. Toàn bộ kiến thức tôi đem tới buổi cài, tôi đăng miễn phí trên YouTube — 37 bài, chia 5 chương, không cắt xén. Tôi không giấu phần hay để bán. Dịch vụ này dành cho người bận hoặc ngại công nghệ — tôi bán buổi chiều của tôi, không bán kiến thức.
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         SECTION 9: CTA CUỐI TRANG
+    ========================================== -->
+    <section class="py-16 md:py-24 max-w-4xl mx-auto px-5 text-center">
+      <div class="bg-gradient-to-b from-blue-50 to-white border border-blue-100 rounded-3xl p-8 md:p-14 shadow-lg">
+        
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-950 tracking-tight mb-6">
+          Nếu bạn đọc tới đây, có thể bạn đã biết mình cần gì.
+        </h2>
+
+        <div class="max-w-2xl mx-auto text-slate-600 text-base md:text-lg leading-relaxed space-y-4 mb-8 text-left">
+          <p>Nhắn Zalo cho tôi.</p>
+          <p>
+            Buổi tư vấn 15 phút hoàn toàn miễn phí. Trong 15 phút đó tôi hỏi bạn làm nghề gì, dùng máy gì, và việc gì tốn thời gian nhất — rồi tôi nói bạn cần gói nào. Hoặc tôi nói bạn không cần mua gì cả, cứ xem playlist trên kênh là đủ. Trường hợp thứ hai xảy ra thường xuyên hơn bạn nghĩ, và tôi không ngại nói ra.
+          </p>
+          <p>
+            Tôi chỉ nhận 5 khách mỗi tháng. Không phải chiêu marketing — mà vì mỗi buổi cài là một buổi chiều liền của tôi, cộng thời gian hỗ trợ sau đó. Làm quá 5 khách một tháng thì chất lượng buổi cài và tốc độ trả lời Zalo sẽ giảm, và đó là thứ tôi không đổi lấy tiền.
+          </p>
+          <div class="p-3.5 bg-amber-50 border border-amber-200 rounded-xl text-amber-900 font-medium text-sm">
+            Tháng này còn <strong class="underline font-bold text-amber-950">2 chỗ còn lại</strong> (cập nhật tuần này). Nếu hết chỗ, tôi xếp bạn vào tháng sau, hoặc chỉ bạn tự học miễn phí trong lúc chờ — kênh YouTube không giới hạn chỗ ngồi.
+          </div>
+        </div>
+
+        <!-- BIGGEST CTA BUTTON -->
+        <div class="flex flex-col items-center gap-4">
+          <a href="https://zalo.me" target="_blank" class="w-full sm:w-auto inline-flex items-center justify-center gap-3 bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-lg md:text-xl px-10 py-5 rounded-2xl shadow-xl shadow-blue-600/30 transition transform hover:-translate-y-1">
+            Nhắn Zalo đặt lịch tư vấn miễn phí 15 phút →
+          </a>
+          <a href="#youtube" class="text-sm text-slate-500 hover:text-slate-800 underline decoration-slate-300 transition">
+            Hoặc xem học miễn phí trên YouTube trước — 37 bài, đủ để tự cài
+          </a>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="bg-slate-900 text-slate-400 py-10 px-5 text-center text-xs md:text-sm border-t border-slate-800">
+    <div class="max-w-4xl mx-auto space-y-3">
+      <div class="font-bold text-slate-200">Hermes AI 1-on-1 Setup Service</div>
+      <p class="text-slate-400 max-w-xl mx-auto">
+        Cam kết hoàn tiền 100% nếu hệ thống không chạy được sau buổi cài. Không phí phát sinh ngầm, dữ liệu nằm cục bộ 100% trên thiết bị của bạn.
+      </p>
+      <div class="pt-4 text-slate-400">
+        © 2026 Hermes Setup. Bản quyền nội dung thuộc về tác giả.
+      </div>
+    </div>
+  </footer>
+
+  <!-- FLOATING QUICK ZALO CTA (MOBILE & DESKTOP) -->
+  <div class="fixed bottom-5 right-5 z-50">
+    <a href="https://zalo.me" target="_blank" class="flex items-center gap-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-5 rounded-full shadow-2xl shadow-blue-600/50 transition transform hover:scale-105">
+      <span class="w-3 h-3 bg-emerald-400 rounded-full animate-ping"></span>
+      <span>Nhắn Zalo 15p</span>
+    </a>
+  </div>
+
+  <!-- JAVASCRIPT: Accordion Logic -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const faqButtons = document.querySelectorAll('.faq-btn');
+
+      faqButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const content = btn.nextElementSibling;
+          const icon = btn.querySelector('svg');
+          const isHidden = content.classList.contains('hidden');
+
+          // Đóng tất cả các FAQ khác
+          document.querySelectorAll('.faq-content').forEach(c => c.classList.add('hidden'));
+          document.querySelectorAll('.faq-btn svg').forEach(i => i.classList.remove('rotate-180'));
+
+          // Mở mục vừa bấm nếu trước đó đang đóng
+          if (isHidden) {
+            content.classList.remove('hidden');
+            icon.classList.add('rotate-180');
+          }
+        });
+      });
+    });
+  </script>
+
+</body>
+</html>
