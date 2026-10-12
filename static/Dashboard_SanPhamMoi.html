@@ -1,0 +1,3833 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard Sản phẩm mới — Kênh Hermes</title>
+<style>
+  :root {
+    --bg: #f5f6f8; --surface: #ffffff; --ink: #1a2233; --muted: #5b6472;
+    --line: #e3e6ec; --accent: #c0392b; --accent-soft: #fdf0ee;
+    --nav-bg: #1a2233; --nav-ink: #c8cfdb; --nav-active: #ffffff;
+    --code-bg: #f0f2f5; --radius: 10px;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0; font-family: -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background: var(--bg); color: var(--ink); font-size: 15px; line-height: 1.65;
+  }
+  .shell { display: flex; min-height: 100vh; }
+  .sidebar {
+    width: 310px; flex-shrink: 0; background: var(--nav-bg); color: var(--nav-ink);
+    position: sticky; top: 0; height: 100vh; overflow-y: auto;
+  }
+  .sidebar-head { padding: 22px 20px 16px; border-bottom: 1px solid rgba(255,255,255,.08); }
+  .sidebar-head h1 { font-size: 17px; margin: 0 0 4px; color: #fff; line-height: 1.35; }
+  .sidebar-head p { margin: 0; font-size: 12px; color: #8a93a3; }
+  .sidebar nav ul { list-style: none; margin: 0; padding: 10px 0; }
+  .nav-link {
+    display: flex; align-items: center; gap: 10px; padding: 11px 20px;
+    color: var(--nav-ink); text-decoration: none; font-size: 13.5px;
+    border-left: 3px solid transparent; transition: background .15s, color .15s;
+  }
+  .nav-link:hover { background: rgba(255,255,255,.06); color: #fff; }
+  .nav-link.active { background: rgba(255,255,255,.10); color: var(--nav-active); border-left-color: var(--accent); font-weight: 600; }
+  .nav-icon { font-size: 16px; width: 22px; text-align: center; flex-shrink: 0; }
+  .sidebar-foot { padding: 16px 20px 22px; border-top: 1px solid rgba(255,255,255,.08); font-size: 11.5px; color: #8a93a3; line-height: 1.7; }
+  .sidebar-foot a { color: #e57373; }
+  .main { flex: 1; min-width: 0; }
+  .topbar {
+    position: sticky; top: 0; z-index: 20; background: var(--surface);
+    border-bottom: 1px solid var(--line); padding: 12px 28px;
+    display: flex; align-items: center; gap: 14px;
+  }
+  .topbar .menu-btn {
+    display: none; border: 1px solid var(--line); background: var(--surface); color: var(--ink);
+    border-radius: 8px; padding: 6px 12px; font-size: 15px; cursor: pointer;
+  }
+  .breadcrumb { font-size: 12.5px; color: var(--muted); }
+  .breadcrumb b { color: var(--ink); }
+  .panels { padding: 28px; max-width: 1080px; }
+  .panel { display: none; }
+  .panel.active { display: block; animation: fadein .18s ease; }
+  @keyframes fadein { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+  .panel-inner {
+    background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 34px 40px 40px;
+  }
+  .panel-inner h1 { font-size: 24px; margin: 0 0 18px; padding-bottom: 12px; border-bottom: 3px solid var(--accent); line-height: 1.3; }
+  .panel-inner h2 { font-size: 19px; margin: 34px 0 12px; padding-top: 8px; line-height: 1.35; }
+  .panel-inner h3 { font-size: 16.5px; margin: 26px 0 8px; color: #2c3a52; }
+  .panel-inner h4 { font-size: 15px; margin: 20px 0 6px; color: #2c3a52; }
+  .panel-inner p { margin: 10px 0; }
+  .panel-inner a { color: #b03a2e; }
+  .panel-inner ul, .panel-inner ol { padding-left: 26px; margin: 10px 0; }
+  .panel-inner li { margin: 4px 0; }
+  .panel-inner strong { color: #16203a; }
+  .panel-inner hr { border: none; border-top: 1px solid var(--line); margin: 28px 0; }
+  .panel-inner blockquote {
+    margin: 16px 0; padding: 10px 16px; border-left: 4px solid var(--accent);
+    background: var(--accent-soft); border-radius: 0 8px 8px 0; color: #4a2b28;
+  }
+  .panel-inner code {
+    background: var(--code-bg); padding: 2px 6px; border-radius: 5px;
+    font-family: "SF Mono", Menlo, Consolas, monospace; font-size: .88em; color: #c0392b;
+  }
+  .panel-inner pre {
+    background: #1e2733; color: #e8ecf2; padding: 14px 16px; border-radius: 8px;
+    overflow-x: auto; font-size: 13px; line-height: 1.55;
+  }
+  .panel-inner pre code { background: none; color: inherit; padding: 0; }
+  .panel-inner table {
+    border-collapse: collapse; width: 100%; margin: 16px 0; font-size: 13.5px;
+    display: block; overflow-x: auto;
+  }
+  .panel-inner th, .panel-inner td { border: 1px solid var(--line); padding: 8px 11px; text-align: left; vertical-align: top; }
+  .panel-inner th { background: #f0f2f6; font-weight: 600; }
+  .panel-inner tr:nth-child(even) td { background: #fafbfc; }
+  @media (max-width: 900px) {
+    .sidebar {
+      position: fixed; left: 0; top: 0; z-index: 40; transform: translateX(-100%);
+      transition: transform .2s ease; box-shadow: 0 0 40px rgba(0,0,0,.3);
+    }
+    .sidebar.open { transform: none; }
+    .topbar .menu-btn { display: block; }
+    .panels { padding: 16px; }
+    .panel-inner { padding: 20px 18px 26px; }
+  }
+</style>
+</head>
+<body>
+<div class="shell">
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-head">
+      <h1>Sản phẩm mới — Kênh Hermes</h1>
+      <p>Ngừng bán khóa · Dịch vụ DFY + Club · 12/10/2026</p>
+    </div>
+    <nav><ul>
+<li><a href="#sec-luande" data-tab="luande" class="nav-link"><span class="nav-icon">💡</span><span class="nav-label">1. Luận đề chiến lược</span></a></li>
+<li><a href="#sec-mohinh" data-tab="mohinh" class="nav-link"><span class="nav-icon">⚖️</span><span class="nav-label">2. So sánh mô hình kiếm tiền</span></a></li>
+<li><a href="#sec-dfy" data-tab="dfy" class="nav-link"><span class="nav-icon">🛠</span><span class="nav-label">3. Dịch vụ cài đặt DFY</span></a></li>
+<li><a href="#sec-club" data-tab="club" class="nav-link"><span class="nav-icon">👥</span><span class="nav-label">4. Club membership</span></a></li>
+<li><a href="#sec-chuyendoi" data-tab="chuyendoi" class="nav-link"><span class="nav-icon">🔄</span><span class="nav-label">5. Chuyển đổi 37 bài + Nội dung</span></a></li>
+    </ul></nav>
+    <div class="sidebar-foot">
+      Link affiliate: <a href="https://vanhi.id.vn/nous">vanhi.id.vn/nous</a><br>
+      Trang cũ: <a href="https://speedreading.vn/ahermes">speedreading.vn/ahermes</a><br>
+      Email/CRM: crm.speedreading.vn (FluentCRM)
+    </div>
+  </aside>
+  <div class="main">
+    <div class="topbar">
+      <button class="menu-btn" onclick="document.getElementById('sidebar').classList.toggle('open')">☰</button>
+      <div class="breadcrumb">Sản phẩm mới → <b id="current-tab">1. Luận đề chiến lược</b></div>
+    </div>
+    <div class="panels">
+<section class="panel" id="sec-luande">
+<div class="panel-inner"><h1 id="san-pham-kiem-tien-moi-luan-e-chien-luoc-ban-quan-ly">Sản phẩm kiếm tiền mới — Luận đề chiến lược (bản quản lý)</h1>
+<blockquote>
+<p>Ngày: 12/10/2026 · Dùng để quyết định hướng trước khi team chốt chi tiết</p>
+</blockquote>
+<hr />
+<h2 id="1-nhin-nhan-tai-san-that-cua-ban">1. Nhìn nhận tài sản thật của bạn</h2>
+<p>Bạn nghĩ mình "không có sản phẩm" — thực ra bạn có, chỉ đang gói sai chỗ:</p>
+<table>
+<thead>
+<tr>
+<th>Tài sản bạn đang có</th>
+<th>Trạng thái hiện tại</th>
+<th>Giá trị thật</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>37 bài khóa Hermes</td>
+<td>Đang bán 239k</td>
+<td>→ Chuyển thành <strong>37 video miễn phí</strong> = 6 tháng nội dung + thước đo uy tín</td>
+</tr>
+<tr>
+<td>3 hệ thống cài sẵn + 17 trợ lý</td>
+<td>Nằm trong khóa học</td>
+<td>→ <strong>Sản phẩm lõi bán được</strong> — người ta mua kết quả, không mua bài học</td>
+</tr>
+<tr>
+<td>Kỹ năng cài Hermes DFY</td>
+<td>Chưa bán</td>
+<td>→ <strong>Dịch vụ 1.5-3.5tr/khách</strong> — tiền ngay, không cần chờ</td>
+</tr>
+<tr>
+<td>speedreading.vn + FluentCRM</td>
+<td>Có sẵn</td>
+<td>→ Hạ tầng bán Club, không phải xây lại</td>
+</tr>
+<tr>
+<td>List khách mua khóa cũ</td>
+<td>Đã có</td>
+<td>→ <strong>Nguồn tiền nhanh nhất</strong> — đã tin bạn, đã trả tiền</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Vấn đề không phải thiếu sản phẩm — là bạn đang bán đào tạo, thứ mà người ta ngại trả tiền vì "tự học trên YouTube được".</strong></p>
+<hr />
+<h2 id="2-luan-e-cot-loi-free-teaching-marketing-cho-dich-vu">2. Luận đề cốt lõi: Free teaching = marketing cho dịch vụ</h2>
+<p>Đây là cơ chế win-win cần hiểu đúng:</p>
+<pre><code>Bạn dạy free CÀNG KỸ
+        ↓
+Người xem càng HIỂU Hermes đáng giá
+        ↓
+Nhưng càng nhiều người TỰ LÀM KHÔNG XONG (cài đặt lỗi, cấu hình sai, bỏ cuộc giữa đường)
+        ↓
+Họ sẵn sàng TRẢ TIỀN để có người làm hộ
+</code></pre>
+<p><strong>Nghịch lý then chốt:</strong> dạy free kỹ hơn KHÔNG giết doanh thu dịch vụ — nó <em>tạo</em> khách cho dịch vụ. Người xem video của bạn rơi vào 3 nhóm, mỗi nhóm một cách kiếm tiền:</p>
+<table>
+<thead>
+<tr>
+<th>Nhóm người xem</th>
+<th>Hành vi</th>
+<th>Bạn thu tiền từ đâu</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Tự làm được</strong> (~30%)</td>
+<td>Theo video cài thành công</td>
+<td>Affiliate Portal (vanhi.id.vn/nous) — thụ động</td>
+</tr>
+<tr>
+<td><strong>Muốn có ngay nhưng lười</strong> (~50%)</td>
+<td>Xem hết, không cài</td>
+<td><strong>Dịch vụ DFY 1.5-3.5tr</strong> — tiền ngay</td>
+</tr>
+<tr>
+<td><strong>Đã có, muốn thêm</strong> (~20%)</td>
+<td>Cài rồi, cần trợ lý mới liên tục</td>
+<td><strong>Club 99-199k/tháng</strong> — thu nhập định kỳ</td>
+</tr>
+</tbody>
+</table>
+<p>Cả 3 nhóm đều thắng: nhóm 1 được miễn phí, nhóm 2 mua thời gian, nhóm 3 mua sự tiện lợi. Bạn không bán "kiến thức" nữa — bạn bán <strong>thời gian và kết quả đã làm sẵn</strong>.</p>
+<hr />
+<h2 id="3-ba-mo-hinh-e-xuat-team-ang-so-sanh-chi-tiet">3. Ba mô hình đề xuất (team đang so sánh chi tiết)</h2>
+<h3 id="mo-hinh-a-dich-vu-done-for-you-uu-tien-so-1">Mô hình A — Dịch vụ Done-For-You (ƯU TIÊN SỐ 1)</h3>
+<ul>
+<li>Cài Hermes + 3 hệ thống + 17 trợ lý lên máy khách, setup xong trong 1 buổi</li>
+<li>Giá: 1.5tr (Cơ bản) → 3.5tr (Doanh nghiệp)</li>
+<li><strong>Tiền về NGAY sau mỗi khách</strong> — giải quyết đúng nỗi lo "affiliate không có tiền ngay"</li>
+<li>2-3 khách/tháng = 4-10tr/tháng, không cần 10.000 subscriber</li>
+</ul>
+<h3 id="mo-hinh-b-club-membership-thu-nhap-inh-ky">Mô hình B — Club membership (THU NHẬP ĐỊNH KỲ)</h3>
+<ul>
+<li>99k/tháng cá nhân, 199k/tháng gia đình/SME</li>
+<li>Mỗi tháng: 1-2 trợ lý AI mới (skill + file cấu hình + video 10-15 phút) + cộng đồng + hỏi đáp</li>
+<li>Dùng FluentCRM có sẵn trên crm.speedreading.vn, không xây hệ thống mới</li>
+<li>100 thành viên × 149k TB = ~15tr/tháng định kỳ — đây mới là "thu nhập bền vững" bạn cần</li>
+</ul>
+<h3 id="mo-hinh-c-affiliate-portal-giu-lai-khong-lam-truc">Mô hình C — Affiliate Portal (GIỮ LẠI, KHÔNG LÀM TRỤC)</h3>
+<ul>
+<li>vanhi.id.vn/nous — $15/đăng ký</li>
+<li>Vai trò: thu nhập thụ động bỏ túi từ nhóm "tự làm được", KHÔNG phải nguồn chính</li>
+<li>Đúng như bạn nói: "affiliate thôi thì ít tiền" — nên để nó làm phụ, không làm chính</li>
+</ul>
+<hr />
+<h2 id="4-e-xuat-cua-quan-ly-chay-song-song-2-tru-uu-tien-dich-vu">4. Đề xuất của quản lý: chạy SONG SONG 2 trụ, ưu tiên Dịch vụ</h2>
+<p><strong>Pha 1 (tháng 1) — Tiền ngay:</strong> Mở dịch vụ DFY, bán cho <strong>list khóa cũ trước</strong> (đã tin bạn). 2 khách = có tiền để tiếp tục làm kênh.
+<strong>Pha 2 (tháng 2-3) — Thu nhập định kỳ:</strong> Mở Club. Khách DFY là thành viên đầu tiên (upsell tự nhiên: "có thợ cài rồi, giờ có người bổ sung trợ lý mới mỗi tháng").
+<strong>Pha 3 (tháng 3-6) — Quy mô:</strong> YouTube chạy 37 video miễn phí → funnel nuôi cả 2 trụ. Affiliate chảy ngầm.</p>
+<p><strong>Tại sao không bán "gói tài sản bán 1 lần 299-499k"?</strong> Vì nó vẫn là "bán cái gì đó để đọc/xem" — gần với khóa học, người ta vẫn so sánh với free. Dịch vụ và Club thì không ai so sánh được giá với YouTube.</p>
+<hr />
+<h2 id="5-nhung-viec-can-ban-quyet-inh">5. Những việc cần bạn quyết định</h2>
+<table>
+<thead>
+<tr>
+<th>Quyết định</th>
+<th>Đề xuất của tôi</th>
+<th>Lưu ý</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Dừng bán khóa 239k?</td>
+<td>Có — dạy free hết trên YouTube</td>
+<td>Khách cũ cần thông báo tử tế (team viết sẵn)</td>
+</tr>
+<tr>
+<td>Mở dịch vụ DFY?</td>
+<td>Có, ngay tháng này</td>
+<td>Bạn phải dành 1-2 buổi/tuần làm việc với khách</td>
+</tr>
+<tr>
+<td>Giá DFY?</td>
+<td>1.5-3.5tr tùy gói</td>
+<td>Team sales-manager đang build quy trình + kịch bản</td>
+</tr>
+<tr>
+<td>Mở Club?</td>
+<td>Có, sau DFY chạy ổn</td>
+<td>Cần 12 trợ lý dự trữ (team đang lên danh sách)</td>
+</tr>
+<tr>
+<td>Trang ahermes cũ?</td>
+<td>Chuyển thành trang dịch vụ + Club</td>
+<td>Hoặc redirect sang kênh YouTube</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="6-deliverable-cua-team-ang-chay">6. Deliverable của team (đang chạy)</h2>
+<table>
+<thead>
+<tr>
+<th>Thành viên</th>
+<th>File</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>mkt-manager</td>
+<td>~/Hermes_SanPhamMoi_MoHinh.md — so sánh mô hình + kịch bản 90 ngày + đề xuất cuối</td>
+</tr>
+<tr>
+<td>sales-manager</td>
+<td>~/Hermes_SanPhamMoi_DFY_QuyTrinh.md — gói dịch vụ, giá, script tư vấn, xử lý phản đối</td>
+</tr>
+<tr>
+<td>mkt-email-ops</td>
+<td>~/Hermes_SanPhamMoi_Club_KeHoach.md — Club 99-199k, 12 trợ lý, kịch bản FluentCRM</td>
+</tr>
+<tr>
+<td>mkt-content</td>
+<td>~/Hermes_SanPhamMoi_ChuyenDoi_NoiDung.md — lộ trình 37 bài → YouTube, thông báo khách cũ, nội dung bán dịch vụ</td>
+</tr>
+</tbody>
+</table>
+<p>Tất cả sẽ tổng hợp thành 1 dashboard HTML như lần trước.</p></div>
+</section>
+<section class="panel" id="sec-mohinh">
+<div class="panel-inner"><h1 id="mo-hinh-kiem-tien-moi-cho-kenh-hermes-khong-ban-khoa-hoc">Mô hình kiếm tiền mới cho kênh Hermes — Không bán khóa học</h1>
+<blockquote>
+<p>Tài liệu nội bộ — Dành cho chủ kênh YouTube dạy miễn phí về Hermes
+Ngách: Trí tuệ nhân tạo tự động cho Doanh nghiệp vừa &amp; nhỏ và Gia đình Việt Nam
+Ngày lập: 12/10/2026
+Tài liệu liên quan: <em>Chiến lược kênh YouTube Hermes + Lộ trình 10 video đầu</em> (<code>~/YouTube_Hermes_ChienLuoc_10Video.md</code>)</p>
+<p><strong>Nguyên tắc ghi số trong tài liệu này:</strong> mọi con số đều là <strong>ƯỚC TÍNH NỘI BỘ</strong> để lập kế hoạch và ra quyết định, <strong>không phải số liệu thị trường đã kiểm chứng</strong>. Nguồn duy nhất của mỗi con số là giả định nội bộ được ghi rõ trong cột "Giả định". Trước khi tin vào bất kỳ con số nào, phải đo bằng số liệu thật trong 10 ngày đầu (xem mục 8).</p>
+</blockquote>
+<hr />
+<h2 id="muc-luc">Mục lục</h2>
+<ol>
+<li><a href="#1-bối-cảnh-và-mục-tiêu">Bối cảnh và mục tiêu</a></li>
+<li><a href="#2-bốn-mô-hình-tiềm-năng--bảng-so-sánh">Bốn mô hình tiềm năng — bảng so sánh</a></li>
+<li><a href="#3-phân-ti-chi-ti-từng-mô-hình">Phân tích chi tiết từng mô hình</a></li>
+<li><a href="#4-kịch-bản-dòng-tiền-90-ngày">Kịch bản dòng tiền 90 ngày</a></li>
+<li><a href="#5-vai-trò-của-việc-dạy-miễn-phí-trên-youtube">Vai trò của việc dạy miễn phí trên YouTube</a></li>
+<li><a href="#6-đề-xuất-cuối-cùng-và-lộ-trình-theo-pha">Đề xuất cuối cùng và lộ trình theo pha</a></li>
+<li><a href="#7-xử-lý-khóa-học-cũ">Xử lý khóa học cũ</a></li>
+<li><a href="#8-việc-phải-làm-trong-7-ngày-đầu-rủi-ro-và-điểm-cần-theo-dõi">Việc phải làm trong 7 ngày đầu, rủi ro và điểm cần theo dõi</a></li>
+</ol>
+<hr />
+<h2 id="1-boi-canh-va-muc-tieu">1. Bối cảnh và mục tiêu</h2>
+<h3 id="11-quyet-inh-a-chot">1.1 Quyết định đã chốt</h3>
+<table>
+<thead>
+<tr>
+<th>Hạng mục</th>
+<th>Nội dung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Khóa học "Nhân Sự Toàn Năng Hermes" (37 bài)</td>
+<td><strong>Ngừng bán. Dạy miễn phí toàn bộ</strong> trên YouTube</td>
+</tr>
+<tr>
+<td>Liên kết hoa hồng giới thiệu (vanhi.id.vn/nous)</td>
+<td>Giữ, nhưng <strong>không coi là nguồn thu chính</strong> — thu về ít và chậm</td>
+</tr>
+<tr>
+<td>Hướng đi mới</td>
+<td>Bán <strong>kết quả và sự tiện lợi</strong>, không bán kiến thức</td>
+</tr>
+</tbody>
+</table>
+<h3 id="12-tai-san-san-co-e-kiem-tien">1.2 Tài sản sẵn có để kiếm tiền</h3>
+<table>
+<thead>
+<tr>
+<th>Tài sản</th>
+<th>Trạng thái</th>
+<th>Giá trị thương mại</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>3 hệ thống Hermes cài sẵn</td>
+<td>Đã chạy ổn định</td>
+<td>Cao — là "phần công cụ" của khóa học cũ, <strong>có thể tách ra bán riêng</strong></td>
+</tr>
+<tr>
+<td>17 trợ lý tự động cho đời sống &amp; công việc</td>
+<td>Đã xây dựng</td>
+<td>Cao — bán một lần hoặc phát hành dần theo tháng</td>
+</tr>
+<tr>
+<td>Kênh YouTube tiếng Việt</td>
+<td>Đang xây dựng, 10 video đầu</td>
+<td>Trung bình — chưa có lưu lượng, cần 2–3 tháng</td>
+</tr>
+<tr>
+<td>Trang speedreading.vn + hệ thống gửi thư FluentCRM</td>
+<td>Đang hoạt động, có danh sách người quan tâm khóa cũ</td>
+<td><strong>Cao nhất ngay lúc này</strong> — đây là tài sản duy nhất có thể cho tiền trong tuần đầu</td>
+</tr>
+<tr>
+<td>Khả năng cài đặt Hermes làm thay cho khách</td>
+<td>Đã làm được</td>
+<td>Cao — giá cao nhất, nhưng tốn thời gian của chính chủ kênh</td>
+</tr>
+</tbody>
+</table>
+<h3 id="13-muc-tieu-cua-mo-hinh-moi">1.3 Mục tiêu của mô hình mới</h3>
+<ol>
+<li>Có tiền về <strong>trong tháng đầu</strong>, trước khi kênh YouTube kịp lớn.</li>
+<li>Dòng thu <strong>định kỳ</strong> phải chiếm tỷ trọng tăng dần theo thời gian (không phụ thuộc vào việc bán hết từng đơn rồi lại bắt đầu từ con số không).</li>
+<li>Việc dạy miễn phí trên YouTube <strong>không được bị cản trở</strong> — nó vừa là sứ mệnh, vừa là công cụ tiếp thị rẻ nhất.</li>
+<li>Người xem kênh <strong>không bị coi là khách hàng tiềm năng để lừa</strong> — ai trả tiền thì trả cho thời gian và sự cá nhân hóa, không phải cho kiến thức bị giấu đi.</li>
+</ol>
+<hr />
+<h2 id="2-bon-mo-hinh-tiem-nang-bang-so-sanh">2. Bốn mô hình tiềm năng — bảng so sánh</h2>
+<table>
+<thead>
+<tr>
+<th>Tiêu chí</th>
+<th>(a) Dịch vụ cài đặt làm thay bạn từ đầu đến cuối</th>
+<th>(b) Hội viên trả phí hàng tháng</th>
+<th>(c) Gói tài sản cài sẵn (bán một lần)</th>
+<th>(d) Gói tổ hợp</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Giá đề xuất</strong></td>
+<td>1.500.000đ – 3.000.000đ / khách</td>
+<td>99.000đ – 199.000đ / tháng</td>
+<td>299.000đ – 499.000đ / gói</td>
+<td>1.200.000đ – 2.500.000đ / khách</td>
+</tr>
+<tr>
+<td><strong>Thời gian có tiền đầu tiên</strong></td>
+<td><strong>Nhanh nhất</strong> (7–14 ngày, nếu đã có người cần)</td>
+<td><strong>Chậm nhất</strong> (cần 30–80 khách hội viên mới đáng, thường mất 4–6 tháng)</td>
+<td>Nhanh (14–30 ngày sau khi có lưu lượng)</td>
+<td>Nhanh (bằng mô hình (a), vì bán chéo)</td>
+</tr>
+<tr>
+<td><strong>Tính chất thu nhập</strong></td>
+<td>Một lần, không lặp lại — phải đi bán liên tục</td>
+<td><strong>Định kỳ, cộng dồn</strong> — khách ở lại càng lâu càng có lời</td>
+<td>Một lần, gần như thụ động sau khi đã đóng gói</td>
+<td>Một lần, nhưng mỗi khách mang lại nhiều tiền nhất</td>
+</tr>
+<tr>
+<td><strong>Khả năng mở rộng</strong></td>
+<td><strong>Thấp</strong> — giới hạn bởi số giờ của một người, không thuê thêm được dễ dàng</td>
+<td><strong>Cao nhất</strong> — thêm 100 khách không đồng nghĩa với thêm 100 giờ làm</td>
+<td><strong>Cao</strong> — làm một lần, bán không giới hạn</td>
+<td>Trung bình — phần dịch vụ vẫn bị chặn bởi thời gian</td>
+</tr>
+<tr>
+<td><strong>Phù hợp kênh YouTube dạy miễn phí</strong></td>
+<td>Phù hợp (là bước cuối của người xem giỏi nhất)</td>
+<td>Ít phù hợp lúc đầu — kênh còn nhỏ, chưa đủ người để giữ tỷ lệ ở lại</td>
+<td><strong>Phù hợp nhất</strong> — hình ảnh dễ hiểu: "thay vì tự làm 3 giờ, lấy bộ có sẵn"</td>
+<td>Phù hợp, nhưng khó giải thích trong 60 giây video</td>
+</tr>
+<tr>
+<td><strong>Lợi ích cho người xem</strong></td>
+<td>Có kết quả mà không cần rành công nghệ</td>
+<td>Được cập nhật trợ lý mới mỗi tháng, có chỗ hỏi han</td>
+<td>Tiết kiệm nhiều giờ, chạy được ngay trong ngày</td>
+<td>Trọn bộ: có kết quả ngay + có đồ chơi mới mỗi tháng</td>
+</tr>
+<tr>
+<td><strong>Rủi ro chính</strong></td>
+<td>Kiệt sức vì làm thuê theo giờ; dịch vụ kéo theo hỗ trợ vô tận</td>
+<td>Tỷ lệ rời bỏ cao nếu mở quá sớm khi chưa có lưu lượng; phải có nội dung mới đều đặn mỗi tháng</td>
+<td>Bị sao chép và chia sẻ miễn phí; cần cập nhật liên tục</td>
+<td>Giá cao làm chậm quyết định mua</td>
+</tr>
+<tr>
+<td><strong>Vốn cần thêm</strong></td>
+<td>Không (thời gian)</td>
+<td>Không (thời gian + nội dung)</td>
+<td>Không (đã có sẵn tài sản)</td>
+<td>Không</td>
+</tr>
+<tr>
+<td><strong>Thứ tự ưu tiên</strong></td>
+<td><strong>Pha 1</strong></td>
+<td>Pha 3</td>
+<td><strong>Pha 2</strong></td>
+<td>Cách đóng gói, chạy xuyên suốt</td>
+</tr>
+</tbody>
+</table>
+<h3 id="21-ket-luan-nhanh-tu-bang">2.1 Kết luận nhanh từ bảng</h3>
+<ul>
+<li>Nếu chỉ được chọn <strong>một</strong> mô hình để sống trong 90 ngày: chọn <strong>(a) Dịch vụ làm thay</strong>. Đây là mô hình duy nhất cho tiền nhanh, giá cao và dùng được ngay tài sản hiện có (danh sách thư cũ + uy tín cá nhân).</li>
+<li>Mô hình có giá trị dài hạn nhất: <strong>(b) Hội viên hàng tháng</strong>, nhưng chỉ mở sau khi đã có đủ khách hàng một lần để làm nền.</li>
+<li>Mô hình "làm một lần bán mãi": <strong>(c) Gói tài sản cài sẵn</strong> — đây là cầu nối hoàn hảo giữa việc dạy miễn phí và dịch vụ giá cao.</li>
+<li><strong>(d) Gói tổ hợp</strong> không phải là mô hình thứ tư — đó là cách đóng gói ba mô hình trên lại để mỗi khách trả nhiều hơn và ở lại lâu hơn.</li>
+</ul>
+<hr />
+<h2 id="3-phan-tich-chi-tiet-tung-mo-hinh">3. Phân tích chi tiết từng mô hình</h2>
+<h3 id="31-a-dich-vu-cai-at-hermes-lam-thay-ban-tu-au-en-cuoi-1500000-3000000">3.1 (a) Dịch vụ cài đặt Hermes làm thay bạn từ đầu đến cuối — 1.500.000đ – 3.000.000đ</h3>
+<p><strong>Khách hàng mua vì gì:</strong> họ đã xem video, thấy hay, nhưng không muốn tự mày mò — hoặc là chủ doanh nghiệp vừa &amp; nhỏ cần một quy trình riêng cho công việc của mình, không có trong video nào.</p>
+<p><strong>Cách bán:</strong> gọi điện/tư vấn trực tiếp 20 phút → báo giá theo phạm vi công việc → làm trong 3–5 ngày → bàn giao + hướng dẫn dùng.</p>
+<p><strong>Ưu điểm:</strong> tiền về ngay, giá cao nhất, mỗi khách là một <strong>ví dụ thực tế</strong> dùng lại được cho kênh YouTube (với sự đồng ý của khách), và qua mỗi khách ta hiểu đúng nỗi đau thật của thị trường để làm video đúng hướng.</p>
+<p><strong>Nhược điểm cần chấp nhận:</strong> đây là <strong>làm thuê theo giờ</strong>. Nếu bán 10 khách/tháng ở mức này, chủ kênh sẽ không còn thời gian làm video — giết chết chính nguồn tiếp thị của mình. Vì vậy mô hình này <strong>phải bị giới hạn số lượng</strong>: tối đa 4–5 khách/tháng ở pha đầu.</p>
+<p><strong>Giá đề xuất theo tầng (mặc định):</strong></p>
+<table>
+<thead>
+<tr>
+<th>Tầng</th>
+<th>Nội dung</th>
+<th>Giá (ước tính)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Cơ bản</td>
+<td>Cài Hermes + kết nối tài khoản + 3 trợ lý tự động chọn sẵn + 1 buổi dạy dùng</td>
+<td>1.500.000đ</td>
+</tr>
+<tr>
+<td>Nâng cao</td>
+<td>Toàn bộ tầng cơ bản + 3 hệ thống cài sẵn đầy đủ + cá nhân hóa theo ngành nghề của khách + hỗ trợ 30 ngày</td>
+<td>3.000.000đ</td>
+</tr>
+</tbody>
+</table>
+<h3 id="32-b-hoi-vien-tra-phi-hang-thang-99000-199000-thang">3.2 (b) Hội viên trả phí hàng tháng — 99.000đ – 199.000đ / tháng</h3>
+<p><strong>Khách hàng mua vì gì:</strong> muốn có trợ lý mới mỗi tháng, muốn hỏi han khi bí, muốn thuộc một nhóm người cùng dùng Hermes.</p>
+<p><strong>Điều kiện tiên quyết để mở (bắt buộc tuân thủ):</strong> ít nhất <strong>100 người</strong> trong danh sách thư đã mua hàng hoặc tải tài liệu và tương tác. Mở hội viên khi chưa có đám đông sẽ dẫn đến tỷ lệ rời bỏ cao, tiếng xấu lan ra nhóm người nhiệt huyết nhất, và chủ kênh mất 2 buổi/tuần để phục vụ một nhóm nhỏ không đủ trả lương cho chính mình.</p>
+<p><strong>Ưu điểm:</strong> thu nhập cộng dồn, dự đoán được, không phụ thuộc vào từng lần bán.</p>
+<p><strong>Nhược điểm:</strong> là <strong>nghĩa vụ sản xuất nội dung hàng tháng vĩnh viễn</strong>. Nếu một tháng không phát hành trợ lý mới, khách hỏi "tôi trả tiền để được gì". Chỉ nên mở khi chủ kênh đã chắc làm được 12 tháng liên tiếp.</p>
+<h3 id="33-c-goi-tai-san-cai-san-ban-mot-lan-299000-499000">3.3 (c) Gói tài sản cài sẵn — bán một lần, 299.000đ – 499.000đ</h3>
+<p><strong>Nội dung gói:</strong> 3 hệ thống Hermes đã cài đặt + 17 trợ lý tự động cho đời sống &amp; công việc + hướng dẫn cài trong 15 phút + quyền nhận bản cập nhật trong 12 tháng.</p>
+<p><strong>Vì sao đây là mô hình quan trọng nhất với kênh YouTube:</strong> nó là <strong>bậc thang giữa</strong> giữa "xem miễn phí" và "thuê làm thay 3 triệu". Người xem video xong sẽ rơi vào một trong ba nhóm — nhóm giữa chính là khách của gói này (xem mục 5).</p>
+<p><strong>Giá:</strong> đề xuất mở bán <strong>399.000đ</strong> (giữa khoảng cho phép), cho phép giảm còn 299.000đ trong đợt mở bán đầu tiên để lấy đánh giá và ảnh chụp màn hình thật từ khách.</p>
+<p><strong>Ưu điểm:</strong> tài sản đã có sẵn, gần như không tốn thêm công sức để đóng gói, bán không giới hạn số lượng, không chiếm thời gian hỗ trợ nhiều.</p>
+<p><strong>Nhược điểm:</strong> có thể bị sao chép và chia sẻ. Cách xử lý: giá trị thật nằm ở <strong>bản cập nhật và hỗ trợ cài đặt</strong>, không nằm ở bản thân tệp — nên chèn dòng "giá gói gồm cập nhật trong 12 tháng" vào trang bán.</p>
+<h3 id="34-d-goi-to-hop-cach-ong-goi-khong-phai-mo-hinh-rieng">3.4 (d) Gói tổ hợp — cách đóng gói, không phải mô hình riêng</h3>
+<table>
+<thead>
+<tr>
+<th>Tên gói</th>
+<th>Thành phần</th>
+<th>Giá (ước tính)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>"Trọn bộ khởi động"</strong></td>
+<td>Gói tài sản cài sẵn (399k) + 3 tháng hội viên (99k × 3) + 1 buổi tư vấn cá nhân hóa</td>
+<td>1.200.000đ (tiết kiệm được nhìn thấy rõ)</td>
+</tr>
+<tr>
+<td><strong>"Làm thay trọn gói"</strong></td>
+<td>Dịch vụ cài đặt tầng nâng cao (3.000k) + tặng kèm gói tài sản cài sẵn + 6 tháng hội viên</td>
+<td>2.500.000đ</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Cơ chế:</strong> người mua gói 399k có nhu cầu làm thay sẽ được đề xuất trừ tiền gói cũ vào giá dịch vụ — người đó không bị mất tiền, ta thu được một khách dịch vụ giá cao mà không phải đi bán lại từ đầu.</p>
+<hr />
+<h2 id="4-kich-ban-dong-tien-90-ngay">4. Kịch bản dòng tiền 90 ngày</h2>
+<blockquote>
+<p><strong>Cảnh báo đọc trước:</strong> toàn bộ phần này là <strong>KỊCH BẢN ƯỚC TÍNH</strong>, dùng để quyết định "làm gì trước, bỏ gì sau". Con số <strong>không phải dự báo doanh thu</strong> và không được dùng để trình bày ban lãnh đạo như thành tích. Mỗi dòng đều ghi rõ giả định nội bộ đằng sau nó. Sau 10 ngày đo thực tế, bảng này phải được viết lại bằng số thật.</p>
+</blockquote>
+<h3 id="41-cac-gia-inh-noi-bo-dung-chung">4.1 Các giả định nội bộ dùng chung</h3>
+<table>
+<thead>
+<tr>
+<th>Giả định</th>
+<th>Giá trị dùng để tính</th>
+<th>Ghi chú</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Quy mô danh sách thư cũ (người quan tâm khóa học)</td>
+<td>500 – 1.500 người</td>
+<td><strong>Phải kiểm tra số thật trong FluentCRM trong ngày đầu</strong> — đây là ẩn số lớn nhất của toàn bộ kế hoạch</td>
+</tr>
+<tr>
+<td>Tỷ lệ mở thư chiến dịch gửi tới danh sách ấm</td>
+<td>25 – 35%</td>
+<td>Giả định nội bộ, chưa kiểm chứng</td>
+</tr>
+<tr>
+<td>Tỷ lệ nhấp vào liên kết trong thư</td>
+<td>3 – 5%</td>
+<td>Giả định nội bộ</td>
+</tr>
+<tr>
+<td>Tỷ lệ chuyển đổi thành khách dịch vụ giá cao (trong số người trả lời/nhấp)</td>
+<td>2 – 5%</td>
+<td>Giả định nội bộ</td>
+</tr>
+<tr>
+<td>Tỷ lệ chuyển đổi thành khách mua gói tài sản</td>
+<td>1 – 3%</td>
+<td>Giả định nội bộ</td>
+</tr>
+<tr>
+<td>Lưu lượng YouTube trong 90 ngày đầu</td>
+<td>8.000 – 15.000 lượt xem (mục tiêu nội bộ từ tài liệu chiến lược kênh)</td>
+<td>Mục tiêu tự đặt, không phải số đo được</td>
+</tr>
+</tbody>
+</table>
+<h3 id="42-thang-1-tien-tu-au-khong-dua-vao-youtube">4.2 Tháng 1 — Tiền từ đâu (không dựa vào YouTube)</h3>
+<table>
+<thead>
+<tr>
+<th>Tuần</th>
+<th>Việc làm</th>
+<th>Nguồn tiền</th>
+<th>Doanh thu ước tính</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Kiểm tra kích thước danh sách thư thật; gửi thư đầu tiên tới người quan tâm khóa học cũ, thông báo "khóa học nay miễn phí hoàn toàn + nếu bạn cần tôi làm thay, đây là bảng giá"</td>
+<td><strong>Danh sách thư cũ</strong></td>
+<td>0đ (tuần đo lường)</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Gọi điện 20 phút với người trả lời; chốt 2–3 khách dịch vụ tầng cơ bản</td>
+<td><strong>Danh sách thư cũ</strong></td>
+<td>3.000.000đ – 4.500.000đ</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Làm và bàn giao cho 2–3 khách đầu; thu tiền; xin phép ghi lại ví dụ thực tế; gửi thư lần 2 tới người chưa mở thư lần 1</td>
+<td>Danh sách thư cũ + nhóm khách đầu giới thiệu</td>
+<td>1.500.000đ – 3.000.000đ</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Mở bán thử <strong>gói tài sản cài sẵn</strong> giá 299.000đ (đợt mở bán đầu) cho chính danh sách thư và nhóm khách đã mua dịch vụ</td>
+<td>Danh sách thư cũ</td>
+<td>1.500.000đ – 3.000.000đ</td>
+</tr>
+<tr>
+<td></td>
+<td><strong>Tổng tháng 1 (ước tính)</strong></td>
+<td></td>
+<td><strong>≈ 6.000.000đ – 10.500.000đ</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Vì sao tiền phải đến từ danh sách thư cũ, không phải từ YouTube:</strong> kênh YouTube mới, cần 2–3 tháng để có lưu lượng đáng kể. Danh sách thư là tài sản ấm duy nhất — những người này đã từng quan tâm tới khóa học, tức là đã từng tin chủ kênh đủ để định mua một món giá 239.000đ. Người này sẵn sàng trả cho "làm thay" hoặc "bộ có sẵn". Bỏ qua danh sách này để chờ YouTube là lãng phí tài sản quý nhất.</p>
+<h3 id="43-thang-2-tien-tu-youtube-bat-au-co">4.3 Tháng 2 — Tiền từ YouTube bắt đầu có</h3>
+<table>
+<thead>
+<tr>
+<th>Tuần</th>
+<th>Việc làm</th>
+<th>Nguồn tiền</th>
+<th>Doanh thu ước tính</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>5–6</td>
+<td>Video hướng dẫn cơ bản phát hành đều (2–3 video/tuần); cuối mỗi video giới thiệu gói tài sản cài sẵn như "cách nhanh hơn"</td>
+<td><strong>YouTube + liên kết hoa hồng (thu nhập phụ)</strong></td>
+<td>1.000.000đ – 3.000.000đ</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Video chuyển đổi trung tâm: "Tự làm hay thuê làm? Tôi làm thay Hermes cho bạn trong 1 ngày" — kèm biểu mẫu đăng ký tư vấn</td>
+<td>YouTube</td>
+<td>1.500.000đ – 3.000.000đ</td>
+</tr>
+<tr>
+<td>8</td>
+<td>Gói "Trọn bộ khởi động" (tổ hợp) ra mắt, bán cho cả danh sách thư và người xem đã mua gói cơ bản</td>
+<td>Cả hai nguồn</td>
+<td>2.000.000đ – 4.000.000đ</td>
+</tr>
+<tr>
+<td></td>
+<td><strong>Tổng tháng 2 (ước tính)</strong></td>
+<td></td>
+<td><strong>≈ 4.500.000đ – 10.000.000đ</strong></td>
+</tr>
+</tbody>
+</table>
+<h3 id="44-thang-3-thiet-lap-dong-thu-inh-ky">4.4 Tháng 3 — Thiết lập dòng thu định kỳ</h3>
+<table>
+<thead>
+<tr>
+<th>Tuần</th>
+<th>Việc làm</th>
+<th>Nguồn tiền</th>
+<th>Doanh thu ước tính</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>9–10</td>
+<td>Đạt mốc 100 người trong danh sách thư tương tác → <strong>ra quyết định có mở hội viên hay không</strong>. Nếu chưa đủ 100 người: <strong>hoãn, không mở</strong></td>
+<td>—</td>
+<td>0đ</td>
+</tr>
+<tr>
+<td>11</td>
+<td>Nếu mở: phát hành trợ lý tự động đầu tiên của tháng cho hội viên; thu phí tháng đầu</td>
+<td>Hội viên</td>
+<td>1.000.000đ – 2.000.000đ</td>
+</tr>
+<tr>
+<td>12</td>
+<td>Duy trì dịch vụ làm thay ở mức tối đa 4–5 khách/tháng; rà soát lại giá dựa trên số giờ thực tế đã tiêu thụ ở tháng 1–2</td>
+<td>Dịch vụ + gói cài sẵn</td>
+<td>3.000.000đ – 6.000.000đ</td>
+</tr>
+<tr>
+<td></td>
+<td><strong>Tổng tháng 3 (ước tính)</strong></td>
+<td></td>
+<td><strong>≈ 4.000.000đ – 8.000.000đ</strong></td>
+</tr>
+</tbody>
+</table>
+<h3 id="45-tong-ket-90-ngay-uoc-tinh">4.5 Tổng kết 90 ngày (ước tính)</h3>
+<table>
+<thead>
+<tr>
+<th>Nguồn</th>
+<th>Tỷ trọng doanh thu ước tính</th>
+<th>Tính chất</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Dịch vụ làm thay</td>
+<td>≈ 45–50%</td>
+<td>Một lần, tốn thời gian</td>
+</tr>
+<tr>
+<td>Gói tài sản cài sẵn + gói tổ hợp</td>
+<td>≈ 30–35%</td>
+<td>Một lần, gần thụ động</td>
+</tr>
+<tr>
+<td>Hội viên hàng tháng (nếu mở)</td>
+<td>≈ 15–20%</td>
+<td><strong>Định kỳ, cộng dồn</strong></td>
+</tr>
+<tr>
+<td>Liên kết hoa hồng giới thiệu</td>
+<td>&lt; 5%</td>
+<td>Không đáng để tối ưu hóa</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Nhận định chiến lược:</strong> trong 90 ngày đầu, dòng thu một lần vẫn chiếm đa số — đó là điều bình thường và <strong>không sao</strong>. Mục tiêu của 90 ngày không phải là có thu nhập đẹp ngay, mà là <strong>chuyển tỷ trọng sang dòng định kỳ</strong> trong 12 tháng tiếp theo. Ngược lại, nếu sau 90 ngày mà 100% doanh thu vẫn là làm thuê theo giờ, nghĩa là đang đi vào bế tắc thời gian.</p>
+<hr />
+<h2 id="5-vai-tro-cua-viec-day-mien-phi-tren-youtube">5. Vai trò của việc dạy miễn phí trên YouTube</h2>
+<h3 id="51-ieu-nguoi-ta-thuong-hieu-sai">5.1 Điều người ta thường hiểu sai</h3>
+<p>Nhiều chủ kênh cho rằng "dạy miễn phí thì ai trả tiền nữa". Thực tế ngược lại: <strong>càng dạy miễn phí có hệ thống, càng nhiều người muốn thuê ta làm thay.</strong> Việc dạy miễn phí không phải là mất mát doanh thu — nó là bộ máy tiếp thị rẻ nhất và có độ tin cậy cao nhất hiện có, vì nó chứng minh năng lực bằng hình ảnh thay vì bằng lời quảng cáo.</p>
+<h3 id="52-co-che-cung-co-loi-day-ky-thi-nguoi-xem-tu-at-minh-vao-ung-nhom">5.2 Cơ chế cùng có lợi: dạy kỹ thì người xem tự đặt mình vào đúng nhóm</h3>
+<p>Sau khi xem một video dạy kỹ, người xem tự rơi vào một trong ba nhóm:</p>
+<table>
+<thead>
+<tr>
+<th>Nhóm người xem</th>
+<th>Họ nghĩ gì sau video</th>
+<th>Họ làm gì</th>
+<th>Ta thu được gì</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>1. Tự làm được, thích tự làm</strong></td>
+<td>"Hay quá, tôi làm ngay được"</td>
+<td>Làm theo, chia sẻ video, bình luận, giới thiệu bạn bè</td>
+<td>Lưu lượng và danh tiếng miễn phí — <strong>không mất tiền, chỉ có lãi</strong></td>
+</tr>
+<tr>
+<td><strong>2. Làm được nhưng tốn thời gian</strong></td>
+<td>"Hay, nhưng tôi mất cả buổi tối để làm cái này"</td>
+<td>Mua gói tài sản cài sẵn (299–499k)</td>
+<td>Doanh thu gần thụ động, số lượng lớn</td>
+</tr>
+<tr>
+<td><strong>3. Không rành, cần giải pháp riêng</strong></td>
+<td>"Tôi không kịp/công việc tôi khác, ai làm giúp tôi"</td>
+<td>Thuê dịch vụ làm thay (1,5–3 triệu)</td>
+<td>Doanh thu cao nhất</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Điểm mấu chốt:</strong> video không tạo ra nhóm 2 và nhóm 3 — video chỉ <strong>làm họ tự nhận ra mình thuộc nhóm nào</strong>. Nếu không có video, cả ba nhóm đều không biết mình có vấn đề cần giải quyết. Dạy miễn phí chính là công cụ <strong>phân loại khách hàng</strong> nhanh nhất và trung thực nhất.</p>
+<h3 id="53-vi-sao-day-cang-ky-thi-cang-ban-uoc-dich-vu">5.3 Vì sao dạy càng kỹ thì càng bán được dịch vụ</h3>
+<table>
+<thead>
+<tr>
+<th>Mức độ dạy</th>
+<th>Hậu quả</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Dạy mập mờ, giấu nghề</td>
+<td>Người xem không làm được → bực bội, bỏ kênh, không ai mua hàng</td>
+</tr>
+<tr>
+<td>Dạy kỹ, rõ từng bước</td>
+<td>Người xem làm được → tự tin → <strong>và chính lúc đó họ mới biết mình không muốn tự làm nữa</strong></td>
+</tr>
+<tr>
+<td>Dạy kỹ + có sản phẩm trả phí hợp lý</td>
+<td>Người xem tự chọn bậc thang phù hợp túi tiền và mức độ rành công nghệ của mình</td>
+</tr>
+</tbody>
+</table>
+<p>Nói cách khác: <strong>video bán "biết làm gì", sản phẩm trả phí bán "không phải tự làm".</strong> Hai thứ này không đá nhau — chúng phục vụ hai nhóm người khác nhau trong cùng một khán giả. Người xem nhóm 1 không mất gì cả, và họ còn là kênh quảng cáo miễn phí cho nhóm 2 và nhóm 3.</p>
+<h3 id="54-cam-ket-giu-uy-tin-ieu-kien-e-co-che-nay-chay-uoc">5.4 Cam kết giữ uy tín (điều kiện để cơ chế này chạy được)</h3>
+<p>Cơ chế trên chỉ hoạt động nếu người xem tin rằng mình <strong>không bị giữ thông tin</strong>. Bốn điều khoản phải giữ tuyệt đối:</p>
+<ol>
+<li><strong>Không bao giờ nói "phần quan trọng nhất tôi để dành cho người trả tiền"</strong> trong video miễn phí. Phần miễn phí phải đủ để người xem tự làm được từ đầu đến cuối.</li>
+<li><strong>Nói rõ ngay từ video đầu</strong> là kênh dạy miễn phí, và có dịch vụ trả phí cho người không muốn tự làm. Minh bạch về giá ngay từ sớm.</li>
+<li><strong>Giá trị của bản trả phí phải là thời gian, sự cá nhân hóa và kết quả cần đạt</strong> — không bao giờ là "kiến thức bí mật".</li>
+<li><strong>Không để quảng cáo sản phẩm lấn át nội dung.</strong> Tỷ lệ tham chiếu: mỗi video dạy đủ 8–10 phút thì đoạn giới thiệu sản phẩm không quá 30 giây.</li>
+</ol>
+<hr />
+<h2 id="6-e-xuat-cuoi-cung-va-lo-trinh-theo-pha">6. Đề xuất cuối cùng và lộ trình theo pha</h2>
+<h3 id="61-mo-hinh-uoc-chon">6.1 Mô hình được chọn</h3>
+<p><strong>Chọn mô hình (c) — Gói tài sản cài sẵn (299.000đ – 499.000đ) làm nền tảng, mở đường bằng (a) Dịch vụ làm thay để lấy tiền và ví dụ thực tế ngay trong tháng đầu, và mở (b) Hội viên hàng tháng ở pha cuối khi đã đủ lưu lượng.</strong></p>
+<h3 id="62-vi-sao-chon-nhu-vay">6.2 Vì sao chọn như vậy</h3>
+<table>
+<thead>
+<tr>
+<th>Lý do</th>
+<th>Giải thích</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Nền tảng phải là gói bán một lần, không phải dịch vụ</strong></td>
+<td>Dịch vụ làm thay trả tiền nhiều nhất nhưng là bẫy thời gian: bán càng nhiều càng không còn thời gian làm video, mà video chính là nguồn tiếp thị duy nhất. Gói bán một lần bán được 10 hay 100 lượt cũng không tốn thêm giờ nào</td>
+</tr>
+<tr>
+<td><strong>Nhưng phải khởi động bằng dịch vụ</strong></td>
+<td>Vì chỉ dịch vụ mới cho tiền nhanh nhất từ danh sách thư ấm hiện có, và mỗi khách dịch vụ cho ra một ví dụ thực tế + hiểu biết về nỗi đau thật để làm video đúng hướng. Đây là "tiền và kiến thức đầu tư", không phải "nghề chính"</td>
+</tr>
+<tr>
+<td><strong>Hội viên mở sau, không mở trước</strong></td>
+<td>Hội viên là mô hình đẹp nhất nhưng chết sớm nếu mở khi chưa có đủ người. Phải có đám đông tối thiểu trước</td>
+</tr>
+<tr>
+<td><strong>Không bán khóa học nữa, và điều đó không làm giảm thu nhập</strong></td>
+<td>Vì mô hình mới bán đúng thứ người xem YouTube muốn: tiết kiệm thời gian và có kết quả. 37 bài giờ thành nội dung miễn phí tiếp thị cho gói trả phí</td>
+</tr>
+<tr>
+<td><strong>Không phụ thuộc liên kết hoa hồng</strong></td>
+<td>Hoa hồng thu về ít và chậm, không đáng làm trụ cột. Giữ lại như thu nhập phụ trong giai đoạn kênh còn nhỏ</td>
+</tr>
+</tbody>
+</table>
+<h3 id="63-lo-trinh-theo-pha">6.3 Lộ trình theo pha</h3>
+<pre><code>PHA 1 (Ngày 1–30): LẤY TIỀN TỪ DANH SÁCH THƯ CŨ
+  Trọng tâm: Dịch vụ làm thay (tối đa 4–5 khách/tháng)
+  Mục tiêu pha: 6–10 triệu đồng, 3 ví dụ thực tế, hiểu đúng nỗi đau
+        ↓ (điều kiện chuyển pha: đã có 3 khách trả tiền và 3 ví dụ thực tế)
+
+PHA 2 (Ngày 31–60): ĐÓNG GÓI VÀ BÁN THỤ ĐỘNG
+  Trọng tâm: Gói tài sản cài sẵn + gói tổ hợp, bán cho cả danh sách thư lẫn người xem YouTube
+  Mục tiêu pha: 5–10 triệu đồng, 20–40 gói bán ra, thu được đánh giá thật của khách
+        ↓ (điều kiện chuyển pha: đủ 100 người tương tác trong danh sách thư)
+
+PHA 3 (Ngày 61–120): DỰNG DÒNG THU ĐỊNH KỲ
+  Trọng tâm: Hội viên hàng tháng (nếu đủ điều kiện) + giảm dần tỷ trọng dịch vụ
+  Mục tiêu pha: 30–60 hội viên đầu tiên, thu nhập định kỳ ổn định hàng tháng
+</code></pre>
+<p><strong>Quy tắc chuyển pha:</strong> không được nhảy pha. Nếu pha 1 chưa có khách trả tiền nào mà đã làm gói tổ hợp và hội viên, kết quả là mất tháng, mất uy tín và mất động lực.</p>
+<h3 id="64-viec-bo-qua-chu-ich">6.4 Việc bỏ qua (chủ đích)</h3>
+<table>
+<thead>
+<tr>
+<th>Việc</th>
+<th>Vì sao bỏ</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Làm liên kết hoa hồng thành nguồn thu chính</td>
+<td>Thu ít, chậm, và phụ thuộc vào người khác</td>
+</tr>
+<tr>
+<td>Chạy quảng cáo trả phí</td>
+<td>Kênh chưa có nội dung đủ và chưa biết tỷ lệ chuyển đổi thật — quảng cáo lúc này là đốt tiền</td>
+</tr>
+<tr>
+<td>Mở hội viên ngay trong tháng 1</td>
+<td>Chưa có đủ người, tỷ lệ rời bỏ sẽ cao</td>
+</tr>
+<tr>
+<td>Nhận dịch vụ không giới hạn số lượng</td>
+<td>Tự hủy nguồn tiếp thị của mình</td>
+</tr>
+<tr>
+<td>Làm khóa học nâng cao bản mới</td>
+<td>Đi ngược quyết định đã chốt và làm rối thông điệp kênh</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="7-xu-ly-khoa-hoc-cu">7. Xử lý khóa học cũ</h2>
+<h3 id="71-chuyen-37-bai-thanh-loat-video-youtube">7.1 Chuyển 37 bài thành loạt video YouTube</h3>
+<table>
+<thead>
+<tr>
+<th>Bước</th>
+<th>Việc làm</th>
+<th>Lưu ý</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Chia 37 bài thành <strong>4–5 danh sách phát</strong> theo chủ đề: Cơ bản / Ứng dụng công việc / Gia đình / Nâng cao / Tự động hóa</td>
+<td>Mỗi danh sách phát phải tự đứng vững được, vì người xem vào từ bài giữa</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Làm mới từng bài: ghi lại hình ảnh bằng phiên bản Hermes mới nhất, thêm phần "làm theo ngay trong video"</td>
+<td>Bài cũ có thể có nội dung lỗi thời do phần mềm cập nhật — phải quay lại, không dùng tệp cũ</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Đăng 2–3 video/tuần theo lịch cố định (khớp với lộ trình 10 video đầu trong tài liệu chiến lược kênh)</td>
+<td>37 bài dự trữ khoảng 13–15 tuần nội dung — đây là lợi thế lớn so với việc phải nghĩ kịch bản mới mỗi tuần</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Cuối mỗi video: giới thiệu <strong>gói tài sản cài sẵn</strong> (không còn nhắc khóa học)</td>
+<td>Thay câu kêu gọi cũ bằng câu kêu gọi mới</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Tệp đính kèm, bài tập của khóa cũ (nếu có) → tách ra làm <strong>tài liệu miễn phí kèm video</strong> hoặc quà thu thập địa chỉ thư</td>
+<td>Không để tài sản đã làm bị bỏ phí</td>
+</tr>
+</tbody>
+</table>
+<h3 id="72-xu-ly-nguoi-a-mua-khoa-hoc-cu">7.2 Xử lý người đã mua khóa học cũ</h3>
+<p>Nguyên tắc: <strong>đừng lấy thêm tiền của người đã tin ta.</strong></p>
+<table>
+<thead>
+<tr>
+<th>Hạng mục</th>
+<th>Đề xuất</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Quyền truy cập khóa cũ</td>
+<td><strong>Giữ vĩnh viễn.</strong> Không tắt, không thu phí lại</td>
+</tr>
+<tr>
+<td>Thái độ thông báo</td>
+<td>Gửi thư trực tiếp, ký tên thật, nói rõ: khóa học nay được dạy miễn phí để nhiều người tiếp cận được, và bản thân người đó <strong>không mất gì</strong></td>
+</tr>
+<tr>
+<td>Quà đền bù (đề xuất "ông bà/tổ tiên")</td>
+<td>Tặng <strong>3 tháng hội viên</strong> khi hội viên mở (pha 3), hoặc <strong>phiếu giảm 300.000đ</strong> cho dịch vụ làm thay nếu cần — chọn một, không tặng cả hai để tránh mất kiểm soát chi phí</td>
+</tr>
+<tr>
+<td>Với người mua gần đây (trong 90 ngày)</td>
+<td>Hoàn <strong>phần chênh lệch</strong> giữa 239.000đ và giá trị thực nhận được, không rắc rối thủ tục. Chi phí nhỏ so với giá trị của một người không nói xấu ta</td>
+</tr>
+<tr>
+<td>Vì sao làm thế</td>
+<td>Đây là nhóm người duy nhất đã chứng minh họ sẵn sàng trả tiền cho ta. Họ vừa là khách hàng của dịch vụ làm thay, vừa là nhóm chia sẻ tích cực nhất trên YouTube nếu được đối xử tử tế</td>
+</tr>
+</tbody>
+</table>
+<h3 id="73-xu-ly-trang-ban-hang-cu-speedreadingvnahermes">7.3 Xử lý trang bán hàng cũ (speedreading.vn/ahermes)</h3>
+<table>
+<thead>
+<tr>
+<th>Hạng mục</th>
+<th>Đề xuất</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Không xóa trang</td>
+<td>Trang vẫn có lưu lượng tìm kiếm và vẫn là cửa thu thập địa chỉ thư</td>
+</tr>
+<tr>
+<td>Thông báo trên trang</td>
+<td>Dòng rõ ràng, đặt ở đầu trang: <em>"Khóa học này nay được dạy miễn phí toàn bộ trên YouTube — xem danh sách phát tại [liên kết]. Nếu bạn cần tôi làm thay, xem bảng giá bên dưới."</em></td>
+</tr>
+<tr>
+<td>Ba lựa chọn đặt trên trang</td>
+<td>1) Vào danh sách phát miễn phí trên YouTube · 2) Mua gói tài sản cài sẵn · 3) Đăng ký tư vấn dịch vụ làm thay</td>
+</tr>
+<tr>
+<td>Biểu mẫu thu thập thư</td>
+<td><strong>Giữ nguyên</strong> — mọi lưu lượng cũ vẫn phải đổ vào danh sách thư, đây là tài sản dùng lại cho mọi đợt bán hàng sau</td>
+</tr>
+<tr>
+<td>Chuyển hướng</td>
+<td>Nếu trang cũ có nhiều đường dẫn rác, dồn về một trang duy nhất cho gọn</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="8-viec-phai-lam-trong-7-ngay-au-rui-ro-va-iem-can-theo-doi">8. Việc phải làm trong 7 ngày đầu, rủi ro và điểm cần theo dõi</h2>
+<h3 id="81-viec-phai-lam-trong-7-ngay-au-theo-thu-tu">8.1 Việc phải làm trong 7 ngày đầu (theo thứ tự)</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Việc</th>
+<th>Người làm</th>
+<th>Xong khi nào</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Mở FluentCRM, lấy <strong>số thật</strong> người trong danh sách thư quan tâm khóa cũ, và số người đã từng mua</td>
+<td>Chủ kênh</td>
+<td>Ngày 1</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Soạn và gửi thư thông báo chuyển hướng (mục 7.2) cho người đã mua khóa</td>
+<td>Chủ kênh</td>
+<td>Ngày 2</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Viết thư chiến dịch cho danh sách thư ấm: thông báo miễn phí + giới thiệu bảng giá dịch vụ làm thay</td>
+<td>Chủ kênh</td>
+<td>Ngày 3</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Gửi chiến dịch đó, mở biểu mẫu đăng ký tư vấn 20 phút</td>
+<td>Chủ kênh</td>
+<td>Ngày 4</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Gọi điện/chốt 2–3 khách dịch vụ đầu tiên</td>
+<td>Chủ kênh</td>
+<td>Ngày 7</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Cập nhật trang speedreading.vn/ahermes theo mục 7.3</td>
+<td>Chủ kênh</td>
+<td>Ngày 7</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Cập nhật câu kêu gọi ở cuối 10 video trong tài liệu chiến lược kênh: đổi từ "mua khóa học" sang "lấy gói cài sẵn / đăng ký làm thay"</td>
+<td>Chủ kênh</td>
+<td>Ngày 7</td>
+</tr>
+</tbody>
+</table>
+<h3 id="82-rui-ro-va-cach-giam-thieu">8.2 Rủi ro và cách giảm thiểu</h3>
+<table>
+<thead>
+<tr>
+<th>Rủi ro</th>
+<th>Mức độ</th>
+<th>Cách giảm thiểu</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Danh sách thư nhỏ hơn nhiều so với giả định</td>
+<td>Cao (chưa đo)</td>
+<td>Đo ngay ngày 1; nếu danh sách dưới 300 người, pha 1 phải kéo dài và dồn lực vào sản xuất video sớm hơn</td>
+</tr>
+<tr>
+<td>Dịch vụ làm thay chiếm hết thời gian, video bị ngừng</td>
+<td>Cao</td>
+<td><strong>Giới hạn cứng 4–5 khách/tháng</strong>, tăng giá khi hết chỗ thay vì nhận thêm</td>
+</tr>
+<tr>
+<td>Gói tài sản bị sao chép và chia sẻ miễn phí</td>
+<td>Trung bình</td>
+<td>Giá trị đặt ở bản cập nhật 12 tháng + hỗ trợ cài đặt, không đặt ở bản thân tệp</td>
+</tr>
+<tr>
+<td>Hội viên mở quá sớm, khách rời bỏ hàng loạt</td>
+<td>Trung bình</td>
+<td>Chỉ mở khi đạt mốc 100 người tương tác (điều kiện bắt buộc ở mục 3.2)</td>
+</tr>
+<tr>
+<td>Khán giả cũ tức giận vì khóa học ngừng bán</td>
+<td>Trung bình</td>
+<td>Xử lý theo mục 7.2: giữ quyền truy cập + tặng đền bù + thư ký tên thật</td>
+</tr>
+<tr>
+<td>Mất tập trung vì làm cùng lúc 4 mô hình</td>
+<td>Cao</td>
+<td>Tuân thủ tuyệt đối lộ trình 3 pha ở mục 6.3 và danh sách "việc bỏ qua" ở mục 6.4</td>
+</tr>
+</tbody>
+</table>
+<h3 id="83-bon-chi-so-phai-theo-doi-hang-tuan">8.3 Bốn chỉ số phải theo dõi hàng tuần</h3>
+<table>
+<thead>
+<tr>
+<th>Chỉ số</th>
+<th>Cách lấy</th>
+<th>Ngưỡng ra quyết định</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Số người trong danh sách thư tương tác (mở thư trong 30 ngày)</td>
+<td>Báo cáo FluentCRM</td>
+<td>Dưới 100 người → hoãn hội viên</td>
+</tr>
+<tr>
+<td>Số khách tư vấn đặt lịch / số khách chốt</td>
+<td>Ghi tay vào bảng theo dõi</td>
+<td>Chốt dưới 20% → sai đối tượng hoặc sai giá, phải sửa thư bán hàng</td>
+</tr>
+<tr>
+<td>Doanh thu chia theo nguồn (danh sách thư / YouTube / giới thiệu)</td>
+<td>Bảng theo dõi đơn hàng</td>
+<td>Tỷ trọng danh sách thư trên 70% kéo dài 2 tháng → đang bỏ bê kênh YouTube</td>
+</tr>
+<tr>
+<td>Tỷ lệ thu nhập định kỳ / tổng thu nhập</td>
+<td>Tính cuối mỗi tháng</td>
+<td>Sau 6 tháng mà vẫn dưới 25% → vẫn đang đi vào bẫy làm thuê theo giờ</td>
+</tr>
+</tbody>
+</table>
+<h3 id="84-cam-ket-cua-tai-lieu-nay">8.4 Cam kết của tài liệu này</h3>
+<p>Toàn bộ số liệu trong mục 4 là <strong>ước tính nội bộ</strong> để ra quyết định ưu tiên. Sau 10 ngày đo thực tế (mục 8.1, việc số 1 và số 4), tài liệu phải được viết lại bằng số thật — bao gồm cả trường hợp số thật thấp hơn nhiều so với giả định. Báo cáo thành tích bằng con số chưa kiểm chứng là tự lừa mình.</p>
+<hr />
+<p><em>Hết tài liệu. Mô hình được chọn: gói tài sản cài sẵn làm nền tảng, dịch vụ làm thay để khởi động, hội viên hàng tháng để ổn định — không bán khóa học, không phụ thuộc hoa hồng giới thiệu.</em></p></div>
+</section>
+<section class="panel" id="sec-dfy">
+<div class="panel-inner"><h1 id="quy-trinh-dich-vu-cai-at-done-for-you-dfy-hermes">Quy Trình Dịch Vụ Cài Đặt Done-For-You (DFY) — Hermes</h1>
+<blockquote>
+<p>Tài liệu vận hành bán hàng cho mô hình mới: chủ kênh cài đặt Hermes + 3 hệ thống + 17 trợ lý AI lên máy khách hàng, giao trong 1 phiên làm việc. Đây là nguồn tiền nhanh và bệ phóng bán membership Club về sau.</p>
+<p>Ngày lập: 12/10/2026 · Phiên bản 1.0 · Trạng thái: Sẵn sàng dùng ngay</p>
+</blockquote>
+<hr />
+<h2 id="0-tom-tat-1-trang-oc-truoc-khi-ban">0. Tóm tắt 1 trang (đọc trước khi bán)</h2>
+<ul>
+<li>Sản phẩm: Dịch vụ cài đặt trọn gói Hermes + 3 hệ thống + 17 trợ lý AI lên máy khách (không cần lập trình).</li>
+<li>Khách mục tiêu: Chủ SME, người bán hàng online, chủ shop nhỏ — KHÔNG rành công nghệ.</li>
+<li>Cam kết cốt lõi (nhắc đi nhắc lại): AI chỉ nháp nội dung, KHÁCH DUYỆT — không tự gửi email, không tự chi tiền.</li>
+<li>Giá đề xuất: Cơ bản 1.5tr / Gia đình 2.5tr / Doanh nghiệp 3.5tr VND.</li>
+<li>Mục tiêu (ƯỚC TÍNH): 3 khách/tháng giai đoạn đầu → ổn định ở 2 khách/tuần (tầm 6-7tr/tháng) sau 3-6 tháng.</li>
+<li>Quy trình 5 bước: Thu lead → Tư vấn 15 phút → Chốt → Cài đặt 1 buổi → Bàn giao + hỗ trợ 30 ngày → Upsell Club.</li>
+<li>Nguyên tắc: bán ít nhưng chắc, 100% khách DFY là khách tiềm năng cho Club sau này.</li>
+</ul>
+<hr />
+<h2 id="1-ba-goi-dich-vu">1. Ba gói dịch vụ</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th><strong>GÓI CƠ BẢN</strong></th>
+<th><strong>GÓI GIA ĐÌNH</strong></th>
+<th><strong>GÓI DOANH NGHIỆP</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Giá</strong></td>
+<td><strong>1.500.000đ</strong></td>
+<td><strong>2.500.000đ</strong></td>
+<td><strong>3.500.000đ</strong></td>
+</tr>
+<tr>
+<td>Đối tượng</td>
+<td>1 người, 1 máy</td>
+<td>Cả nhà / 2 người, 2 máy</td>
+<td>Chủ shop + nhân viên, 3-5 máy</td>
+</tr>
+<tr>
+<td>Số máy cài</td>
+<td>1 máy</td>
+<td>2 máy</td>
+<td>3-5 máy</td>
+</tr>
+<tr>
+<td>3 hệ thống Hermes</td>
+<td>Có</td>
+<td>Có</td>
+<td>Có, tinh chỉnh theo nghiệp vụ</td>
+</tr>
+<tr>
+<td>Trợ lý AI</td>
+<td>5 trợ lý chọn lọc</td>
+<td>8 trợ lý chọn lọc</td>
+<td>17 trợ lý, chọn theo ngành</td>
+</tr>
+<tr>
+<td>Kênh kết nối</td>
+<td>1 kênh (ví dụ Gmail)</td>
+<td>2 kênh (Gmail + Zalo/FB)</td>
+<td>Tùy chọn, gợi ý theo ngành</td>
+</tr>
+<tr>
+<td>Thời gian thực hiện</td>
+<td>1 buổi (2-3 giờ)</td>
+<td>1 buổi (3-4 giờ)</td>
+<td>1-2 buổi (4-6 giờ)</td>
+</tr>
+<tr>
+<td>Hướng dẫn sử dụng</td>
+<td>1 buổi nhóm nhỏ (60 phút)</td>
+<td>1 buổi riêng (90 phút)</td>
+<td>1 buổi training team (2 giờ)</td>
+</tr>
+<tr>
+<td>File cấu hình</td>
+<td>Bộ cấu hình cá nhân hoá</td>
+<td>Bộ cấu hình 2 người</td>
+<td>Bộ cấu hình doanh nghiệp + quy trình team</td>
+</tr>
+<tr>
+<td>Hỗ trợ sau bán</td>
+<td>30 ngày (Zalo, trả lời trong 24h làm việc)</td>
+<td>30 ngày, ưu tiên</td>
+<td>30 ngày + 1 buổi review sau 2 tuần</td>
+</tr>
+<tr>
+<td><strong>Phù hợp ai</strong></td>
+<td>Người dùng cá nhân, thử trước</td>
+<td>Gia đình nhỏ, cặp đôi làm chung</td>
+<td>Shop online, văn phòng nhỏ 3-10 người</td>
+</tr>
+</tbody>
+</table>
+<h3 id="khach-nhan-uoc-gi-deliverable-cu-the">Khách nhận được gì (deliverable cụ thể)</h3>
+<p>Mỗi gói đều gồm:</p>
+<ol>
+<li><strong>Hermes cài đặt xong, chạy được ngay</strong> — chủ kênh cài trực tiếp trên máy khách, test kỹ trước khi rời.</li>
+<li><strong>File cấu hình hoá</strong> — bộ prompt, kết nối kênh, tên trợ lý đặt sẵn theo ngành khách (ví dụ: "Trợ lý Bán hàng Shop Hoa").</li>
+<li><strong>Sổ tay dùng nhanh 1 trang</strong> — file PDF/inforgraphic gửi qua Zalo, in được, dán cạnh bàn làm việc.</li>
+<li><strong>1 buổi hướng dẫn</strong> — khách xem chủ kênh dùng thử 3 tình huống thật của chính khách.</li>
+<li><strong>Hỗ trợ 30 ngày qua Zalo</strong> — trả lời trong 24 giờ làm việc, sửa lỗi miễn phí.</li>
+</ol>
+<h3 id="quy-tac-inh-gia-ky-luat-ung-pha">Quy tắc định giá (kỷ luật — đừng phá)</h3>
+<ul>
+<li>Không giảm giá. Nếu khách kêu đắt → giới thiệu GÓI CƠ BẢN, không giảm GÓI GIA ĐÌNH/DOANH NGHIỆP.</li>
+<li>Ưu đãi duy nhất cho phép: mua trong buổi tư vấn (hoặc trong 24h sau) → tặng thêm 15 ngày hỗ trợ (tổng 45 ngày).</li>
+<li>Trả góp: chấp nhận 50% trước khi cài, 50% sau khi bàn giao — chỉ áp dụng GÓI GIA ĐÌNH/DOANH NGHIỆP.</li>
+</ul>
+<hr />
+<h2 id="2-quy-trinh-ban-hang-5-buoc">2. Quy trình bán hàng (5 bước)</h2>
+<pre><code>Thu lead → Tư vấn 15 phút → Chốt → Cài đặt (1 buổi) → Bàn giao + Upsell Club
+</code></pre>
+<h3 id="buoc-1-thu-lead-nguon-youtube-comment-fb-zalo">Bước 1 — Thu lead (nguồn: YouTube, comment, FB, Zalo)</h3>
+<table>
+<thead>
+<tr>
+<th>Nguồn</th>
+<th>Cách thu</th>
+<th>Ghi chú</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Video YouTube</td>
+<td>Comment/để lại "DFY" hoặc inbox chủ kênh</td>
+<td>Trả lời trong 2 giờ, không để nguội</td>
+</tr>
+<tr>
+<td>Bài FB/Zalo</td>
+<td>Inbox riêng</td>
+<td>Chụp ảnh màn hình lưu bằng chứng nhu cầu</td>
+</tr>
+<tr>
+<td>Giới thiệu khách cũ</td>
+<td>Zalo trực tiếp</td>
+<td>Khách cũ giới thiệu → quà tặng voucher 200k cho lần mua Club</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Tiêu chí lead tốt (qualify nhanh):</strong> chủ shop/doanh nghiệp nhỏ · đang dùng điện thoại+FB/Zalo bán hàng · than phiền nhiều việc lặt vặt · chưa từng nghe AI. Lead xấu: cần giải pháp công nghệ phức tạp hoặc hỏi giá rồi im lặng — ghi nhận rồi cho vào nhóm "nuôi dưỡng dài hạn", đừng đuổi theo.</p>
+<h3 id="buoc-2-tu-van-15-phut-zalo-call-hoac-goi-ien">Bước 2 — Tư vấn 15 phút (Zalo call hoặc gọi điện)</h3>
+<p><strong>Mục tiêu:</strong> hiểu việc hàng ngày của khách → chọn đúng gói → hẹn ngày cài. KHÔNG bán trong buổi này trừ khi khách tự đòi mua.</p>
+<p><strong>Kịch bản mở đầu (30 giây):</strong></p>
+<blockquote>
+<p>"Chào anh/chị [tên] — em là [tên], bên kênh Hermes ạ. Em nghe anh/chị quan tâm chuyện cài đặt trợ lý AI hỗ trợ công việc. Em xin phép hỏi nhanh vài câu để tư vấn đúng nhu cầu, khoảng 10-15 phút, anh/chị tiện chứ ạ?"</p>
+</blockquote>
+<p><strong>Bộ 8 câu hỏi khám nhu cầu (hỏi tuần tự, nghe nhiều hơn nói):</strong></p>
+<ol>
+<li>"Hiện tại trong ngày anh/chị hay mất thời gian nhất vào việc gì?" <em>(khơi nỗi đau)</em></li>
+<li>"Việc đó lặp lại mỗi ngày hay theo tuần? Khoảng bao lâu mỗi lần?" <em>(đo mức độ)</em></li>
+<li>"Anh/chị đang dùng máy gì — Windows hay Mac? Điện thoại gì?" <em>(check kỹ thuật sơ bộ)</em></li>
+<li>"Anh/chị có hay soạn nội dung đăng bán hàng — Facebook, Zalo, email — không?" <em>(→ gợi ý trợ lý phù hợp)</em></li>
+<li>"Có việc gì anh/chị hay quên hoặc làm sai lặp lại không?" <em>(→ trợ lý nhắc việc/checklist)</em></li>
+<li>"Anh/chị đã từng dùng công cụ AI nào chưa? Ấn tượng thế nào?" <em>(đo mức độ hiểu biết)</em></li>
+<li>"Nếu có người cài đặt xong xuôi, anh/chị chỉ việc dùng — anh/chị thấy sao?" <em>(thăm dò sẵn sàng trả tiền)</em></li>
+<li>"Anh/chị muốn bắt đầu sớm nhất khi nào?" <em>(chốt lịch)</em></li>
+</ol>
+<p><strong>Kỹ thuật lắng nghe:</strong> ghi chép câu trả lời vào sẵn mẫu "Phiếu khám nhu cầu" (mục 2.1). Khách nói xong câu 1-2, chủ kênh đã đoán được gói phù hợp.</p>
+<p><strong>Chốt tư vấn (kết buổi):</strong></p>
+<blockquote>
+<p>"Nghe anh/chị kể, em thấy [GÓI X] là vừa. Nếu anh/chị đồng ý, em cài trong [ngày hẹn], xong xuôi anh/chị dùng luôn trong buổi chiều hôm đó. Em giữ chỗ nhé?"</p>
+</blockquote>
+<p>Nếu khách chưa quyết: "Không sao ạ, em gửi bảng giá và video demo qua Zalo anh/chị xem thêm, tuần sau em hỏi lại nhé." → Đưa vào danh sách theo dõi, nhắc lại sau 3 ngày.</p>
+<h3 id="buoc-3-chot-on">Bước 3 — Chốt đơn</h3>
+<ul>
+<li>Xác nhận ghi chép: gói, giá, ngày giờ cài, địa điểm/link.</li>
+<li>Thu 100% (hoặc 50% nếu trả góp) TRƯỚC khi cài. Chuyển khoản, giữ biên nhận.</li>
+<li>Gửi xác nhận Zalo mẫu:<blockquote>
+<p>"Em xác nhận: anh/chị [tên] đặt [GÓI X] — giá [Y]. Cài đặt [ngày, giờ] tại [địa điểm/Google Meet]. Đã nhận [Z]đ. Trong buổi cài em mang theo máy dự phòng, anh/chị chỉ cần có wifi và khoảng [X] giờ thôi ạ."</p>
+</blockquote>
+</li>
+<li>Đặt nhắc lịch (calendar + Zalo nhắc trước 1 ngày và 2 giờ).</li>
+</ul>
+<h3 id="buoc-4-trien-khai-checklist-1-buoi">Bước 4 — Triển khai: Checklist 1 buổi</h3>
+<p><strong>Trước buổi cài (chuẩn bị tối đa 30 phút):</strong></p>
+<ul>
+<li>[ ] Nhắc lịch khách qua Zalo (trước 1 ngày và sáng hôm đó).</li>
+<li>[ ] Xác nhận khách có: wifi mạnh, máy tính, điện thoại, quyền cài phần mềm.</li>
+<li>[ ] Chuẩn bị sẵn: bộ cấu hình theo gói đã đặt (file prompt mẫu), USB dự phòng, danh sách 17 trợ lý.</li>
+<li>[ ] Nếu cài từ xa: test Zalo call/UltraViewer trước 10 phút.</li>
+</ul>
+<p><strong>Trong buổi cài (theo thứ tự — đừng nhảy cóc):</strong></p>
+<ul>
+<li>[ ] 1. Giới thiệu lại 2 phút: hôm nay làm gì, khách cần làm gì.</li>
+<li>[ ] 2. Cài Hermes lên máy khách (chủ kênh thao tác, khách xem).</li>
+<li>[ ] 3. Cài 3 hệ thống, test từng cái ngay tại chỗ.</li>
+<li>[ ] 4. Kích hoạt trợ lý AI theo danh sách đã chọn, đặt tên theo ngành khách.</li>
+<li>[ ] 5. Kết nối kênh (Gmail/Zalo/FB) — nhắc khách đăng nhập chính tài khoản của họ, KHÔNG dùng chung.</li>
+<li>[ ] 6. Chạy 3 tình huống thật của khách (dùng chính câu hỏi khách nêu lúc tư vấn). Ví dụ: "Soạn 3 caption bán hoa cho ngày mai", "Nhắc tôi gọi khách lúc 9h sáng mai", "Tóm tắt 5 email hôm nay cho tôi".</li>
+<li>[ ] 7. Khách tự làm lại 1 tình huống — chủ kênh chỉ đứng cạnh hướng dẫn, KHÔNG giành chuột.</li>
+<li>[ ] 8. Sửa lỗi phát sinh tại chỗ đến khi khách thấy ổn.</li>
+<li>[ ] 9. Buổi hướng dẫn: chỉ 3 việc khách sẽ dùng nhiều nhất + cách "hỏi trợ lý" cho đúng.</li>
+<li>[ ] 10. Bàn giao sổ tay dùng nhanh + file cấu hình (gửi Zalo + in 1 bản nếu cài tại chỗ).</li>
+<li>[ ] 11. Xác nhận thanh toán còn lại (nếu có) và hướng dẫn cách liên hệ hỗ trợ 30 ngày.</li>
+</ul>
+<p><strong>Nguyên tắc trong buổi cài:</strong> luôn để khách tự bấm/nhập mật khẩu; chỉ chỗ nhưng không thao tác thay; mỗi 20 phút dừng hỏi "rõ chưa anh/chị?".</p>
+<h3 id="buoc-5-ban-giao-ho-tro-30-ngay">Bước 5 — Bàn giao &amp; hỗ trợ 30 ngày</h3>
+<p><strong>Mẫu bàn giao (gửi Zalo ngay khi cài xong):</strong></p>
+<blockquote>
+<p>BÀN GIAO DỊCH VỤ CÀI ĐẶT HERMES
+Khách: [tên] · Gói: [X] · Ngày cài: [ngày]
+Đã bàn giao:
+- Hermes cài đặt hoàn tất trên [số] máy: [model]
+- 3 hệ thống Hermes: hoạt động, đã test
+- Trợ lý AI đã kích hoạt: [liệt kê]
+- Kênh đã kết nối: [Gmail/Zalo/FB]
+- Sổ tay dùng nhanh: đính kèm tin nhắn này
+Hỗ trợ: 30 ngày (đến [ngày]), phản hồi trong 24h làm việc qua Zalo này.
+Lưu ý an toàn: AI chỉ nháp nội dung, anh/chị duyệt trước khi gửi đi. AI không tự gửi email, không tự chi tiền.</p>
+</blockquote>
+<p><strong>Lịch hỗ trợ sau bán:</strong></p>
+<ul>
+<li>Ngày 1-3: nhắn hỏi "dùng có trơn không, vướng chỗ nào bảo em".</li>
+<li>Ngày 7: nhắn tip 1 mẹo nhỏ (tăng giá trị cảm nhận).</li>
+<li>Ngày 14: nhắn hỏi thăm + gợi ý nhẹ nhàng câu lạc bộ (xem mục 4).</li>
+<li>Ngày 30: hỏi muốn gia hạn/mở rộng không, thu thập testimonial.</li>
+</ul>
+<hr />
+<h2 id="3-kich-ban-xu-ly-5-phan-oi-thuong-gap">3. Kịch bản xử lý 5 phản đối thường gặp</h2>
+<h3 id="31-sao-khong-tu-lam-uoc-phai-thue">3.1 "Sao không tự làm được, phải thuê?"</h3>
+<blockquote>
+<p>"Anh/chị tự làm được thật ạ — nhưng mất khoảng 1-2 tuần để đọc tài liệu, thử-sai, cấu hình lại nhiều lần, và nếu vướng lỗi thì không biết hỏi ai. Dịch vụ DFY của em là bán THỜI GIAN và SỰ CHẮC CHĂN: 1 buổi là chạy được ngay, có người kèm đến khi quen. Anh/chị mua về thời gian đó để lo việc bán hàng — việc mà anh/chị giỏi hơn em."</p>
+</blockquote>
+<p><strong>Kỹ thuật:</strong> thừa nhận đúng là được, rồi chuyển trọng tâm từ "tiền" sang "thời gian". Nếu khách vẫn muốn tự làm → gửi link hướng dẫn miễn phí, giữ quan hệ, họ thường quay lại.</p>
+<h3 id="32-at-qua">3.2 "Đắt quá."</h3>
+<blockquote>
+<p>"Em hiểu ạ. Em xin nói thật: gói cài đặt này tương đương [X] giờ làm việc mỗi tuần được trả lại cho anh/chị. Với chủ shop, mỗi giờ bán hàng kiếm được nhiều hơn [con số ước lượng theo ngành]. Nếu ngân sách hôm nay chưa cho phép, em có GÓI CƠ BẢN 1.5 triệu — cài đủ 3 hệ thống, dùng thử trước, sau này nâng cấp chỉ trả phần chênh lệch ạ."</p>
+</blockquote>
+<p><strong>Kỹ thuật:</strong> đổi khung "giá tiền" → "giá trị thời gian". Không bao giờ tự giảm giá; chỉ hạ gói. Nếu khách kêu đắt 2 lần → không ép, hẹn gọi lại sau 1 tháng.</p>
+<h3 id="33-co-an-toan-du-lieu-khong">3.3 "Có an toàn dữ liệu không?"</h3>
+<blockquote>
+<p>"Đây là câu em trả lời rõ nhất: Hermes KHÔNG tự gửi email, KHÔNG tự chuyển tiền, KHÔNG tự đăng bài. Mọi nội dung AI chỉ NHÁP — anh/chị bấm duyệt rồi mới gửi đi. Toàn bộ chạy trên máy của anh/chị, không gửi dữ liệu ra ngoài trừ khi anh/chị tự kết nối kênh. Trong buổi cài, anh/chị tự đăng nhập mọi tài khoản — em không bao giờ giữ mật khẩu của anh/chị."</p>
+</blockquote>
+<p><strong>Kỹ thuật:</strong> nói thẳng 3 điều "KHÔNG", rồi chỉ ra khách giữ quyền kiểm soát cuối cùng (bấm duyệt). Nếu khách là doanh nghiệp có dữ liệu nhạy cảm → đề xuất GÓI DOANH NGHIỆP cài trên máy nội bộ, không cloud.</p>
+<h3 id="34-toi-khong-ranh-cong-nghe">3.4 "Tôi không rành công nghệ."</h3>
+<blockquote>
+<p>"Vừa đúng người em phục vụ ạ. 8/10 khách của em đều như anh/chị — bán hàng giỏi chứ không rành máy móc. Vì vậy em cài xong, chỉ để anh/chị nhắn tin như đang nhắn Zalo thôi: 'trợ lý ơi, viết cho tôi...'. Không cần biết công nghệ bên trong. Em kèm đến khi anh/chị tự làm được 1 việc đầu tiên mới thôi. Nếu không dùng được sau buổi cài, em hoàn tiền."</p>
+</blockquote>
+<p><strong>Kỹ thuật:</strong> "không rành" chính là lý do họ cần DFY. Nhấn mạnh: nhắn tin như Zalo + kèm tay + cam kết hoàn tiền nếu không dùng được.</p>
+<h3 id="35-sau-nay-can-duy-tri-chi-phi-gi">3.5 "Sau này cần duy trì chi phí gì?"</h3>
+<blockquote>
+<p>"Em liệt kê thật, không giấu gì: (1) Chi phí duy trì bắt buộc — không có. Hermes chạy trên máy anh/chị. (2) Chi phí tuỳ chọn — nếu anh/chị muốn dùng thêm trợ lý mới, cộng đồng hỏi đáp và cập nhật hằng tháng thì có Câu lạc bộ Hermes, khoảng [X đ]/tháng, hủy bất cứ lúc nào. (3) Nếu anh/chị tự nâng cấp phần cứng hoặc mua thêm gói AI trả phí của bên thứ ba thì đó là chi phí riêng — không bắt buộc."</p>
+</blockquote>
+<p><strong>Kỹ thuật:</strong> trung thực tuyệt đối — liệt kê cả chi phí "không có" và "có thể có". Khách sợ nhất là phát sinh chi phí giấu giếm. Sẵn sàng nói "không có phí ẩn" tạo niềm tin dài hạn.</p>
+<hr />
+<h2 id="4-lo-trinh-upsell-khach-dfy-club-membership">4. Lộ trình Upsell: Khách DFY → Club Membership</h2>
+<p><strong>Nguyên tắc vàng:</strong> KHÔNG bán Club trong buổi cài đặt. Buổi cài là để khách thấy Hermes chạy; Club bán sau khi khách đã dùng được và thấy giá trị.</p>
+<h3 id="moc-thoi-gian-upsell">Mốc thời gian upsell</h3>
+<table>
+<thead>
+<tr>
+<th>Thời điểm</th>
+<th>Hành động</th>
+<th>Kênh</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ngày 0 (bàn giao)</td>
+<td>Chỉ NHẮC 1 câu: "Sau này có Câu lạc bộ Hermes — cập nhật trợ lý mới + cộng đồng, em giới thiệu sau nhé."</td>
+<td>Zalo</td>
+</tr>
+<tr>
+<td>Ngày 7</td>
+<td>Gửi tip nhỏ + hỏi dùng có trơn không</td>
+<td>Zalo</td>
+</tr>
+<tr>
+<td>Ngày 14</td>
+<td>Gửi video/tin "trợ lý mới tháng này" — làm khách thèm</td>
+<td>Zalo</td>
+</tr>
+<tr>
+<td>Ngày 21-30</td>
+<td>Lời mời chính thức vào Club (nếu khách dùng đều)</td>
+<td>Zalo/điện thoại</td>
+</tr>
+<tr>
+<td>Sau ngày 30</td>
+<td>Khách chưa mua → cho vào nhóm "nuôi dưỡng", nhắc nhẹ mỗi tháng, không đeo</td>
+<td>Zalo</td>
+</tr>
+</tbody>
+</table>
+<h3 id="kich-ban-moi-vao-club-ngay-21-30">Kịch bản mời vào Club (ngày 21-30)</h3>
+<blockquote>
+<p>"Anh/chị ơi, Hermes dùng trên máy anh/chị đã ổn chưa ạ? Em viết để giới thiệu Câu lạc bộ Hermes — chỗ các thành viên nhận: (1) trợ lý AI mới mỗi tháng, cài sẵn dùng luôn; (2) cộng đồng hỏi đáp trên Zalo/FB, hỏi gì cũng có người trả lời; (3) buổi hỏi đáp trực tiếp hằng tháng. Phí [X đ]/tháng, hủy bất cứ lúc nào. Anh/chị dùng ổn thì gia nhập, không thì cứ dùng như hiện tại, em vẫn hỗ trợ hết 30 ngày nhé ạ."</p>
+</blockquote>
+<p><strong>Tại sao khách thấy giá trị:</strong>
+- Họ đã tin chủ kênh (vừa trải nghiệm dịch vụ tốt).
+- "Trợ lý mới mỗi tháng" = sản phẩm liên tục mới, không nhàm chán.
+- "Cộng đồng" = không đứng một mình khi gặp khó.
+- Cam kết hủy bất cứ lúc nào → rủi ro bằng 0.</p>
+<p><strong>Tỷ lệ mục tiêu (ƯỚC TÍNH):</strong> 30-40% khách DFY chuyển thành hội viên Club trong 60 ngày đầu. Nếu thấp hơn → xem lại chất lượng buổi cài và buổi hỏi đáp hàng tháng.</p>
+<hr />
+<h2 id="5-muc-tieu-doanh-thu-so-khach-uoc-tinh">5. Mục tiêu doanh thu &amp; số khách (ƯỚC TÍNH)</h2>
+<blockquote>
+<p>⚠️ Toàn bộ phần này là ƯỚC TÍNH dựa trên giả định dưới đây, không phải cam kết. Cần cập nhật bằng số liệu thực tế sau 2 tháng vận hành.</p>
+</blockquote>
+<h3 id="bang-uoc-tinh">Bảng ước tính</h3>
+<table>
+<thead>
+<tr>
+<th>Chỉ tiêu</th>
+<th>Tháng 1-2</th>
+<th>Tháng 3-4</th>
+<th>Tháng 5-6</th>
+<th>Ghi chú</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Khách DFY/tháng</td>
+<td>2</td>
+<td>3</td>
+<td>4-5</td>
+<td>Tăng dần khi có testimonial</td>
+</tr>
+<tr>
+<td>Doanh thu trung bình/khách</td>
+<td>2.0tr</td>
+<td>2.3tr</td>
+<td>2.5tr</td>
+<td>Mix dần về gói cao hơn</td>
+</tr>
+<tr>
+<td>Doanh thu DFY/tháng</td>
+<td>~4tr</td>
+<td>~7tr</td>
+<td>~11tr</td>
+<td></td>
+</tr>
+<tr>
+<td>Khách chuyển Club</td>
+<td>1</td>
+<td>2</td>
+<td>4</td>
+<td>Theo tỷ lệ 30-40%</td>
+</tr>
+<tr>
+<td>Doanh thu Club/tháng</td>
+<td>+1tr</td>
+<td>+2tr</td>
+<td>+4tr</td>
+<td>Giả định phí ~1tr/tháng/hội viên</td>
+</tr>
+<tr>
+<td><strong>Tổng thu nhập/tháng</strong></td>
+<td><strong>~5tr</strong></td>
+<td><strong>~9tr</strong></td>
+<td><strong>~15tr</strong></td>
+<td>Giai đoạn ổn định mục tiêu</td>
+</tr>
+</tbody>
+</table>
+<h3 id="con-uong-en-thu-nhap-on-inh-uoc-tinh">Con đường đến thu nhập ổn định (ƯỚC TÍNH)</h3>
+<ul>
+<li><strong>Mốc 1 (tháng 1-2):</strong> 2 khách DFY/tháng → kiểm chứng quy trình, thu testimonial đầu tiên.</li>
+<li><strong>Mốc 2 (tháng 3-4):</strong> 3 khách DFY/tháng + 2 hội viên Club → ~9tr/tháng.</li>
+<li><strong>Mốc 3 (tháng 5-6):</strong> 4-5 khách DFY/tháng + 4 hội viên Club → ~15tr/tháng — mức có thể sống được và quay lại đầu tư nội dung.</li>
+</ul>
+<h3 id="gia-inh-rui-ro">Giả định &amp; rủi ro</h3>
+<p><strong>Giả định:</strong>
+1. Chủ kênh đăng nội dung đều (2-3 video/tuần) trên YouTube + FB.
+2. Kênh YouTube hiện có sẵn lượng xem tạo lead nóng (người hỏi trước, không phải gọi lạnh).
+3. 1 buổi cài = 1 khách chốt; không quá 2 buổi/khách.
+4. Phí Club giữ nguyên [X đ]/tháng, không giảm sâu.</p>
+<p><strong>Rủi ro cần theo dõi:</strong>
+- Lead ít → tăng nội dung, thêm form đăng ký tư vấn miễn phí (lead magnet: "Checklist 17 trợ lý").
+- Tỷ lệ chốt thấp hơn 30% → xem lại script tư vấn, có thể do giá hoặc do chưa rõ giá trị.
+- Khách dùng rồi bỏ → buổi hỏi đáp hàng tháng phải thực sự hữu ích, nếu không Club sẽ churn nhanh.
+- Thời gian cài bị kéo dài → chuẩn hoá bộ cấu hình sẵn, rút ngắn mỗi buổi xuống tối đa 4 giờ.</p>
+<hr />
+<h2 id="6-bang-theo-doi-hang-ngay-dung-chung-cho-team">6. Bảng theo dõi hàng ngày (dùng chung cho team)</h2>
+<table>
+<thead>
+<tr>
+<th>Ngày</th>
+<th>Lead mới</th>
+<th>Đã tư vấn</th>
+<th>Đã chốt</th>
+<th>Đã cài xong</th>
+<th>Doanh thu</th>
+<th>Ghi chú</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Số liệu cần nhớ mỗi tuần:</strong> số lead mới, tỷ lệ tư vấn→chốt (mục tiêu ≥30%), số khách đang trong 30 ngày hỗ trợ, số khách Club mới.</p>
+<hr />
+<h2 id="phu-luc-a-phieu-kham-nhu-cau-inmo-san-khi-tu-van">Phụ lục A — Phiếu khám nhu cầu (in/mở sẵn khi tư vấn)</h2>
+<ul>
+<li>Tên khách / SĐT / nguồn lead:</li>
+<li>Nghề/nền tảng bán hàng:</li>
+<li>Việc tốn thời gian nhất (câu 1-2):</li>
+<li>Máy đang dùng (Windows/Mac, số máy):</li>
+<li>Kênh hay dùng (FB/Zalo/Gmail):</li>
+<li>Đã dùng AI chưa? Ấn tượng gì?:</li>
+<li>Mức sẵn sàng chi trả (nếu khách tự nói):</li>
+<li>Ngày hẹn cài đặt:</li>
+<li>Gói đề xuất / Gói khách chọn:</li>
+<li>Kết quả: ☐ Chốt ☐ Theo dõi ☐ Từ chối — lý do:</li>
+</ul>
+<h2 id="phu-luc-b-lich-nhac-tu-ong-at-trong-zaloien-thoai">Phụ lục B — Lịch nhắc tự động (đặt trong Zalo/điện thoại)</h2>
+<ul>
+<li>Trước buổi cài 1 ngày: nhắc khách chuẩn bị wifi + máy + thời gian.</li>
+<li>Sáng ngày cài: nhắc giờ hẹn.</li>
+<li>Ngày 1-3 sau cài: hỏi dùng có trơn không.</li>
+<li>Ngày 7: gửi tip nhỏ.</li>
+<li>Ngày 14: gửi tin trợ lý mới.</li>
+<li>Ngày 21: mời Club (nếu khách dùng đều).</li>
+<li>Ngày 30: hỏi gia hạn + xin testimonial.</li>
+</ul>
+<hr />
+<p><em>Tài liệu nội bộ — cập nhật số liệu thực tế vào phần 5 sau mỗi tháng vận hành.</em></p></div>
+</section>
+<section class="panel" id="sec-club">
+<div class="panel-inner"><h1 id="club-membership-99199kthang-ke-hoach-san-pham-kich-ban-ky-thuat-fluentcrm">CLUB MEMBERSHIP 99–199K/THÁNG — KẾ HOẠCH SẢN PHẨM + KỊCH BẢN KỸ THUẬT FLUENTCRM</h1>
+<p>Tài liệu vận hành · Kênh YouTube Hermes (Nhân Sự Toàn Năng / AI Agent)
+Hệ thống thực thi: WordPress + <strong>FluentCRM Pro</strong> trên <code>crm.speedreading.vn</code>
+Ngày lập: 12/10/2026 · Phiên bản 1.0</p>
+<hr />
+<h2 id="muc-luc">MỤC LỤC</h2>
+<ol start="0">
+<li>Hiện trạng hệ thống đã kiểm tra + quyết định stack</li>
+<li>Cấu trúc Club: tên, 2 mức giá, quyền lợi, lộ trình 12 trợ lý</li>
+<li>Kịch bản kỹ thuật FluentCRM (custom field, list/tag/segment, automation, luồng thanh toán)</li>
+<li>Mẫu email "Trợ lý mới tháng X"</li>
+<li>Upsell từ dịch vụ DFY → Club</li>
+<li>KPI membership (ước tính)</li>
+<li>Cơ chế chuyển đổi từ YouTube → thành viên</li>
+<li>Checklist triển khai 30 ngày + rủi ro
+Phụ lục A — List &amp; Tag đang có trên hệ thống</li>
+</ol>
+<hr />
+<h2 id="0-hien-trang-he-thong-a-kiem-tra-thuc-te">0. HIỆN TRẠNG HỆ THỐNG (ĐÃ KIỂM TRA THỰC TẾ)</h2>
+<p>Kiểm tra ngày 12/10/2026 bằng REST API công khai + MCP FluentCRM:</p>
+<table>
+<thead>
+<tr>
+<th>Hạng mục</th>
+<th>Kết quả kiểm tra</th>
+<th>Hệ quả cho kế hoạch</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>FluentCRM</td>
+<td><strong>Pro</strong> — đủ bộ: funnels/automation, sequences, dynamic segments, recurring campaigns, campaigns-pro (resend-unopened, tag-actions), AI, companies, docs, forms</td>
+<td>Làm được toàn bộ membership trên 1 plugin. Không cần plugin membership thứ 2</td>
+</tr>
+<tr>
+<td>FluentSMTP</td>
+<td>Đã cài (namespace <code>fluent-smtp</code> hoạt động)</td>
+<td>Gửi mail ổn định; vẫn phải xác thực SPF/DKIM/DMARC</td>
+</tr>
+<tr>
+<td>WP MCP Adapter</td>
+<td>Đã cài (<code>/mcp</code>, <code>fluent-crm/mcp</code>)</td>
+<td>Có thể build automation bằng API/MCP thay vì click tay trong GUI</td>
+</tr>
+<tr>
+<td>WooCommerce</td>
+<td><strong>KHÔNG có</strong> (<code>/wc/store/v1</code> → 404)</td>
+<td>Không có đường tự động thanh toán. Chuyển khoản thủ công là lựa chọn ĐÚNG, không phải giải pháp tạm</td>
+</tr>
+<tr>
+<td>MemberPress / Paid Memberships Pro</td>
+<td><strong>KHÔNG có</strong></td>
+<td>Không dùng — xem lý do ở 0.2</td>
+</tr>
+<tr>
+<td>Fluent Forms</td>
+<td><strong>CHƯA cài</strong> — nhưng FluentCRM có sẵn route <code>install-fluentform</code> (cài 1-click từ <code>FluentCRM → Settings</code>)</td>
+<td>Cài Fluent Forms để nhận "đơn xin vào Club" và "báo đã chuyển khoản"</td>
+</tr>
+<tr>
+<td>FluentCommunity</td>
+<td><strong>CHƯA cài</strong> — có route <code>install-fluent-community</code></td>
+<td>Khu vực thành viên + cộng đồng. Xem 2.8 để chọn Free hay trả phí</td>
+</tr>
+<tr>
+<td>Danh sách (list)</td>
+<td>8 list; list mấu chốt = <strong>List 7 "Đăng Ký Khoá học Hermes"</strong></td>
+<td>Club phải có <strong>list riêng</strong>, không trộn vào List 7</td>
+</tr>
+<tr>
+<td>Tag</td>
+<td>13 tag; tag mấu chốt = <strong>Tag 13 "Đăng ký khoá Hermes"</strong></td>
+<td>Bộ tag Club dùng tiền tố <code>CLB-</code> để không nhầm</td>
+</tr>
+</tbody>
+</table>
+<p><strong>List/Tag theo kế hoạch cũ mà CHƯA tồn tại:</strong> <code>YT Hermes LeadMagnet</code> (list) và các tag <code>YT-Hermes-Cheatsheet</code>, <code>YT-LM-Downloaded</code>, <code>YT-Watched-V1V2</code>, <code>YT-Portal-Clicked</code>, <code>YT-Watched-V6V8</code>, <code>YT-Course-Clicked</code>, <code>YT-Nurture-Done</code>, <code>YT-Enrolled-Course</code>, <code>YT-Portal-User</code> — đây là kế hoạch trong <code>~/YouTube_Hermes_LeadMagnet_Plan.md</code>, chưa build trên hệ thống. Club sẽ <strong>tái sử dụng lại đúng bộ tên đó</strong> (mục 6), nên build một lần dùng cho cả hai mục tiêu.</p>
+<h3 id="01-stack-quyet-inh">0.1 Stack quyết định</h3>
+<pre><code>FluentCRM Pro (đã có)      → não: contact, tag, segment động, automation, recurring campaign
+Fluent Forms (cài 1-click) → form xin vào Club + form &quot;Tôi đã chuyển khoản&quot;
+FluentCommunity (cài 1-click, Free) → khu vực thành viên + cộng đồng, role theo trạng thái
+Thanh toán: chuyển khoản / Momo → xác nhận THỦ CÔNG → cấp quyền (bảng đối soát)
+Không dùng: Stripe, WooCommerce Subscriptions, MemberPress
+</code></pre>
+<h3 id="02-vi-sao-khong-dung-memberpress-paid-memberships-pro-woocommerce-subscriptions">0.2 Vì sao KHÔNG dùng MemberPress / Paid Memberships Pro / WooCommerce Subscriptions</h3>
+<ol>
+<li><strong>Thanh toán VN là chuyển khoản.</strong> MemberPress và WooCommerce Subscriptions đều xoay quanh thẻ/PayPal. Để bắt chuyển khoản, chúng buộc dùng "manual gateway" — tức là vẫn phải có người bấm duyệt, nhưng giờ thêm một lớp plugin phức tạp ở giữa.</li>
+<li><strong>Không có auto-renew = không có failed-payment.</strong> Khách quên không bị trừ tiền oan → gần như không có chargeback, không có khiếu nại, không có hoàn tiền. Đây là lợi thế, không phải thiếu sót.</li>
+<li><strong>Mỗi plugin thêm là một bề mặt lỗi + một nguồn xung đột + một lần nâng cấp phải test.</strong> Với 3 hệ thống đang chạy, thêm plugin membership trả phí là rủi ro không đổi lại được giá trị giai đoạn đầu.</li>
+<li><strong>FluentCRM Pro đã có đủ</strong>: dynamic segment theo ngày hết hạn, automation theo trigger, recurring campaign hàng tháng, benchmark, conditional. Cộng FluentCommunity Free cho khu vực thành viên — đủ cho 500 thành viên đầu.</li>
+<li><strong>Khi nào đổi:</strong> khi số thành viên &gt; 300 và tỷ lệ quên gia hạn &gt; 25%, lúc đó mới cân nhắc <strong>FluentCart</strong> (cùng nhà Fluent, có sẵn route <code>install-fluent-cart</code> trong FluentCRM Settings) để tự động hoá. Ghi rõ: đây là quyết định của tháng 6–9, không phải bây giờ.</li>
+</ol>
+<hr />
+<h2 id="1-cau-truc-club">1. CẤU TRÚC CLUB</h2>
+<h3 id="11-ten-goi-y-chon-1-dung-nhat-quan-moi-noi">1.1 Tên gợi ý (chọn 1, dùng nhất quán mọi nơi)</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Tên</th>
+<th>Dùng khi nào</th>
+<th>Nhận xét</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>A</strong></td>
+<td><strong>HERMES CLUB</strong></td>
+<td><em>Khuyến nghị dùng chính</em></td>
+<td>Ngắn, dễ đọc ở end-card YouTube, dễ gõ, dễ nhớ. Không giới hạn ở "công cụ" nên sau này thêm buổi hỏi đáp, thêm case study đều vừa</td>
+</tr>
+<tr>
+<td>B</td>
+<td>CLB TRỢ LÝ AI HERMES</td>
+<td>Nếu muốn nhấn mạnh tiếng Việt, tránh từ "club" nghe Tây</td>
+<td>Rõ nghĩa hơn với người 40+, nhưng dài — trên end-card phải thu nhỏ chữ</td>
+</tr>
+<tr>
+<td>C</td>
+<td>HERMES INSIDER</td>
+<td>Muốn cảm giác "trong nhà", hội viên</td>
+<td>Hơi mập mờ, người xem không hiểu nhận gì</td>
+</tr>
+<tr>
+<td>D</td>
+<td>ĐỘI TRỢ LÝ CỦA TÔI</td>
+<td>Muốn kể chuyện cá nhân</td>
+<td>Hay nhưng khó mở rộng thành thương hiệu</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Quyết định: HERMES CLUB</strong> — câu chào ở mọi kênh:</p>
+<blockquote>
+<p><strong>HERMES CLUB</strong> — mỗi tháng một trợ lý AI mới, kèm file cấu hình sẵn và video 12 phút. 99k/tháng, hủy bất cứ lúc nào.</p>
+</blockquote>
+<p>Quy ước tên trong FluentCRM (phải giống y hệt ở mọi nơi để sau này còn nhận ra):</p>
+<table>
+<thead>
+<tr>
+<th>Đối tượng</th>
+<th>Tên</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>List</td>
+<td><code>Hermes Club Thanh vien</code></td>
+</tr>
+<tr>
+<td>Automation (funnel)</td>
+<td><code>Hermes Club — Vao Club</code> (onboarding)</td>
+</tr>
+<tr>
+<td>Automation (funnel)</td>
+<td><code>Hermes Club — Gia han &amp; het han</code></td>
+</tr>
+<tr>
+<td>Email Sequence</td>
+<td><code>Hermes Club — Onboarding</code></td>
+</tr>
+<tr>
+<td>Recurring campaign</td>
+<td><code>Hermes Club — Tro ly moi thang</code></td>
+</tr>
+<tr>
+<td>Tag trạng thái</td>
+<td><code>CLB-Active</code>, <code>CLB-ChoThanhToan</code>, <code>CLB-HetHan</code>, <code>CLB-DaHuy</code></td>
+</tr>
+<tr>
+<td>Tag gói</td>
+<td><code>CLB-CaNhan</code>, <code>CLB-GiaDinh-SME</code></td>
+</tr>
+<tr>
+<td>Trang thành viên</td>
+<td><code>speedreading.vn/hermes-club</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="12-hai-muc-gia-quyen-loi">1.2 Hai mức giá &amp; quyền lợi</h3>
+<table>
+<thead>
+<tr>
+<th>Quyền lợi</th>
+<th><strong>CÁ NHÂN — 99k/tháng</strong></th>
+<th><strong>GIA ĐÌNH / SME — 199k/tháng</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Trợ lý mới mỗi tháng (skill + file cấu hình + video 12')</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Khu vực thành viên trên web (tải file, xem lại mọi tháng)</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Cộng đồng Zalo/Telegram</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Buổi hỏi đáp trực tiếp hàng tháng (60 phút)</td>
+<td>✅ Xem lại bản ghi</td>
+<td>✅ <strong>Được hỏi trực tiếp</strong>, ưu tiên lên lịch</td>
+</tr>
+<tr>
+<td>Hỏi trong nhóm, có người trả lời</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Số người dùng</td>
+<td>1 người</td>
+<td><strong>Tối đa 5 người</strong> (gia đình) hoặc <strong>1 team SME</strong></td>
+</tr>
+<tr>
+<td>Giảm giá dịch vụ cài đặt Done-For-You</td>
+<td>—</td>
+<td><strong>Giảm 20%</strong> khi thuê cài đặt</td>
+</tr>
+<tr>
+<td>Xin trợ lý theo đúng việc của mình</td>
+<td>Góp ý chủ đề</td>
+<td><strong>1 trợ lý/năm được làm riêng theo yêu cầu</strong></td>
+</tr>
+<tr>
+<td>Hỗ trợ 1-1 qua Zalo khi bí</td>
+<td>Không</td>
+<td>✅ Trong giờ hành chính</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Giá trị phải thấy rõ trong 30 giây đầu</strong> (đây là điều khách trả tiền cho, không phải "truy cập nhóm"):</p>
+<blockquote>
+<p>99k = <strong>ít hơn 2 bữa cơm quán</strong>. Mỗi tháng bạn nhận 1 trợ lý đã cấu hình sẵn, chỉ việc copy file vào là chạy. Tháng đầu đã có: trợ lý lập kế hoạch tuần.</p>
+</blockquote>
+<p><strong>Chính sách phải nói rõ ngay trên trang bán</strong> (tránh hiểu nhầm, tránh chargeback):</p>
+<ul>
+<li>Không tự động trừ tiền. <strong>Mỗi tháng khách chủ động chuyển khoản</strong> để gia hạn.</li>
+<li>Hủy bất cứ lúc nào, không cần lý do, không phụ phí.</li>
+<li>Không hoàn tiền giữa chừng (đã rõ trên trang → không có tranh cãi).</li>
+<li>Quyền truy cập khu vực thành viên <strong>tắt ngay khi hết hạn</strong>, nhưng <strong>file đã tải về thì khách giữ lại</strong> — nói rõ điều này ngay từ đầu để không ai cảm thấy bị "tước" đồ đã trả tiền.</li>
+<li>Trợ lý của tháng trước vẫn nằm trong khu vực thành viên suốt thời gian còn là thành viên.</li>
+</ul>
+<h3 id="13-tro-ly-moi-moi-thang-la-gi-cu-the">1.3 "Trợ lý mới mỗi tháng" là gì cụ thể</h3>
+<p>Mỗi tháng bàn giao <strong>1 gói</strong> gồm đúng 4 thứ — đây là định nghĩa cố định, khách biết trước sẽ nhận gì:</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Thành phần</th>
+<th>Hình thức</th>
+<th>Dung lượng</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><strong>Skill Hermes mới</strong></td>
+<td>1–2 file <code>SKILL.md</code> + thư mục skill, copy vào <code>~/.hermes/skills/</code> là dùng</td>
+<td>2 file</td>
+</tr>
+<tr>
+<td>2</td>
+<td><strong>File cấu hình sẵn</strong></td>
+<td>Profile/config snippet + prompt mẫu, copy–paste là chạy</td>
+<td>1 file</td>
+</tr>
+<tr>
+<td>3</td>
+<td><strong>Video hướng dẫn</strong></td>
+<td>Quay màn hình, 10–15 phút, giọng nói thật, không cần dựng đẹp</td>
+<td>1 video</td>
+</tr>
+<tr>
+<td>4</td>
+<td><strong>Bài đăng kèm</strong></td>
+<td>1 trang trên web: trợ lý làm được gì, 5 câu lệnh mẫu, 3 lỗi hay gặp</td>
+<td>1 bài</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Nguyên tắc bắt buộc với mọi trợ lý: phải "chạy được ngay hôm đó" trên máy khách.</strong> Trợ lý nào không qua được kiểm tra này thì đổi trợ lý khác. Đây là thứ giữ chân thành viên — không phải số lượng.</p>
+<p><strong>Tiêu chí chọn trợ lý cho tháng tiếp theo</strong> (thứ tự ưu tiên):</p>
+<ol>
+<li>Việc mà nhiều người trong nhóm Zalo hỏi tuần này</li>
+<li>Việc mà người xem comment dưới video gần nhất</li>
+<li>Việc mà chủ kênh tự làm đi làm lại bằng tay (bằng chứng là nó đáng tự động)</li>
+<li>Trợ lý đã hứa trong lộ trình 12 tháng</li>
+</ol>
+<h3 id="14-lo-trinh-12-thang-au">1.4 Lộ trình 12 tháng đầu</h3>
+<table>
+<thead>
+<tr>
+<th>Tháng</th>
+<th>Trợ lý</th>
+<th>Việc cụ thể nó gánh</th>
+<th>Skill/file bàn giao</th>
+<th>Video</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><strong>Trợ lý Lập kế hoạch tuần</strong></td>
+<td>Nhận danh sách việc lộn xộn → kế hoạch 7 ngày, mỗi ngày 3 việc quan trọng, chỉ ra việc nên BỎ</td>
+<td>skill <code>weekly-review-planning</code> + profile mẫu + bảng 7 ngày</td>
+<td>12'</td>
+</tr>
+<tr>
+<td>2</td>
+<td><strong>Trợ lý Hộp thư</strong></td>
+<td>Ưu tiên hoá inbox, nhóm email theo việc, soạn bản nháp trả lời (KHÔNG tự gửi)</td>
+<td>skill <code>email-inbox-triage</code> + prompt nháp trả lời</td>
+<td>12'</td>
+</tr>
+<tr>
+<td>3</td>
+<td><strong>Trợ lý Thu chi</strong></td>
+<td>Nhận ảnh bill/text giao dịch → bảng thu chi tháng, cảnh báo vượt hạn mức</td>
+<td>skill <code>xlsx</code> + mẫu sổ thu chi + prompt đọc bill</td>
+<td>13'</td>
+</tr>
+<tr>
+<td>4</td>
+<td><strong>Trợ lý Thực đơn &amp; đi chợ</strong></td>
+<td>Theo tủ lạnh + số người ăn → thực đơn 5 bữa, danh sách đi chợ gộp 1 lần</td>
+<td>prompt thực đơn + mẫu bảng tuần</td>
+<td>11'</td>
+</tr>
+<tr>
+<td>5</td>
+<td><strong>Trợ lý Học tập cho con</strong></td>
+<td>Tóm tắt tài liệu dài, soạn câu hỏi họp phụ huynh, nhắc lịch học con</td>
+<td>skill <code>nano-pdf</code> + prompt hỏi đáp học đường</td>
+<td>12'</td>
+</tr>
+<tr>
+<td>6</td>
+<td><strong>Trợ lý Content</strong></td>
+<td>Từ 1 ý thô → 5 hook video + caption + kịch bản ngắn, bỏ văn mẫu AI</td>
+<td>skill <code>humanizer</code> + bộ hook + template caption</td>
+<td>14'</td>
+</tr>
+<tr>
+<td>7</td>
+<td><strong>Trợ lý Báo cáo</strong></td>
+<td>Gom số liệu tuần → báo cáo 1 trang gửi sếp/khách, có biểu đồ</td>
+<td>skill <code>xlsx</code> + mẫu báo cáo tuần</td>
+<td>13'</td>
+</tr>
+<tr>
+<td>8</td>
+<td><strong>Trợ lý Họp hành</strong></td>
+<td>Biên bản thô → quyết định + việc ai làm + hạn nào; nhắc việc tồn</td>
+<td>skill <code>meeting-action-items</code> + mẫu biên bản</td>
+<td>12'</td>
+</tr>
+<tr>
+<td>9</td>
+<td><strong>Trợ lý Nghiên cứu thị trường</strong></td>
+<td>Theo dõi 5 đối thủ/5 chủ đề → bản tin có trích dẫn, có nguồn</td>
+<td>skill <code>competitor-news-monitor</code> + <code>grounded-citations</code></td>
+<td>13'</td>
+</tr>
+<tr>
+<td>10</td>
+<td><strong>Trợ lý Chăm sóc học viên / khách</strong></td>
+<td>Phân loại người cần chăm, gợi ý nội dung tiếp theo, nhắc việc follow-up</td>
+<td>skill FluentCRM ops + prompt phân loại</td>
+<td>14'</td>
+</tr>
+<tr>
+<td>11</td>
+<td><strong>Trợ lý Gia đình &amp; lịch</strong></td>
+<td>Nhớ lịch cố định cả nhà, nhắc sáng/chiều, gộp lịch họp phụ huynh – tiêm – sinh nhật</td>
+<td>skill <code>apple-reminders</code> / Google Calendar + mẫu lịch tuần</td>
+<td>11'</td>
+</tr>
+<tr>
+<td>12</td>
+<td><strong>Trợ lý Tổng hợp cuối năm</strong></td>
+<td>Rà 11 tháng: việc nào thực sự dùng, việc nào nên bỏ, đề xuất 3 trợ lý năm sau</td>
+<td>skill <code>weekly-review-planning</code> + bảng tự chấm</td>
+<td>15'</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Nhịp sản xuất 1 trợ lý/tháng</strong> (để biết trước khối lượng, tránh hứa quá tay):</p>
+<table>
+<thead>
+<tr>
+<th>Việc</th>
+<th>Thời gian</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Viết skill + prompt mẫu</td>
+<td>3–4 giờ</td>
+</tr>
+<tr>
+<td>Quay video 12'</td>
+<td>1 giờ quay + 1 giờ dựng</td>
+</tr>
+<tr>
+<td>Upload lên khu vực thành viên + viết bài đăng</td>
+<td>1 giờ</td>
+</tr>
+<tr>
+<td>Soạn + test email thông báo</td>
+<td>1 giờ</td>
+</tr>
+<tr>
+<td><strong>Tổng</strong></td>
+<td><strong>~7 giờ/tháng</strong> — làm được trong 1 buổi chiều thứ Bảy</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Quy tắc dự phòng (quan trọng):</strong> luôn có <strong>1 trợ lý dự trữ đã làm xong</strong> để tháng bận deadline thì vẫn giao đúng ngày. Giao trễ 1 lần là mất niềm tin cả năm.</p>
+<hr />
+<h2 id="2-kich-ban-ky-thuat-fluentcrm">2. KỊCH BẢN KỸ THUẬT FLUENTCRM</h2>
+<h3 id="21-du-lieu-custom-fields-ay-la-xuong-song">2.1 Dữ liệu: Custom Fields (đây là xương sống)</h3>
+<p>Tạo trong <strong>FluentCRM → Settings → Custom Fields</strong> (nhóm <code>club</code>). Không dùng tag để lưu ngày hết hạn — tag không so sánh được ngày trong segment động.</p>
+<table>
+<thead>
+<tr>
+<th>Nhãn</th>
+<th>Slug / Key</th>
+<th>Kiểu</th>
+<th>Ghi chú</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Gói Club</td>
+<td><code>club_plan</code></td>
+<td>Dropdown: <code>ca_nhan</code> / <code>gia_dinh_sme</code></td>
+<td>Quyết định quyền lợi</td>
+</tr>
+<tr>
+<td>Trạng thái</td>
+<td><code>club_status</code></td>
+<td>Dropdown: <code>cho_thanh_toan</code> / <code>active</code> / <code>het_han</code> / <code>da_huy</code></td>
+<td>Chỉ 4 giá trị, không thêm</td>
+</tr>
+<tr>
+<td>Ngày vào</td>
+<td><code>club_joined_at</code></td>
+<td>Date</td>
+<td>Ngày duyệt thanh toán đầu tiên</td>
+</tr>
+<tr>
+<td><strong>Thanh toán đến ngày</strong></td>
+<td><code>club_paid_until</code></td>
+<td>Date</td>
+<td><strong>Trường quan trọng nhất</strong> — segment gia hạn và hết hạn đều dựa vào đây</td>
+</tr>
+<tr>
+<td>Kỳ thanh toán gần nhất</td>
+<td><code>club_last_paid_at</code></td>
+<td>Date</td>
+<td>Để đối soát, phát hiện thành viên hay quên</td>
+</tr>
+<tr>
+<td>Số kỳ đã trả</td>
+<td><code>club_period_count</code></td>
+<td>Number</td>
+<td>Tăng dần 1,2,3… — dùng cho báo cáo giữ chân</td>
+</tr>
+<tr>
+<td>Mã giao dịch / nội dung CK</td>
+<td><code>club_payment_ref</code></td>
+<td>Text</td>
+<td>Khách gõ vào form báo đã CK</td>
+</tr>
+<tr>
+<td>Người giới thiệu</td>
+<td><code>club_referred_by</code></td>
+<td>Email</td>
+<td>Để thưởng người giới thiệu (tùy chọn)</td>
+</tr>
+<tr>
+<td>Link mời cộng đồng đã gửi</td>
+<td><code>club_invite_sent_at</code></td>
+<td>Date</td>
+<td>Tránh gửi lại link mời nhiều lần</td>
+</tr>
+<tr>
+<td>Ghi chú nội bộ</td>
+<td><code>club_note</code></td>
+<td>Text</td>
+<td>Ghi tay khi có tình huống đặc biệt</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Quy tắc: một sự thật chỉ nằm ở MỘT chỗ.</strong> Trạng thái nằm ở <code>club_status</code>; tag chỉ để gửi email cho nhanh. Khi hai chỗ mâu thuẫn → custom field là đúng, tag là copy.</p>
+<h3 id="22-danh-sach-tag">2.2 Danh sách &amp; Tag</h3>
+<p><strong>List</strong> (tạo tại <strong>FluentCRM → Contacts → Lists</strong>):</p>
+<table>
+<thead>
+<tr>
+<th>Tên list</th>
+<th>Ai ở trong</th>
+<th>Ghi chú</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Hermes Club Thanh vien</code></td>
+<td>Mọi người từng vào Club (active + hết hạn + đã huỷ)</td>
+<td>List "tổng" để gửi thông báo chung. <strong>Không trộn List 7 khóa học</strong></td>
+</tr>
+<tr>
+<td><code>Hermes Club Cho thanh toan</code></td>
+<td>Đã gửi form xin vào, chờ chuyển khoản</td>
+<td>Bỏ khỏi list này ngay khi duyệt</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Tag</strong> (FluentCRM → Contacts → Tags), tiền tố <code>CLB-</code> để phân biệt với Tag 13 khóa học:</p>
+<table>
+<thead>
+<tr>
+<th>Nhóm</th>
+<th>Tag</th>
+<th>Ai có</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Trạng thái</td>
+<td><code>CLB-ChoThanhToan</code></td>
+<td>Đã đăng ký, chưa CK</td>
+</tr>
+<tr>
+<td>Trạng thái</td>
+<td><code>CLB-Active</code></td>
+<td>Đã duyệt và còn hạn</td>
+</tr>
+<tr>
+<td>Trạng thái</td>
+<td><code>CLB-HetHan</code></td>
+<td>Quá <code>club_paid_until</code>, chưa gia hạn</td>
+</tr>
+<tr>
+<td>Trạng thái</td>
+<td><code>CLB-DaHuy</code></td>
+<td>Chủ động rời</td>
+</tr>
+<tr>
+<td>Gói</td>
+<td><code>CLB-CaNhan</code> / <code>CLB-GiaDinh-SME</code></td>
+<td>Theo <code>club_plan</code></td>
+</tr>
+<tr>
+<td>Nhắc nở</td>
+<td><code>CLB-NhacTruoc3Ngay</code>, <code>CLB-NhacTruoc1Ngay</code>, <code>CLB-NhacQuaHan</code>, <code>CLB-Winback</code></td>
+<td>Automation tự apply để không gửi trùng</td>
+</tr>
+<tr>
+<td>Hành vi</td>
+<td><code>CLB-DaTaiFileThang</code>, <code>CLB-DaXemVideo</code>, <code>CLB-ThamGiaHoiDap</code></td>
+<td>Đo mức độ dùng thật</td>
+</tr>
+<tr>
+<td>Nguồn</td>
+<td><code>CLB-Tu-DFY</code>, <code>CLB-Tu-YouTube</code>, <code>CLB-Tu-KhoaCu</code></td>
+<td>Để biết kênh nào sinh thành viên</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Quy tắc tag bất biến:</strong> một người chỉ có <strong>đúng 1</strong> trong 4 tag trạng thái. Khi đổi trạng thái, automation phải <strong>gỡ tag cũ trước, apply tag mới sau</strong> — nếu không, người hết hạn vẫn nằm trong <code>CLB-Active</code> và tiếp tục nhận trợ lý miễn phí.</p>
+<h3 id="23-segment-ong-dynamic-segments">2.3 Segment động (Dynamic Segments)</h3>
+<p>Tạo tại <strong>FluentCRM → Contacts → Segments → New Segment → Dynamic</strong>. Segment động tự cập nhật, không cần chạy job.</p>
+<table>
+<thead>
+<tr>
+<th>Tên segment</th>
+<th>Điều kiện</th>
+<th>Dùng để</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>CLB — Dang hoat dong</code></td>
+<td><code>club_status = active</code> <strong>VÀ</strong> <code>club_paid_until &gt; today</code></td>
+<td>Gửi trợ lý mới hàng tháng, thống kê MRR</td>
+</tr>
+<tr>
+<td><code>CLB — Sap het han (3 ngay)</code></td>
+<td><code>club_status = active</code> <strong>VÀ</strong> <code>club_paid_until</code> trong 3 ngày tới <strong>VÀ</strong> KHÔNG có tag <code>CLB-NhacTruoc3Ngay</code></td>
+<td>Nhắc gia hạn đợt 1</td>
+</tr>
+<tr>
+<td><code>CLB — Sap het han (1 ngay)</code></td>
+<td>Như trên, 1 ngày, KHÔNG có tag <code>CLB-NhacTruoc1Ngay</code></td>
+<td>Nhắc gia hạn đợt 2</td>
+</tr>
+<tr>
+<td><code>CLB — Qua han (chua huy)</code></td>
+<td><code>club_status = active</code> <strong>VÀ</strong> <code>club_paid_until &lt; today</code> <strong>VÀ</strong> KHÔNG có tag <code>CLB-QuaHan</code></td>
+<td>Tắt quyền + email "quên gia hạn"</td>
+</tr>
+<tr>
+<td><code>CLB — Het han 7 ngay</code></td>
+<td><code>club_status = het_han</code> <strong>VÀ</strong> ngày hết hạn cách đây 7 ngày</td>
+<td>Win-back</td>
+</tr>
+<tr>
+<td><code>CLB — Cho thanh toan</code></td>
+<td>có tag <code>CLB-ChoThanhToan</code> <strong>VÀ</strong> <code>club_joined_at</code> &gt; 2 ngày trước</td>
+<td>Nhắc người đăng ký mà quên chuyển khoản</td>
+</tr>
+<tr>
+<td><code>CLB — Khong tai file</code></td>
+<td><code>club_status = active</code> <strong>VÀ</strong> KHÔNG có tag <code>CLB-DaTaiFileThang</code></td>
+<td>Cảnh báo thành viên "ngủ đông"</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Lưu ý kỹ thuật đã gặp:</strong> segment động cần WP-Cron chạy đúng. Vào <strong>FluentCRM → Settings → Cron Status</strong> kiểm tra lần chạy gần nhất. Nếu cron chết, mọi automation đứng im và KHÔNG báo lỗi — triệu chứng là "email không chạy" chứ không phải "email lỗi".</p>
+</blockquote>
+<h3 id="24-automation-chinh">2.4 Automation chính</h3>
+<p>Tạo tại <strong>FluentCRM → Automations → New Automation</strong>. Đặt tên y như mục 1.1.</p>
+<h4 id="a-hermes-club-vao-club-onboarding">A. <code>Hermes Club — Vao Club</code> (onboarding)</h4>
+<table>
+<thead>
+<tr>
+<th>Bước</th>
+<th>Loại</th>
+<th>Nội dung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Trigger</td>
+<td><strong>Contact added to list</strong> → <code>Hermes Club Thanh vien</code></td>
+<td>Chạy khi apply list sau khi duyệt CK</td>
+</tr>
+<tr>
+<td>1</td>
+<td>Delay</td>
+<td><strong>5 phút</strong></td>
+</tr>
+<tr>
+<td>2</td>
+<td>Send custom email</td>
+<td><strong>E1</strong> — "Vào Club thành công" + link khu vực thành viên + link mời Zalo</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Delay</td>
+<td><strong>2 ngày</strong></td>
+</tr>
+<tr>
+<td>4</td>
+<td>Conditional</td>
+<td>Đã có tag <code>CLB-DaVao-Community</code> chưa?</td>
+</tr>
+<tr>
+<td>4a</td>
+<td>(No) Send email</td>
+<td><strong>E2</strong> — nhắc vào cộng đồng + giới thiệu 1 người trong nhóm</td>
+</tr>
+<tr>
+<td>4b</td>
+<td>(Yes)</td>
+<td>Bỏ qua</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Delay</td>
+<td><strong>3 ngày</strong></td>
+</tr>
+<tr>
+<td>6</td>
+<td>Conditional</td>
+<td>Đã có tag <code>CLB-DaTaiFileThang</code> chưa?</td>
+</tr>
+<tr>
+<td>6a</td>
+<td>(No) Send email</td>
+<td><strong>E3</strong> — "Trợ lý tháng này dùng thế nào" (hướng dẫn từng bước)</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Delay</td>
+<td><strong>5 ngày</strong></td>
+</tr>
+<tr>
+<td>8</td>
+<td>Conditional</td>
+<td><code>club_plan = gia_dinh_sme</code>?</td>
+</tr>
+<tr>
+<td>8a</td>
+<td>(Yes) Send email</td>
+<td><strong>E4</strong> — mời buổi hỏi đáp + giảm 20% dịch vụ DFY</td>
+</tr>
+<tr>
+<td>9</td>
+<td>Apply tag</td>
+<td><code>CLB-Onboarding-Done</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Điểm cần cấu hình trên WordPress để automation này chạy:</strong>
+- <code>FluentCRM → Settings → Email Settings</code> → gửi bằng FluentSMTP, đồng bộ WP Users <strong>TẮT</strong> (không cần tạo user WP cho thành viên).
+- Nếu dùng FluentCommunity: bật tích hợp FluentCRM để việc vào/ra Space tự đồng bộ với tag (<code>FluentCommunity → Settings → Integrations</code>).
+- <strong>Automation phải ở trạng thái <code>published</code></strong> — automation để <code>draft</code> thì trigger KHÔNG bao giờ chạy.</p>
+<h4 id="b-hermes-club-gia-han-het-han">B. <code>Hermes Club — Gia han &amp; het han</code></h4>
+<table>
+<thead>
+<tr>
+<th>Bước</th>
+<th>Loại</th>
+<th>Nội dung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Trigger</td>
+<td><strong>Date-based / Custom field based</strong> → <code>club_paid_until</code> trước <strong>3 ngày</strong></td>
+<td>Nhắc gia hạn đợt 1</td>
+</tr>
+<tr>
+<td>1</td>
+<td>Send email</td>
+<td><strong>G1</strong> — "Club hết hạn sau 3 ngày" (nhắc nhẹ, không bán)</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Apply tag</td>
+<td><code>CLB-NhacTruoc3Ngay</code></td>
+</tr>
+<tr>
+<td>3</td>
+<td>Delay đến</td>
+<td><code>club_paid_until</code> trước <strong>1 ngày</strong></td>
+</tr>
+<tr>
+<td>4</td>
+<td>Conditional</td>
+<td><code>club_status</code> vẫn là <code>active</code>? (tức là chưa gia hạn)</td>
+</tr>
+<tr>
+<td>4a</td>
+<td>(Yes) Send email</td>
+<td><strong>G2</strong> — "Ngày mai hết hạn" + nút chuyển khoản + số tiền</td>
+</tr>
+<tr>
+<td>4b</td>
+<td>Apply tag</td>
+<td><code>CLB-NhacTruoc1Ngay</code></td>
+</tr>
+<tr>
+<td>5</td>
+<td>Delay đến</td>
+<td><code>club_paid_until</code> sau <strong>1 ngày</strong></td>
+</tr>
+<tr>
+<td>6</td>
+<td>Conditional</td>
+<td>Đã gia hạn chưa? (<code>club_status</code> vẫn <code>active</code> và <code>club_paid_until</code> đã đổi)</td>
+</tr>
+<tr>
+<td>6a</td>
+<td>(No) Set custom field</td>
+<td><code>club_status = het_han</code></td>
+</tr>
+<tr>
+<td>6b</td>
+<td>Remove tag</td>
+<td><code>CLB-Active</code></td>
+</tr>
+<tr>
+<td>6c</td>
+<td>Apply tag</td>
+<td><code>CLB-HetHan</code></td>
+</tr>
+<tr>
+<td>6d</td>
+<td>Send email</td>
+<td><strong>G3</strong> — "Quyền truy cập đã tắt" (trung thực, không dọa)</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Delay</td>
+<td><strong>7 ngày</strong></td>
+</tr>
+<tr>
+<td>8</td>
+<td>Send email</td>
+<td><strong>G4</strong> — Win-back: "Trợ lý tháng này là gì" + 1 lý do quay lại</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Vì sao phải có bước Conditional sau mỗi email nhắc:</strong> người đã chuyển khoản lúc 22h hôm trước sẽ không muốn nhận email "ngày mai hết hạn" lúc 8h sáng. Bước Conditional đọc lại <code>club_status</code> / <code>club_paid_until</code> tại thời điểm chạy, không phải lúc vào funnel.</p>
+<h4 id="c-hermes-club-cho-thanh-toan-nhac-nguoi-quen-ck">C. <code>Hermes Club — Cho thanh toan</code> (nhắc người quên CK)</h4>
+<table>
+<thead>
+<tr>
+<th>Bước</th>
+<th>Loại</th>
+<th>Nội dung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Trigger</td>
+<td><strong>Contact added to tag</strong> <code>CLB-ChoThanhToan</code></td>
+<td>Hoặc: <code>Contact added to list</code> → <code>Hermes Club Cho thanh toan</code></td>
+</tr>
+<tr>
+<td>1</td>
+<td>Send email ngay</td>
+<td><strong>C1</strong> — hướng dẫn chuyển khoản: số tài khoản, số tiền, <strong>nội dung CK bắt buộc</strong>, Momo</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Delay</td>
+<td><strong>1 ngày</strong></td>
+</tr>
+<tr>
+<td>3</td>
+<td>Conditional</td>
+<td>Đã có tag <code>CLB-Active</code>?</td>
+</tr>
+<tr>
+<td>3a</td>
+<td>(No) Send email</td>
+<td><strong>C2</strong> — nhắc nhẹ + trả lời 3 thắc mắc hay gặp</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Delay</td>
+<td><strong>2 ngày</strong></td>
+</tr>
+<tr>
+<td>5</td>
+<td>Conditional</td>
+<td>Đã có tag <code>CLB-Active</code>?</td>
+</tr>
+<tr>
+<td>5a</td>
+<td>(No) Send email</td>
+<td><strong>C3</strong> — "Còn muốn vào không?" (email cuối, dễ hủy đăng ký thì thôi)</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Conditional</td>
+<td>Vẫn chưa active</td>
+</tr>
+<tr>
+<td>6a</td>
+<td>Apply tag</td>
+<td><code>CLB-BoQua</code> + gỡ <code>CLB-ChoThanhToan</code> + gỡ khỏi list <code>Cho thanh toan</code></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Đây là automation sinh tiền trực tiếp nhất. Người đăng ký rồi quên chuyển khoản là chuyện thường — tỷ lệ cứu lại với đúng 3 email thường là 20–35%.</p>
+</blockquote>
+<h3 id="25-luong-thanh-toan-chuyen-khoan-xac-nhan-thu-cong-cap-quyen">2.5 Luồng thanh toán: chuyển khoản → xác nhận thủ công → cấp quyền</h3>
+<p>Đây là <strong>luồng vận hành mỗi ngày</strong>, không phải cấu hình một lần.</p>
+<pre><code>[1] Khách điền form trên speedreading.vn/hermes-club
+       → Fluent Forms tạo contact + apply tag CLB-ChoThanhToan
+       → apply list &quot;Hermes Club Cho thanh toan&quot;
+       → automation &quot;Cho thanh toan&quot; gửi C1 (hướng dẫn CK)
+
+[2] Khách chuyển khoản, nội dung CK bắt buộc: HERMES-CLUB-&lt;email&gt;
+       (nội dung chuẩn hoá là chìa khoá — không có nó thì không đối soát được)
+
+[3] Khách điền form &quot;TÔI ĐÃ CHUYỂN KHOẢN&quot; (Fluent Forms thứ 2)
+       → cập nhật custom field club_payment_ref + club_plan
+       → apply tag CLB-BaoDaCK
+
+[4] Chủ kênh đối soát (5 phút/ngày, bảng trong Google Sheets)
+       ĐÚNG → apply tag CLB-Active + set club_paid_until = hôm nay + 1 tháng
+              + set club_status = active + apply list &quot;Hermes Club Thanh vien&quot;
+              → automation &quot;Vao Club&quot; tự chạy
+       SAI  → bấm nút &quot;Email nhắc lại&quot; trong FluentCRM (dùng template C2)
+
+[5] Mỗi tháng, automation &quot;Gia han &amp; het han&quot; tự lo phần còn lại
+</code></pre>
+<p><strong>Nội dung chuyển khoản chuẩn</strong> (viết y nguyên trên trang bán và trong email C1):</p>
+<pre><code>Ngân hàng: [TÊN NGÂN HÀNG]
+Số tài khoản: [SỐ TK]
+Chủ tài khoản: [TÊN]
+Số tiền: 99.000đ (Cá nhân) hoặc 199.000đ (Gia đình/SME)
+Nội dung: HERMES-CLUB-&lt;email của bạn&gt;
+</code></pre>
+<p><strong>Form 2 ("Tôi đã chuyển khoản") gồm những trường nào</strong> (Fluent Forms → form mới):</p>
+<table>
+<thead>
+<tr>
+<th>Trường</th>
+<th>Kiểu</th>
+<th>Bắt buộc</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Email</td>
+<td>Email</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Gói chọn</td>
+<td>Radio: Cá nhân 99k / Gia đình-SME 199k</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Nội dung chuyển khoản đã dùng</td>
+<td>Text</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Ảnh biên lai</td>
+<td>File upload</td>
+<td>Không (tin vào nội dung CK)</td>
+</tr>
+<tr>
+<td>Họ tên</td>
+<td>Text</td>
+<td>Không</td>
+</tr>
+<tr>
+<td>Số điện thoại / Zalo</td>
+<td>Text</td>
+<td>Không</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Cấu hình Feed của cả 2 form:</strong> <code>Fluent Forms → Settings → Marketing &amp; CRM → FluentCRM</code> → khi submit: tạo/update contact, apply list + tag như bảng trên. Đây là liên kết form → CRM, <strong>phải bật</strong> nếu không form thu thập mà FluentCRM không biết gì.</p>
+<p><strong>Cách cấp quyền khu vực thành viên (3 lựa chọn, chọn 1):</strong></p>
+<table>
+<thead>
+<tr>
+<th>Cách</th>
+<th>Dùng khi</th>
+<th>Cách làm</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>A. FluentCommunity (khuyến nghị)</strong></td>
+<td>Muốn có cộng đồng + nơi để tải file, tất cả trong WordPress</td>
+<td>Cài FluentCommunity Free → tạo Space <code>Hermes Club</code> → <strong>Private</strong> → phân quyền theo role/hoặc paywall. Khi apply tag <code>CLB-Active</code>, automation gọi action thêm vào Space</td>
+</tr>
+<tr>
+<td>B. WordPress + role thủ công</td>
+<td>Không muốn thêm plugin</td>
+<td>Tạo role <code>club_member</code>, trang <code>/hermes-club</code> đặt <code>visibility = private</code>, thêm user WP vào role khi duyệt. Đơn giản nhưng không có cộng đồng</td>
+</tr>
+<tr>
+<td>C. Link file trên Google Drive + trang danh sách</td>
+<td>Muốn chạy ngay trong ngày 1, ít tốn công</td>
+<td>Trang WP bảo vệ bằng mật khẩu chung. <strong>Nhược điểm rõ:</strong> link bị chia sẻ ra ngoài là mất kiểm soát</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Khuyến nghị thực tế: bắt đầu bằng Cách A (FluentCommunity Free).</strong> Lý do: nó giải quyết cùng lúc 3 nhu cầu (khu vực thành viên, cộng đồng, nơi hỏi đáp) mà không cần tự code phân quyền; bản Free đã có Space riêng tư và role. Nếu sau này cần bán course/paywall thì nâng Pro.</p>
+<p><strong>Điểm cần cấu hình trên WordPress cho FluentCommunity:</strong>
+- Cài từ <code>FluentCRM → Settings → Install FluentCommunity</code> (route <code>install-fluent-community</code> đã có sẵn trên hệ thống) — cách này tránh phải upload plugin qua FTP.
+- <code>FluentCommunity → Settings → Integrations</code> → bật <strong>FluentCRM</strong>.
+- Tạo Space <code>Hermes Club</code>, chế độ <strong>Private</strong> (không phải Public — Public là lộ nội dung trả phí).
+- Tạo role <code>CLB-ThanhVien</code>; KHÔNG cấp quyền tạo Space cho thành viên (tránh nhóm loạn).
+- Tắt chức năng không dùng (forum công khai, directory) để giảm bề mặt bảo mật.</p>
+<h3 id="26-gui-tro-ly-moi-moi-thang-recurring-campaign">2.6 Gửi trợ lý mới mỗi tháng: Recurring Campaign</h3>
+<p>Tạo tại <strong>FluentCRM → Emails → Recurring Campaigns → New</strong>. Tính năng này thuộc <strong>FluentCRM Pro</strong> (bản free không có).</p>
+<table>
+<thead>
+<tr>
+<th>Thiết lập</th>
+<th>Giá trị</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Title</td>
+<td><code>Hermes Club — Tro ly moi thang</code></td>
+</tr>
+<tr>
+<td>Interval</td>
+<td><strong>Monthly</strong> — ngày <strong>5</strong>, giờ <strong>08:00</strong></td>
+</tr>
+<tr>
+<td>Recipients</td>
+<td><strong>Dynamic Segment</strong> → <code>CLB — Dang hoat dong</code></td>
+</tr>
+<tr>
+<td>Exclude</td>
+<td>Tag <code>CLB-NhacTruoc3Ngay</code>, <code>CLB-HetHan</code> (an toàn kép)</td>
+</tr>
+<tr>
+<td>Content</td>
+<td>Viết tay mỗi tháng, hoặc dùng Latest Post Block để tự lấy bài đăng trên web</td>
+</tr>
+<tr>
+<td>Auto-send</td>
+<td><strong>BẬT</strong> "Send automatically" — nhưng 2 tháng đầu để TẮT để tự đọc lại trước khi gửi</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Vì sao ngày 5 mà không phải ngày 1:</strong> tránh trùng lúc khách nhận hàng loạt email đầu tháng; và cho chủ kênh 4 ngày cuối tháng trước để hoàn thiện trợ lý mà không bị áp lực giờ G.</p>
+<p><strong>Nếu không muốn dùng Recurring Campaign</strong> (hoặc muốn kiểm soát tuyệt đối từng tháng): dùng <strong>Campaign thường</strong>, đặt lịch gửi ngày 5 hàng tháng, chọn segment <code>CLB — Dang hoat dong</code>. Thủ công hơn nhưng chắc chắn — nên dùng cách này trong 3 tháng đầu để nhìn rõ số liệu rồi mới chuyển sang tự động.</p>
+<h3 id="27-bao-ve-deliverability-lam-truoc-khi-gui-bat-ky-email-club-nao">2.7 Bảo vệ deliverability (làm TRƯỚC khi gửi bất kỳ email Club nào)</h3>
+<table>
+<thead>
+<tr>
+<th>Việc</th>
+<th>Ở đâu</th>
+<th>Tiêu chí đạt</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Xác thực SPF</td>
+<td>DNS của domain gửi (<code>speedreading.vn</code>)</td>
+<td>Có bản ghi SPF bao gồm máy chủ SMTP</td>
+</tr>
+<tr>
+<td>Xác thực DKIM</td>
+<td>FluentSMTP → connection settings → bật DKIM signing</td>
+<td>Đã verify</td>
+</tr>
+<tr>
+<td>Cài DMARC</td>
+<td>DNS: <code>_dmarc.speedreading.vn</code> TXT</td>
+<td>Bắt đầu <code>p=none</code>, có <code>rua</code> nhận báo cáo</td>
+</tr>
+<tr>
+<td>Gửi thử</td>
+<td>FluentCRM → Campaigns → Send Test</td>
+<td>3 địa chỉ: Gmail, Outlook, iPhone</td>
+</tr>
+<tr>
+<td>Kiểm tra bounce</td>
+<td>FluentCRM → Settings → Bounce</td>
+<td>Hard bounce &lt; 2%, bounce handler đã trỏ đúng</td>
+</tr>
+<tr>
+<td>Theo dõi spam complaint</td>
+<td>FluentSMTP / báo cáo DMARC</td>
+<td>&lt; 0,1%</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Quy tắc không bao giờ phá:</strong> mọi email Club phải có <strong>unsubscribe rõ ràng</strong> (FluentCRM tự thêm nếu bật trong Settings) và <strong>địa chỉ thật</strong> ở footer. Một domain vào spam là mất cả kênh email — đắt hơn nhiều so với việc gia hạn thêm vài thành viên.</p>
+<h3 id="28-nhung-cam-bay-ky-thuat-a-gap-ghi-lai-e-khong-vap-lai">2.8 Những cạm bẫy kỹ thuật đã gặp (ghi lại để không vấp lại)</h3>
+<p>Đây là kinh nghiệm thực tế trên chính hệ thống này, không phải lý thuyết:</p>
+<ol>
+<li><strong>Tạo email bằng MCP <code>upsert-campaign</code> KHÔNG lưu body vào cột <code>email_body</code></strong> (bị rỗng). Phải UPDATE trực tiếp bảng <code>wpd5_fc_campaigns SET email_body='&lt;html&gt;'</code>. Nếu build bằng GUI thì không vấn đề gì.</li>
+<li><strong>Action <code>send_campaign_email</code> trong automation là placeholder, không gửi được.</strong> Dùng <code>send_custom_email</code>, với <code>settings.campaign</code> chứa <code>email_subject</code> / <code>body_html</code> / <code>design_template</code>.</li>
+<li><strong><code>saveFunnelSequence</code> qua REST</strong> (<code>POST fluent-crm/v2/funnels/funnel/save-funnel-sequences</code>): <code>settings</code> phải là <strong>object</strong> (không phải chuỗi), <code>conditions</code> phải là <strong>JSON string</strong> (ngược lại). Trộn lẫn 2 kiểu này là lỗi im lặng — automation tạo xong mà không chạy.</li>
+<li><strong>Automation phải <code>status = published</code></strong> mới trigger khi add list. Draft thì không bao giờ chạy và không báo lỗi.</li>
+<li><strong>Trigger <code>fluentcrm_contact_added_to_lists</code> chỉ fire khi qua <code>Subscriber::attachLists()</code></strong> — nghĩa là qua model/API chuẩn. Apply tag hàng loạt bằng bulk endpoint có thể <strong>không</strong> kích hoạt trigger. Khi test, kiểm tra lại bằng cách xem automation có nhận contact không, đừng tin là "đã apply list là sẽ chạy".</li>
+<li><strong>GUI của FluentCRM là SPA</strong> — khi mở URL mới trong tab cũ hay bị <code>about:blank</code> và mất session. Ưu tiên REST API qua MCP thay vì click chuột.</li>
+<li><strong>Segment động phụ thuộc WP-Cron.</strong> Cron chết thì segment đóng băng và email không gửi, không có thông báo lỗi. Kiểm tra <code>Settings → Cron Status</code> mỗi tuần.</li>
+</ol>
+<hr />
+<h2 id="3-kenh-giao-tro-ly-moi-mau-email">3. KÊNH GIAO TRỢ LÝ MỚI + MẪU EMAIL</h2>
+<h3 id="31-kenh-nao-giao-cai-gi">3.1 Kênh nào giao cái gì</h3>
+<table>
+<thead>
+<tr>
+<th>Kênh</th>
+<th>Vai trò</th>
+<th>Nội dung đặt ở đó</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Email FluentCRM</strong></td>
+<td>Kênh chính — chắc chắn đến, đo được</td>
+<td>Thông báo trợ lý mới (ngày 5), nhắc gia hạn, win-back</td>
+</tr>
+<tr>
+<td><strong>Khu vực thành viên trên web</strong> (FluentCommunity)</td>
+<td>Nơi LƯU trữ — file, video, hỏi đáp</td>
+<td>Mọi file cấu hình, video, bài đăng từng tháng, thảo luận</td>
+</tr>
+<tr>
+<td><strong>Nhóm Zalo / Telegram</strong></td>
+<td>Nơi trả lời nhanh, giữ chân</td>
+<td>Hỏi "cái này bị lỗi", chia sẻ kết quả, thông báo buổi hỏi đáp</td>
+</tr>
+<tr>
+<td><strong>Buổi hỏi đáp trực tiếp</strong></td>
+<td>Giá trị không copy được</td>
+<td>60 phút/tháng, bản ghi để trong khu vực thành viên</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Nguyên tắc:</strong> email là <strong>đường ray</strong> (đưa người ta đến), web là <strong>nhà kho</strong> (giữ đồ), nhóm Zalo là <strong>phòng khách</strong> (giữ người). Không đảo ba vai này — email chỉ để link, không nhét file đính kèm (làm tăng tỷ lệ vào spam).</p>
+<h3 id="32-mau-email-tro-ly-moi-thang-x">3.2 Mẫu email: "Trợ lý mới tháng X"</h3>
+<p>Gửi ngày 5 hàng tháng qua Recurring Campaign / Campaign đến segment <code>CLB — Dang hoat dong</code>.</p>
+<p><strong>3 tiêu đề chọn 1 (A/B test):</strong></p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Subject</th>
+<th>Preview text</th>
+<th>Dùng khi</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>A</strong></td>
+<td><code>Trợ lý tháng 3 đã sẵn sàng: Trợ lý Thu chi</code></td>
+<td><code>Copy 2 file vào là chạy tối nay</code></td>
+<td>Mặc định — nói rõ có gì</td>
+</tr>
+<tr>
+<td>B</td>
+<td><code>Tháng này: bớt 1 việc tay mỗi tối</code></td>
+<td><code>Trợ lý Thu chi + video 13 phút</code></td>
+<td>Muốn nhấn lợi ích</td>
+</tr>
+<tr>
+<td>C</td>
+<td><code>{{contact.first_name}} ơi, đồ mới của tháng đã lên</code></td>
+<td><code>Trợ lý Thu chi — tối nay dùng được</code></td>
+<td>Tháng có tương tác thấp, cần gần gũi</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Nội dung (125 từ):</strong></p>
+<hr />
+<p><strong>Subject:</strong> Trợ lý tháng 3 đã sẵn sàng: Trợ lý Thu chi</p>
+<p>Chào {{contact.first_name}},</p>
+<p>Trợ lý tháng này của HERMES CLUB đã lên: <strong>Trợ Lý Thu Chi</strong>.</p>
+<p>Nó gánh việc này: bạn chụp bill hoặc dán dãy giao dịch vào, nó lập thành bảng thu chi theo tháng, tính tổng theo nhóm, và cảnh báo khi một nhóm chi vượt hạn mức bạn đặt. Không cần nhập tay, không cần biết công thức.</p>
+<p>Gồm có 4 thứ:</p>
+<ol>
+<li>File skill để copy vào Hermes (2 phút)</li>
+<li>Mẫu sổ thu chi theo tháng</li>
+<li>Video 13 phút — tôi làm từ đầu đến có bảng xong</li>
+<li>Bảng hạn mức gợi ý cho hộ gia đình</li>
+</ol>
+<p>Tải ở đây: <strong>[ MỞ TRỢ LÝ THÁNG 3 → ]</strong>
+<code>speedreading.vn/hermes-club</code></p>
+<p>Tối nay làm được ngay. Có gì vướng, hỏi trong nhóm Zalo — tôi trả lời trong ngày.</p>
+<p>— Văn Hỉ, HERMES CLUB</p>
+<p><em>Bạn nhận mail này vì là thành viên HERMES CLUB. Hủy nhận tin 1 cú click ở cuối mail.</em></p>
+<hr />
+<p><strong>Quy tắc cho email này:</strong></p>
+<ul>
+<li><strong>1 trợ lý = 1 email = 1 link.</strong> Không nhét thêm tin tức, không nhét upsell.</li>
+<li>Đề cập đúng <strong>tháng</strong> và đúng <strong>tên trợ lý</strong> — thành viên phải thấy mình đang ở thứ tự nào trong 12 tháng.</li>
+<li>Luôn nói rõ <strong>thời lượng video</strong> và <strong>thời gian để cài</strong> (2 phút) — đó là thứ người ta cần để quyết định mở ngay hay để mai.</li>
+<li>Không viết "đừng bỏ lỡ", không đồng hồ đếm ngược — Club là dịch vụ hàng tháng, không phải flash sale.</li>
+</ul>
+<h3 id="33-cac-email-van-hanh-con-lai-tom-tat-e-build">3.3 Các email vận hành còn lại (tóm tắt để build)</h3>
+<table>
+<thead>
+<tr>
+<th>Mã</th>
+<th>Tên</th>
+<th>Gửi khi</th>
+<th>Mục tiêu</th>
+<th>Độ dài</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>C1</td>
+<td>Hướng dẫn chuyển khoản</td>
+<td>Ngay sau đăng ký</td>
+<td>Làm cho khách trả tiền dễ nhất có thể</td>
+<td>Ngắn, có số TK rõ</td>
+</tr>
+<tr>
+<td>C2</td>
+<td>Nhắc quên CK</td>
+<td>+1 ngày</td>
+<td>Cứu người đăng ký rồi bỏ</td>
+<td>Ngắn</td>
+</tr>
+<tr>
+<td>C3</td>
+<td>Còn muốn vào không?</td>
+<td>+3 ngày</td>
+<td>Dọn list, giữ sạch</td>
+<td>Rất ngắn</td>
+</tr>
+<tr>
+<td>E1</td>
+<td>Vào Club thành công</td>
+<td>Khi duyệt</td>
+<td>Đưa vào khu vực thành viên + nhóm Zalo</td>
+<td>Ngắn</td>
+</tr>
+<tr>
+<td>E2</td>
+<td>Nhắc vào cộng đồng</td>
+<td>+2 ngày</td>
+<td>Tăng tương tác (tương tác = ở lại)</td>
+<td>Ngắn</td>
+</tr>
+<tr>
+<td>E3</td>
+<td>Trợ lý tháng này dùng thế nào</td>
+<td>+3 ngày (nếu chưa tải file)</td>
+<td>Kích hoạt người mới</td>
+<td>Trung bình</td>
+</tr>
+<tr>
+<td>E4</td>
+<td>Mời hỏi đáp + giảm DFY</td>
+<td>+5 ngày (chỉ gói 199k)</td>
+<td>Cảm nhận giá trị gói đắt</td>
+<td>Trung bình</td>
+</tr>
+<tr>
+<td>G1</td>
+<td>Hết hạn sau 3 ngày</td>
+<td>Trước 3 ngày</td>
+<td>Gia hạn</td>
+<td>Ngắn</td>
+</tr>
+<tr>
+<td>G2</td>
+<td>Ngày mai hết hạn</td>
+<td>Trước 1 ngày</td>
+<td>Gia hạn</td>
+<td>Rất ngắn</td>
+</tr>
+<tr>
+<td>G3</td>
+<td>Quyền đã tắt</td>
+<td>Sau 1 ngày</td>
+<td>Trung thực + mở đường quay lại</td>
+<td>Ngắn</td>
+</tr>
+<tr>
+<td>G4</td>
+<td>Win-back</td>
+<td>+7 ngày sau hết hạn</td>
+<td>Lấy lại thành viên</td>
+<td>Trung bình</td>
+</tr>
+<tr>
+<td>M</td>
+<td>Trợ lý mới tháng X</td>
+<td>Ngày 5 hàng tháng</td>
+<td>Giá trị lõi</td>
+<td>125 từ</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="4-upsell-tu-dich-vu-dfy-club">4. UPSELL TỪ DỊCH VỤ DFY → CLUB</h2>
+<h3 id="41-logic-cua-cu-upsell-nay">4.1 Logic của cú upsell này</h3>
+<p>Khách vừa trả 1,5–3,5tr để cài 3 hệ thống. Trong đầu họ lúc này có 2 trạng thái cùng lúc: <strong>vui vì xong việc</strong> và <strong>lo vì từ giờ tự bơi</strong>. Club trả lời đúng nỗi lo thứ hai — không phải bán thêm, mà là <strong>nối dài sự yên tâm vừa mua</strong>.</p>
+<blockquote>
+<p>Câu then chốt: <em>"Tôi vừa cài xong 3 hệ thống cho anh. Nhưng 3 hệ thống đó là của tháng này. Tháng sau anh sẽ cần trợ lý thứ 4, thứ 5 — và đó là lý do tôi có HERMES CLUB."</em></p>
+</blockquote>
+<p><strong>Thời điểm upsell (đừng bán sớm hơn):</strong></p>
+<table>
+<thead>
+<tr>
+<th>Thời điểm</th>
+<th>Cách</th>
+<th>Tỷ lệ nhận</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ngay sau khi bàn giao</td>
+<td><strong>Không bán</strong> — chỉ xác nhận mọi thứ chạy</td>
+<td>—</td>
+</tr>
+<tr>
+<td><strong>+3 ngày</strong> (đã dùng thử, có câu hỏi)</td>
+<td>Email/Zalo</td>
+<td><strong>Cao nhất</strong></td>
+</tr>
+<tr>
+<td>+7 ngày</td>
+<td>Email</td>
+<td>Trung bình</td>
+</tr>
+<tr>
+<td>+14 ngày</td>
+<td>Nhắc cuối</td>
+<td>Thấp</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Ưu đãi dành riêng cho khách DFY</strong> (làm họ thấy được đối xử đặc biệt): <strong>tháng đầu 49k</strong> thay vì 99k, kèm dòng "vì anh đã tin tưởng thuê tôi cài đặt". Khuyến mãi này chỉ gửi 1 lần, không lặp lại.</p>
+<h3 id="42-mau-nhan-zalo-ngan-gui-3-ngay">4.2 Mẫu nhắn Zalo (ngắn, gửi +3 ngày)</h3>
+<hr />
+<p>Anh {{ten}}, dạo này 3 hệ thống chạy ổn không ạ?</p>
+<p>Em hỏi vì thấy mấy anh cài xong toàn bị cái bẫy giống nhau: dùng đúng 3 trợ lý đã cài, rồi 2 tháng sau thấy còn một đống việc tay khác vẫn chưa ai gánh.</p>
+<p>Em có HERMES CLUB — mỗi tháng 1 trợ lý mới (file + video 12 phút), 99k/tháng, hủy lúc nào cũng được. Tháng này là Trợ Lý Thu Chi, tháng sau là Thực Đơn &amp; Đi Chợ.</p>
+<p>Anh là khách cũ nên em để giá tháng đầu 49k: <code>speedreading.vn/hermes-club</code></p>
+<p>Không thì em gửi anh xem thử 1 trợ lý cũng được, anh dùng thấy hợp tính.</p>
+<hr />
+<h3 id="43-mau-email-upsell-neu-khong-co-zalo">4.3 Mẫu email upsell (nếu không có Zalo)</h3>
+<p><strong>Subject:</strong> <code>Còn 1 việc tay tôi chưa gánh được cho anh</code>
+<strong>Preview text:</strong> <code>HERMES CLUB — tháng đầu 49k cho khách cũ</code></p>
+<hr />
+<p>Chào {{contact.first_name}},</p>
+<p>3 hệ thống tôi cài cho anh tuần trước giờ chạy ổn chứ?</p>
+<p>Có một việc tôi chưa làm được cho anh: <strong>tháng sau anh sẽ cần trợ lý thứ 4.</strong></p>
+<p>3 hệ thống vừa rồi giải quyết việc của tháng này. Nhưng việc thì không hết — và mỗi lần cần thêm trợ lý mới, anh lại phải tự ngồi cấu hình từ đầu. Đó là việc tôi không thể cài hộ anh được, vì nó phụ thuộc vào việc anh đang làm từng tháng.</p>
+<p><strong>HERMES CLUB</strong> sinh ra cho đúng chỗ đó:</p>
+<ul>
+<li>Mỗi tháng 1 trợ lý mới — file cấu hình sẵn + video 12 phút</li>
+<li>Khu vực thành viên trên web, tải file và xem lại mọi tháng</li>
+<li>Nhóm Zalo hỏi đáp + buổi hỏi đáp trực tiếp hàng tháng</li>
+<li><strong>99k/tháng, hủy bất cứ lúc nào</strong></li>
+</ul>
+<p>Anh là khách cũ nên tháng đầu của anh là <strong>49k</strong> — nhập mã <code>DFY-CLUB49</code> khi chuyển khoản.</p>
+<p><strong>[ XEM HERMES CLUB → ]</strong>
+<code>speedreading.vn/hermes-club</code></p>
+<p>Nếu tháng này chưa cần, em gửi anh xem thử 1 trợ lý miễn phí cũng được — cứ trả lời mail này.</p>
+<p>— Văn Hỉ</p>
+<hr />
+<p><strong>Trong FluentCRM:</strong> khách DFY nhận tag <code>CLB-Tu-DFY</code> + <code>CLB-Upsell-Sent</code>. Nếu họ vào Club, tag <code>CLB-Tu-DFY</code> giữ lại — đây là dữ liệu cho biết kênh DFY sinh bao nhiêu phần trăm thành viên Club.</p>
+<hr />
+<h2 id="5-kpi-membership-uoc-tinh">5. KPI MEMBERSHIP (ƯỚC TÍNH)</h2>
+<blockquote>
+<p><strong>Cảnh báo đọc trước:</strong> toàn bộ bảng dưới đây là <strong>ước tính</strong>, tính từ tỷ lệ chuyển đổi thường gặp của kênh YouTube vừa và thị trường dịch vụ 99–199k/tháng ở VN. Đây là <strong>mốc để đo</strong>, không phải cam kết. Sau tháng thứ 2 có số thật, thay toàn bộ cột "ước tính" bằng số thực và giữ lại phần lý giải.</p>
+</blockquote>
+<h3 id="51-gia-inh-au-vao">5.1 Giả định đầu vào</h3>
+<table>
+<thead>
+<tr>
+<th>Giả định</th>
+<th>Giá trị</th>
+<th>Ghi chú</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Lượt xem/tháng trên toàn kênh</td>
+<td>20.000</td>
+<td>Điều chỉnh theo YouTube Studio</td>
+</tr>
+<tr>
+<td>Tỷ lệ click mô tả video → landing</td>
+<td>1,5–3%</td>
+<td>End-card + link đầu mô tả</td>
+</tr>
+<tr>
+<td>Tỷ lệ landing → điền form</td>
+<td>25–35%</td>
+<td>Landing 1 mục tiêu duy nhất</td>
+</tr>
+<tr>
+<td>Tỷ lệ form → chuyển khoản thật</td>
+<td>25–35%</td>
+<td>Đây là tỷ lệ dễ vỡ nhất — nhờ automation "Cho thanh toan"</td>
+</tr>
+<tr>
+<td>Tỷ lệ khách DFY nhận upsell</td>
+<td>15–25%</td>
+<td>Khách đã trả 1,5–3,5tr</td>
+</tr>
+<tr>
+<td>Tỷ lệ khách khoá cũ nhận upsell</td>
+<td>5–10%</td>
+<td>List 7 + tag 13</td>
+</tr>
+</tbody>
+</table>
+<h3 id="52-so-thanh-vien-muc-tieu">5.2 Số thành viên mục tiêu</h3>
+<table>
+<thead>
+<tr>
+<th>Chỉ số</th>
+<th><strong>Tháng 1</strong></th>
+<th><strong>Tháng 3</strong></th>
+<th><strong>Tháng 6</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Thành viên MỚI/tháng (YouTube)</td>
+<td>15</td>
+<td>25</td>
+<td>35</td>
+</tr>
+<tr>
+<td>Thành viên MỚI/tháng (DFY upsell)</td>
+<td>3</td>
+<td>5</td>
+<td>8</td>
+</tr>
+<tr>
+<td>Thành viên MỚI/tháng (khoá cũ)</td>
+<td>5</td>
+<td>8</td>
+<td>10</td>
+</tr>
+<tr>
+<td><strong>Tổng mới/tháng</strong></td>
+<td><strong>~23</strong></td>
+<td><strong>~38</strong></td>
+<td><strong>~53</strong></td>
+</tr>
+<tr>
+<td>Tỷ lệ rời bỏ/tháng (churn)</td>
+<td>8%</td>
+<td>8%</td>
+<td>6%</td>
+</tr>
+<tr>
+<td><strong>Thành viên active cuối tháng</strong></td>
+<td><strong>~23</strong></td>
+<td><strong>~95</strong></td>
+<td><strong>~230</strong></td>
+</tr>
+<tr>
+<td>Trong đó gói 199k (giả định 25%)</td>
+<td>~6</td>
+<td>~24</td>
+<td>~58</td>
+</tr>
+</tbody>
+</table>
+<h3 id="53-mrr-tuong-ung">5.3 MRR tương ứng</h3>
+<table>
+<thead>
+<tr>
+<th>Chỉ số</th>
+<th>Tháng 1</th>
+<th>Tháng 3</th>
+<th>Tháng 6</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Gói 99k × số lượng</td>
+<td>~17 × 99k = 1,7tr</td>
+<td>~71 × 99k = 7,0tr</td>
+<td>~172 × 99k = 17,0tr</td>
+</tr>
+<tr>
+<td>Gói 199k × số lượng</td>
+<td>~6 × 199k = 1,2tr</td>
+<td>~24 × 199k = 4,8tr</td>
+<td>~58 × 199k = 11,5tr</td>
+</tr>
+<tr>
+<td><strong>MRR</strong></td>
+<td><strong>~2,9 triệu</strong></td>
+<td><strong>~11,8 triệu</strong></td>
+<td><strong>~28,5 triệu</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>So sánh để thấy độ lớn:</strong> tháng 6 ước tính 28,5tr/tháng đứng vững, đối trọng với dịch vụ DFY 1,5–3,5tr/khách — nhưng DFY thì phải làm từng khách, còn Club thì cùng một bộ trợ lý phục vụ hàng trăm người. Đó là lý do Club là nguồn thu thứ hai chứ không phải thứ ba.</p>
+<h3 id="54-ty-le-giu-chan-retention-muc-tieu">5.4 Tỷ lệ giữ chân (retention) mục tiêu</h3>
+<table>
+<thead>
+<tr>
+<th>Chỉ số</th>
+<th>Mục tiêu</th>
+<th>Cách đo</th>
+<th>Nếu tệ hơn thì làm gì</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Retention tháng 2</strong> (vào tháng 2 có trả tiếp không)</td>
+<td><strong>≥ 70%</strong></td>
+<td>Segment: có <code>club_period_count ≥ 2</code> / tổng từng vào</td>
+<td>Xem lại trợ lý tháng 1–2: có "chạy được ngay" không</td>
+</tr>
+<tr>
+<td><strong>Retention tháng 3</strong></td>
+<td>≥ 60%</td>
+<td><code>club_period_count ≥ 3</code> / tổng</td>
+<td>Thêm automation kích hoạt người chưa tải file</td>
+</tr>
+<tr>
+<td><strong>Retention trung bình 6 tháng</strong></td>
+<td><strong>≥ 55%</strong></td>
+<td><code>club_period_count ≥ 6</code> / tổng từng vào</td>
+<td>Mời hỏi đáp sớm hơn, làm trợ lý theo yêu cầu của nhóm</td>
+</tr>
+<tr>
+<td><strong>Thành viên ở lại ≥ 6 tháng</strong></td>
+<td>≥ 40%</td>
+<td>Tương tự, đo 1 lần ở tháng 9</td>
+<td>Đây là nhóm sinh giá trị nhất — hỏi trực tiếp 5 người xem vì sao ở lại</td>
+</tr>
+<tr>
+<td><strong>Tỷ lệ hủy chủ động</strong></td>
+<td>&lt; 4%/tháng</td>
+<td>Đếm tag <code>CLB-DaHuy</code></td>
+<td>Nếu &gt; 6%: hỏi 5 người vừa hủy, không đoán</td>
+</tr>
+</tbody>
+</table>
+<h3 id="55-chi-so-van-hanh-phai-nhin-moi-tuan">5.5 Chỉ số vận hành phải nhìn mỗi tuần</h3>
+<table>
+<thead>
+<tr>
+<th>Chỉ số</th>
+<th>Mốc lành mạnh</th>
+<th>Nơi xem</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tỷ lệ mở email trợ lý mới</td>
+<td>&gt; 40% (list nhỏ, trả tiền)</td>
+<td>FluentCRM → Reports</td>
+</tr>
+<tr>
+<td>Tỷ lệ click link khu vực thành viên</td>
+<td>&gt; 25%</td>
+<td>FluentCRM → Reports</td>
+</tr>
+<tr>
+<td>Tỷ lệ tải file tháng hiện tại</td>
+<td>&gt; 60% trong 10 ngày</td>
+<td>Đếm tag <code>CLB-DaTaiFileThang</code></td>
+</tr>
+<tr>
+<td>Tỷ lệ gia hạn đúng hạn</td>
+<td>&gt; 65%</td>
+<td>So <code>club_last_paid_at</code> với <code>club_paid_until</code> cũ</td>
+</tr>
+<tr>
+<td>Tỷ lệ cứu được người quên CK</td>
+<td>&gt; 25%</td>
+<td>Automation "Cho thanh toan" → có <code>CLB-Active</code></td>
+</tr>
+<tr>
+<td>Tỷ lệ cứu được người quá hạn</td>
+<td>&gt; 15%</td>
+<td>Email G3/G4 → có <code>CLB-Active</code> trở lại</td>
+</tr>
+<tr>
+<td>Bounce rate</td>
+<td>&lt; 2%</td>
+<td>FluentCRM → Settings → Bounce</td>
+</tr>
+<tr>
+<td>Tỷ lệ hủy đăng ký nhận tin</td>
+<td>&lt; 0,5%/email</td>
+<td>FluentCRM → Reports</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Quy tắc đọc số:</strong> 1 tháng chỉ đổi <strong>1 biến</strong> (subject HOẶC ngày gửi HOẶC độ dài email). Đổi 3 thứ cùng lúc thì không bao giờ biết cái nào tạo ra khác biệt.</p>
+<hr />
+<h2 id="6-co-che-chuyen-oi-tu-youtube-thanh-vien">6. CƠ CHẾ CHUYỂN ĐỔI TỪ YOUTUBE → THÀNH VIÊN</h2>
+<p>Giá 99k chỉ tự bán được nếu <strong>người xem hiểu họ sẽ nhận gì</strong> trong 10 giây và <strong>đăng ký trong lúc đang xem video</strong>. Ba chỗ để làm việc đó:</p>
+<h3 id="61-cta-trong-video-chon-ung-video-u-next-rai-eu">6.1 CTA trong video (chọn đúng video, đừ next: rải đều)</h3>
+<table>
+<thead>
+<tr>
+<th>Video</th>
+<th>Vai trò trong chuyển đổi</th>
+<th>CTA đặt ở đâu</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>V1–V3 (cài đặt, làm quen)</strong></td>
+<td>Người xem mới — chưa sẵn sàng trả tiền</td>
+<td><strong>KHÔNG bán Club.</strong> Chỉ CTA lead magnet (cheat sheet) + đăng ký Nous Portal</td>
+</tr>
+<tr>
+<td><strong>V4–V5 (ứng dụng thực tế)</strong></td>
+<td>Người đã chạy được việc đầu tiên, đang đói thêm</td>
+<td><strong>Mềm:</strong> nhắc 1 câu "mấy trợ lý này tui gói sẵn trong Club" ở phút 12–13, không CTA cứng</td>
+</tr>
+<tr>
+<td><strong>V6–V8 (case study, tự động hoá)</strong></td>
+<td>Người đã thấy giá trị, sẵn sàng chi</td>
+<td><strong>BÁN Ở ĐÂY.</strong> CTA cứng ở 70% video + end-card</td>
+</tr>
+<tr>
+<td><strong>Video "tổng kết tháng"</strong></td>
+<td>Người đã xem nhiều video</td>
+<td>CTA mạnh nhất — "tháng này Club có gì"</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Cách nói CTA (đọc y nguyên, đừng thêm):</strong></p>
+<blockquote>
+<p><em>"Mấy trợ lý tui vừa chỉ, tui cấu hình sẵn thành file trong HERMES CLUB. Mỗi tháng một trợ lý mới, 99k, huỷ lúc nào cũng được. Link ở dưới — dùng tháng đầu rồi thấy không đáng thì thôi."</em></p>
+</blockquote>
+<p>Ba thứ khiến câu này tự nhiên: <strong>nói "99k" toẹt ra</strong> (giấu giá là mất niềm tin), <strong>nói "huỷ lúc nào cũng được"</strong> (bỏ rào chắn lớn nhất), <strong>nói "thấy không đáng thì thôi"</strong> (tự tin vào sản phẩm).</p>
+<h3 id="62-end-card-15-giay-cuoi-moi-video-tu-v4-tro-i">6.2 End-card (15 giây cuối mỗi video từ V4 trở đi)</h3>
+<pre><code>┌─────────────────────────────────────┐
+│  HERMES CLUB — 99k/tháng            │
+│  Mỗi tháng 1 trợ lý mới             │
+│                                     │
+│  [ XEM CLUB ]    [ Trợ lý tháng này ]│
+│                                     │
+│  Link ở mô tả ↓                     │
+└─────────────────────────────────────┘
+</code></pre>
+<h3 id="63-mo-ta-video-bo-cuc-co-inh">6.3 Mô tả video (bố cục cố định)</h3>
+<pre><code>— 2 dòng đầu: video này làm gì (link ở đây bị cắt nếu dài quá)
+— Link chính: speedreading.vn/hermes-club     ← luôn đứng thứ 2
+— Link phụ: lead magnet / khoá học
+— Mô tả chi tiết
+— Timestamp
+</code></pre>
+<p><strong>Comment được ghim (viết sẵn, dùng cho mọi video từ V4):</strong></p>
+<blockquote>
+<p>Link HERMES CLUB ở mô tả nhé — 99k/tháng, mỗi tháng 1 trợ lý mới kèm file cấu hình sẵn. Huỷ lúc nào cũng được, không ràng buộc. Hỏi gì ở đây tui trả lời.</p>
+</blockquote>
+<h3 id="64-lead-magnet-la-cau-noi-khong-bo-qua-buoc-nay">6.4 Lead magnet là cầu nối (không bỏ qua bước này)</h3>
+<p>Người xem YouTube <strong>không</strong> mua 99k ngay từ video đầu. Họ đi đường vòng:</p>
+<pre><code>Video V1–V3
+  → tải HERMES CHEAT SHEET (30 việc, miễn phí)     ← thu email
+  → 5 email nurture trong 10 ngày
+      E4 (ứng dụng) nhắc nhẹ về Club
+      E5 (sau khi đã xem video) → CTA Club cứng
+  → vào HERMES CLUB 99k
+</code></pre>
+<p><strong>Vì sao phải qua lead magnet:</strong> nó biến "người xem vô danh" thành "contact có tên" — từ đó mới gửi được email gia hạn, win-back, thông báo trợ lý mới. Không có email thì Club chỉ bán được cho người xem đúng lúc họ đang ở trên YouTube, tức là mất 95% cơ hội.</p>
+<p><strong>Tái sử dụng đúng bộ tên đã chọn trong kế hoạch lead magnet</strong> (để không có 2 bộ đặt tên song song): list <code>YT Hermes LeadMagnet</code>, tag <code>YT-Hermes-Cheatsheet</code> / <code>YT-LM-Downloaded</code> / <code>YT-Watched-V1V2</code> / <code>YT-Watched-V6V8</code> / <code>YT-Course-Clicked</code> / <code>YT-Nurture-Done</code>, automation <code>Hermes YouTube Nurture</code>. Người có tag <code>YT-Watched-V6V8</code> mà chưa vào Club → <strong>đối tượng ngon nhất</strong> cho campaign Club, nên gửi riêng cho nhóm này trước.</p>
+<p><strong>Trong email nurture (E4), chèn đúng 1 đoạn về Club:</strong></p>
+<blockquote>
+<p><em>Còn một chỗ nữa: tui gói mấy trợ lý kiểu vừa rồi thành file cấu hình sẵn, mỗi tháng 1 trợ lý mới, trong HERMES CLUB — 99k/tháng, huỷ lúc nào cũng được. Không phải khoá học, không có bài tập. Chỉ là: file + video 12 phút + nhóm để hỏi. Xem ở speedreading.vn/hermes-club.</em></p>
+</blockquote>
+<h3 id="65-ieu-khong-lam-bao-ve-niem-tin">6.5 Điều KHÔNG làm (bảo vệ niềm tin)</h3>
+<ul>
+<li>Không dùng đồng hồ đếm ngược, không "chỉ còn 3 chỗ", không giá giảm giả tạo. Club là dịch vụ hàng tháng — những trò này lộ ra là mất sạch.</li>
+<li>Không hứa "tự động 100%" hay "thay thế nhân viên".</li>
+<li>Không gửi email Club cho người chưa từng vào Club (đó là spam). Chỉ gửi cho list/tag nguồn YouTube.</li>
+<li>Không bán Club trong video cài đặt (V1–V3) — người đó còn chưa cài xong.</li>
+</ul>
+<hr />
+<h2 id="7-checklist-trien-khai-30-ngay-rui-ro">7. CHECKLIST TRIỂN KHAI 30 NGÀY + RỦI RO</h2>
+<h3 id="71-tuan-1-nen">7.1 Tuần 1 — Nền</h3>
+<ul>
+<li>[ ] Cài <strong>Fluent Forms</strong> (từ <code>FluentCRM → Settings → Install Fluent Forms</code>)</li>
+<li>[ ] Cài <strong>FluentCommunity Free</strong> (từ <code>FluentCRM → Settings → Install FluentCommunity</code>)</li>
+<li>[ ] Xác thực <strong>SPF / DKIM / DMARC</strong> cho domain gửi — <em>làm trước mọi việc khác</em></li>
+<li>[ ] Tạo 9 custom field <code>club_*</code> (mục 2.1)</li>
+<li>[ ] Tạo list <code>Hermes Club Thanh vien</code> + <code>Hermes Club Cho thanh toan</code></li>
+<li>[ ] Tạo 11 tag <code>CLB-*</code> (mục 2.2)</li>
+<li>[ ] Tạo 7 segment động <code>CLB — *</code> (mục 2.3)</li>
+<li>[ ] Kiểm tra <code>FluentCRM → Settings → Cron Status</code> đang chạy</li>
+</ul>
+<h3 id="72-tuan-2-san-pham-luong-tien">7.2 Tuần 2 — Sản phẩm &amp; luồng tiền</h3>
+<ul>
+<li>[ ] Làm xong <strong>trợ lý tháng 1</strong> (Lập kế hoạch tuần): 2 file skill + file cấu hình + video 12'</li>
+<li>[ ] Làm xong <strong>trợ lý dự trữ tháng 2</strong> (để phòng bận)</li>
+<li>[ ] Dựng landing <code>speedreading.vn/hermes-club</code>: tên, 2 bảng giá, quyền lợi, chính sách huỷ, số TK, nội dung CK chuẩn</li>
+<li>[ ] Form 1 "Xin vào Club" + feed FluentCRM (apply tag <code>CLB-ChoThanhToan</code> + list <code>Cho thanh toan</code>)</li>
+<li>[ ] Form 2 "Tôi đã chuyển khoản" + feed FluentCRM (cập nhật <code>club_payment_ref</code>, <code>club_plan</code>)</li>
+<li>[ ] Bảng đối soát chuyển khoản (Google Sheets): ngày, email, số tiền, nội dung CK, trạng thái</li>
+<li>[ ] Tạo Space <code>Hermes Club</code> (Private) trong FluentCommunity + role <code>CLB-ThanhVien</code></li>
+<li>[ ] Upload trợ lý tháng 1 lên khu vực thành viên</li>
+<li>[ ] Tạo nhóm Zalo/Telegram + nội quy 5 dòng</li>
+</ul>
+<h3 id="73-tuan-3-automation">7.3 Tuần 3 — Automation</h3>
+<ul>
+<li>[ ] Build automation <code>Hermes Club — Vao Club</code> (E1–E4) → <strong>đặt <code>published</code></strong></li>
+<li>[ ] Build automation <code>Hermes Club — Cho thanh toan</code> (C1–C3) → <strong>đặt <code>published</code></strong></li>
+<li>[ ] Build automation <code>Hermes Club — Gia han &amp; het han</code> (G1–G4) → <strong>đặt <code>published</code></strong></li>
+<li>[ ] Soạn 12 email theo bảng mục 3.3</li>
+<li>[ ] <strong>Gửi thử nội bộ 3 địa chỉ</strong> (Gmail / Outlook / iPhone) — kiểm tra render và link</li>
+<li>[ ] Test đầu-cuối bằng 1 contact thật của mình: form → CK giả → duyệt → nhận E1 → vào được Space</li>
+</ul>
+<h3 id="74-tuan-4-mo-ban">7.4 Tuần 4 — Mở bán</h3>
+<ul>
+<li>[ ] Ghi video V6–V8 có CTA Club (theo mục 6.1)</li>
+<li>[ ] Làm end-card + sửa mô tả video + ghim comment trên mọi video từ V4</li>
+<li>[ ] Chèn đoạn Club vào email nurture E4</li>
+<li>[ ] Gửi email giới thiệu Club cho nhóm <code>YT-Watched-V6V8</code> (nếu list lead magnet đã build)</li>
+<li>[ ] Gửi email upsell cho khách DFY gần đây (tag <code>CLB-Tu-DFY</code>, mã <code>DFY-CLUB49</code>)</li>
+<li>[ ] Gửi email cho List 7 / Tag 13 (khách khoá cũ) — gói 49k tháng đầu</li>
+<li>[ ] Mở bán chính thức, theo dõi số liệu mỗi tuần</li>
+</ul>
+<h3 id="75-rui-ro-cach-xu-ly">7.5 Rủi ro &amp; cách xử lý</h3>
+<table>
+<thead>
+<tr>
+<th>Rủi ro</th>
+<th>Triệu chứng</th>
+<th>Xử lý</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Automation không chạy</strong></td>
+<td>Đã duyệt CK mà không nhận email</td>
+<td>Kiểm tra (1) automation <code>published</code> chưa, (2) cron status, (3) contact có đúng list không — trigger <code>added_to_lists</code> chỉ fire qua <code>attachLists()</code></td>
+</tr>
+<tr>
+<td><strong>Email vào spam</strong></td>
+<td>Tỷ lệ mở tụt đột ngột</td>
+<td>Kiểm tra SPF/DKIM/DMARC, bỏ link rút gọn lạ, giảm link trong 1 email</td>
+</tr>
+<tr>
+<td><strong>Người hết hạn vẫn nhận trợ lý</strong></td>
+<td>Phàn nàn "tôi đã hủy mà vẫn nhận mail"</td>
+<td>Tag trạng thái chưa được gỡ — kiểm tra automation có bước <code>remove tag CLB-Active</code> trước khi <code>apply CLB-HetHan</code></td>
+</tr>
+<tr>
+<td><strong>Khách bị trừ tiền 2 lần</strong></td>
+<td>Không xảy ra được (không auto-renew)</td>
+<td>Nếu có: hoàn ngay, đây là lợi thế của mô hình CK thủ công</td>
+</tr>
+<tr>
+<td><strong>Không kịp làm trợ lý tháng</strong></td>
+<td>Gần ngày 5 mà chưa xong</td>
+<td>Phát hành <strong>trợ lý dự trữ</strong> + email xin lỗi 2 dòng. Không im lặng bỏ qua tháng</td>
+</tr>
+<tr>
+<td><strong>Quá tải buổi hỏi đáp</strong></td>
+<td>&gt; 30 người tham gia</td>
+<td>Chia 2 buổi, ưu tiên gói 199k; bản ghi cho mọi người</td>
+</tr>
+<tr>
+<td><strong>Nội dung bị chia sẻ ra ngoài</strong></td>
+<td>Link/file lọt nhóm khác</td>
+<td>Chấp nhận một phần — đó là marketing miễn phí. Chỉ khoá phần hỏi đáp trực tiếp</td>
+</tr>
+<tr>
+<td><strong>Churn cao ở tháng 2</strong></td>
+<td>Retention &lt; 60%</td>
+<td>Nguyên nhân gần như luôn là trợ lý tháng 1 không "chạy được ngay". Sửa sản phẩm, không sửa email</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="phu-luc-a-list-tag-ang-co-tren-he-thong">PHỤ LỤC A — LIST &amp; TAG ĐANG CÓ TRÊN HỆ THỐNG</h2>
+<p><em>Kiểm tra ngày 12/10/2026. Dùng để tránh tạo trùng và tránh gửi nhầm người.</em></p>
+<p><strong>8 List:</strong></p>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Tên</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Đăng ký nhận quà</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Đăng ký khoá học</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Học viên chính thức</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Tốt nghiệp</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Bất động sản thiên khôi</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Đầu tư Chứng Khoán VPS</td>
+</tr>
+<tr>
+<td><strong>7</strong></td>
+<td><strong>Đăng Ký Khoá học Hermes</strong> ← khóa 239k</td>
+</tr>
+<tr>
+<td>8</td>
+<td>Văn Hỉ Site</td>
+</tr>
+</tbody>
+</table>
+<p><strong>13 Tag:</strong></p>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Tên</th>
+<th>Ghi chú</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Cold Lead</td>
+<td></td>
+</tr>
+<tr>
+<td>2</td>
+<td>Warm Lead</td>
+<td></td>
+</tr>
+<tr>
+<td>3</td>
+<td>Student</td>
+<td></td>
+</tr>
+<tr>
+<td>4</td>
+<td>Bản tin</td>
+<td></td>
+</tr>
+<tr>
+<td>5</td>
+<td>Lan toả</td>
+<td></td>
+</tr>
+<tr>
+<td>6</td>
+<td>Học Video 200k</td>
+<td></td>
+</tr>
+<tr>
+<td>7</td>
+<td>Học Online 980k</td>
+<td></td>
+</tr>
+<tr>
+<td>8</td>
+<td>Học Coach 5 triệu</td>
+<td></td>
+</tr>
+<tr>
+<td>9</td>
+<td>Webinar Free</td>
+<td></td>
+</tr>
+<tr>
+<td>10</td>
+<td>Coaching 1 Year</td>
+<td></td>
+</tr>
+<tr>
+<td>11</td>
+<td>Đăng ký tuyển dụng Thiên Khôi</td>
+<td></td>
+</tr>
+<tr>
+<td>12</td>
+<td>Đăng ký đầu tư chứng khoán VPS</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>13</strong></td>
+<td><strong>Đăng ký khoá Hermes</strong></td>
+<td>"Lead đăng ký khoá Hermes 239k"</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Quy tắc phân tách với hệ thống đang chạy:</strong> mọi thứ của Club dùng tiền tố <code>CLB-</code> hoặc tên <code>Hermes Club …</code>. <strong>Không bao giờ</strong> gửi email Club đến List 7 hoặc người có Tag 13 — họ đã mua khóa, gửi thêm lời mời bán hàng là làm phiền và làm giảm uy tín cả khóa học lẫn Club.</p>
+<hr />
+<p><em>Hết. Tài liệu này gồm kế hoạch sản phẩm, kịch bản kỹ thuật thực thi được trên FluentCRM Pro đang chạy, và nội dung mẫu — có thể đưa thẳng cho đội vận hành.</em></p></div>
+</section>
+<section class="panel" id="sec-chuyendoi">
+<div class="panel-inner"><h1 id="ke-hoach-chuyen-oi-bo-noi-dung">KẾ HOẠCH CHUYỂN ĐỔI + BỘ NỘI DUNG</h1>
+<h2 id="hermes-tu-khoa-hoc-cu-37-bai-sang-youtube-mien-phi-dich-vu-cai-at-club">Hermes: Từ khóa học cũ (37 bài) sang YouTube miễn phí + Dịch vụ cài đặt + Club</h2>
+<p>Ngày viết: 12/10/2026 · Người viết: @mkt-content · Task: t_103eeb50</p>
+<hr />
+<h2 id="0-quyet-inh-nguyen-tac">0. QUYẾT ĐỊNH &amp; NGUYÊN TẮC</h2>
+<p>Quyết định của chủ kênh:
+- Không còn bán khóa học "Nhân Sự Toàn Năng Hermes". Toàn bộ 37 bài dạy miễn phí trên YouTube.
+- Bán thay thế: (1) Dịch vụ cài đặt Done-For-You 1.5–3.5 triệu/khách, (2) Club membership 99–199k/tháng.
+- Trang cũ speedreading.vn/ahermes đổi vai trò (mục 3).</p>
+<p>Nguyên tắc viết suốt bộ tài liệu này:
+- Nội dung miễn phí phải thật sự đủ dùng cho người chịu khó tự học. Không cắt xén kiến thức rồi bán nốt phần còn lại — vậy mất uy tín.
+- Dịch vụ DFY không bán "thông tin". Bán thời gian, sự yên tâm, và cam kết làm xong trong một buổi.
+- Không hứa quá đáng. Không nói "kiếm thêm thu nhập", "tự động hóa 90% công việc". Nói đúng việc AI làm được.</p>
+<hr />
+<h2 id="1-lo-trinh-ang-37-bai-cu-thanh-video-youtube-mien-phi">1. LỘ TRÌNH ĐĂNG 37 BÀI CŨ THÀNH VIDEO YOUTUBE MIỄN PHÍ</h2>
+<h3 id="11-gom-thanh-5-nhom-chapter">1.1. Gom thành 5 nhóm (chapter)</h3>
+<table>
+<thead>
+<tr>
+<th>Chapter</th>
+<th>Tên</th>
+<th>Số video</th>
+<th>Nội dung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ch.0</td>
+<td>Mở màn</td>
+<td>3</td>
+<td>Demo kết quả, Hermes là gì, minh bạch mô hình</td>
+</tr>
+<tr>
+<td>Ch.1</td>
+<td>Cơ bản</td>
+<td>9</td>
+<td>Cài đặt, Portal, lệnh, Memory, profile, bảo mật, sửa lỗi</td>
+</tr>
+<tr>
+<td>Ch.2</td>
+<td>Công việc</td>
+<td>10</td>
+<td>File văn phòng, email, lịch, báo cáo, research, đội ngũ AI, tự động hóa</td>
+</tr>
+<tr>
+<td>Ch.3</td>
+<td>Gia đình &amp; cá nhân</td>
+<td>8</td>
+<td>Học tập, tài chính, bữa ăn, sức khỏe, du lịch, con cái, sổ gia đình</td>
+</tr>
+<tr>
+<td>Ch.4</td>
+<td>Nâng cao</td>
+<td>7</td>
+<td>Multi-agent, model local, tự viết Skill, API, Portal/affiliate</td>
+</tr>
+<tr>
+<td></td>
+<td><strong>Tổng</strong></td>
+<td><strong>37</strong></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3 id="12-video-nao-len-au-chien-luoc-wow">1.2. Video nào lên đầu — chiến lược "wow"</h3>
+<p>Đề xuất: Tuần 1 đăng đúng 3 video này, theo thứ tự:</p>
+<ol>
+<li><strong>"Tôi nhờ AI viết lại báo cáo 200 trang trong 1 phút"</strong> (lấy từ bài cũ V6).
+   Lý do: đây là video duy nhất cho thấy KẾT QUẢ trước, giải thích sau. Người xem không cần biết Hermes là gì cũng hiểu ngay giá trị. Quay thật, không tua. Đây là video lấy subscriber.</li>
+<li><strong>"Hermes Agent là gì — trợ lý AI chạy ngay trên máy bạn"</strong> (bài cũ V1).
+   Lý do: video nền tảng, xếp thứ 2 để người vừa bị "wow" hiểu ngay họ vừa xem cái gì.</li>
+<li><strong>"Vì sao tôi dạy MIỄN PHÍ toàn bộ — và tôi sống bằng gì"</strong>.
+   Lý do: minh bạch ngay từ đầu sẽ cứu kênh khỏi nghi ngờ sau này ("dạy miễn phí thì chắc bán gì đó"). Nói thật: tôi cài đặt máy cho người bận, và có Club cho người muốn đồng hành. Video này cũng là nơi CTA Club lần đầu.</li>
+</ol>
+<h3 id="13-lich-ang-16-tuan-23-videotuan">1.3. Lịch đăng 16 tuần (2–3 video/tuần)</h3>
+<p>Nhịp: Tuần 1–5 đăng 3 video/tuần (đẩy nhanh giai đoạn chạy máy quen), từ tuần 6 đăng 2 video/tuần. Tổng: 16 tuần ≈ 4 tháng.</p>
+<table>
+<thead>
+<tr>
+<th>Tuần</th>
+<th>Video đăng tuần đó</th>
+<th>Ghi chú CTA (xem mục 5)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>W1 "Báo cáo 200 trang 1 phút" · W2 "Hermes là gì" · W3 "Vì sao miễn phí"</td>
+<td>W1 → DFY · W2 → Club nhẹ · W3 → Club</td>
+</tr>
+<tr>
+<td>2</td>
+<td>C1-1 Cài đặt (Win/Mac) · C1-2 Đăng ký Portal &amp; API key · C1-3 Lệnh cơ bản bằng tiếng Việt</td>
+<td>C1-1, C1-2 → DFY (2 video "tự làm khó" nhất)</td>
+</tr>
+<tr>
+<td>3</td>
+<td>C1-4 Memory · C1-5 Profile nhiều nhân viên · C1-6 Bảo mật &amp; file nằm ở đâu</td>
+<td>C1-4 → Club</td>
+</tr>
+<tr>
+<td>4</td>
+<td>C1-7 Sửa lỗi thường gặp · C1-8 Backup &amp; dọn dẹp · C1-9 Kiểm tra 10 phút</td>
+<td>C1-7 → DFY</td>
+</tr>
+<tr>
+<td>5</td>
+<td>C2-1 File PDF/Word/Excel · C2-2 Skills · C2-3 Cron</td>
+<td>C2-3 → DFY · C2-2 → Club nhẹ</td>
+</tr>
+<tr>
+<td>6</td>
+<td>C2-4 Email trả lời khách · C2-5 Lịch &amp; nhắc việc qua Telegram</td>
+<td>Club</td>
+</tr>
+<tr>
+<td>7</td>
+<td>C2-6 Báo cáo tự động · C2-7 Research đối thủ</td>
+<td>Club nhẹ</td>
+</tr>
+<tr>
+<td>8</td>
+<td>C2-8 Đội ngũ AI (1 tổng + 4 chuyên) · C2-9 Quản lý dự án</td>
+<td>C2-8 → Club (video Club chính)</td>
+</tr>
+<tr>
+<td>9</td>
+<td>C2-10 Tự động hóa quy trình lặp · C3-1 Trợ lý học tập</td>
+<td>C2-10 → DFY</td>
+</tr>
+<tr>
+<td>10</td>
+<td>C3-2 Tài chính gia đình · C3-3 Bữa ăn &amp; đi chợ</td>
+<td>Không CTA bán — xây lòng tin</td>
+</tr>
+<tr>
+<td>11</td>
+<td>C3-4 Sức khỏe · C3-5 Du lịch</td>
+<td>Không CTA bán</td>
+</tr>
+<tr>
+<td>12</td>
+<td>C3-6 Kèm con học · C3-7 Sổ gia đình</td>
+<td>C3-6 → Club nhẹ</td>
+</tr>
+<tr>
+<td>13</td>
+<td>C3-8 Mua sắm thông minh · C4-1 Multi-agent</td>
+<td>C4-1 → DFY</td>
+</tr>
+<tr>
+<td>14</td>
+<td>C4-2 Telegram đầy đủ · C4-3 Model local</td>
+<td>C4-3 → Portal/affiliate</td>
+</tr>
+<tr>
+<td>15</td>
+<td>C4-4 Tự viết Skill · C4-5 Tích hợp API</td>
+<td>C4-4, C4-5 → DFY</td>
+</tr>
+<tr>
+<td>16</td>
+<td>C4-6 Portal &amp; affiliate · C4-7 Đánh giá công cụ</td>
+<td>C4-6 → Portal/affiliate · C4-7 → Club</td>
+</tr>
+</tbody>
+</table>
+<p>Video tuần 16 đăng xong, kênh chuyển sang video mới (không thuộc 37 bài cũ) — đề xuất giao @mkt-social lên kế hoạch nội dung tiếp.</p>
+<h3 id="14-ghi-chu-san-xuat-ap-chung">1.4. Ghi chú sản xuất (áp chung)</h3>
+<ul>
+<li>Kênh faceless: quay màn hình + voiceover tiếng Việt. Không lộ mặt.</li>
+<li>Script V1–5 và V6–10 đã có sẵn tại ~/YouTube_Hermes_Script_V1-5.md và ~/YouTube_Hermes_Script_V6-10.md — tái sử dụng, chỉ cần chỉnh phần CTA theo bảng mục 5.</li>
+<li>Mỗi video: hook 15 giây → nội dung → CTA 30 giây cuối.</li>
+<li>Mô tả mọi video: link playlist theo chapter + link dịch vụ (speedreading.vn/ahermes sau khi đổi — mục 3).</li>
+<li>Thumbnail tông tối, chữ to, logo Hermes. Nhất quán cả series.</li>
+<li>Link affiliate Portal trong mô tả: CẦN XÁC MINH LẠI link redirect và mức giảm giá trước khi đăng (ghi chú từ brief trước, chưa xác nhận).</li>
+</ul>
+<hr />
+<h2 id="2-bai-thong-bao-cho-khach-a-mua-khoa-hoc-cu">2. BÀI THÔNG BÁO CHO KHÁCH ĐÃ MUA KHÓA HỌC CŨ</h2>
+<p>Mục tiêu: (1) thông báo miễn phí hóa toàn bộ, (2) giữ uy tín — khách cũ không được cảm thấy bị lừa, (3) biến khách cũ thành khách đầu tiên của Club/dịch vụ cài đặt.</p>
+<h3 id="21-email">2.1. Email</h3>
+<p><strong>Tiêu đề — 3 phương án:</strong>
+1. "Toàn bộ khóa học giờ miễn phí — và một lời xin lỗi" (CHỌN)
+2. "Thư ngỏ: tôi mở miễn phí 37 bài dạy Hermes"
+3. "Tặng bạn 3 tháng Club — kèm tin khóa học đã mở khoá"</p>
+<p>Lý do chọn (1): vừa nói rõ tin chính (miễn phí), vừa báo hiệu có lời xin lỗi — hai thứ người đọc cần biết ngay trong 5 giây đầu. Không giật tít, không dùng dấu "!".</p>
+<p><strong>Nội dung:</strong></p>
+<hr />
+<p>Chào bạn,</p>
+<p>Bạn từng mua khóa học "Nhân Sự Toàn Năng Hermes" của tôi. Hôm nay tôi viết thư này để nói hai điều.</p>
+<p>Thứ nhất: lời xin lỗi. Tôi sắp mở miễn phí toàn bộ 37 bài giảng của khóa đó trên YouTube. Ai cũng xem được, không mất tiền. Nếu bạn đã trả tiền trước đây, đúng là bạn trả cho thứ mà vài tuần nữa người khác lấy không. Tôi biết điều đó nghe không hay, nên tôi nói thẳng ở đây thay vì im lặng làm như không có gì.</p>
+<p>Lý do tôi làm vậy: nội dung khóa ngày càng cũ so với tốc độ Hermes cập nhật. Tôi không muốn bán một thứ sẽ lỗi thời trong tay khách. Và tôi nhận ra người cần nó nhất — chủ cửa hàng nhỏ, nhân viên văn phòng, bà mẹ bận con — phần lớn không trả nổi, hoặc không dám trả, một khóa học online.</p>
+<p>Thứ hai: quà cho riêng bạn. Vì bạn tin tưởng tôi từ khi chưa có gì chắc chắn:</p>
+<ul>
+<li>3 tháng dùng Club Hermes miễn phí (trị giá theo gói 99–199k/tháng). Trong Club có buổi hỏi đáp hằng tháng, khu vực hỏi lỗi khi cài đặt, và các workflow mới tôi làm được.</li>
+<li>Nếu sau này bạn cần ai đó cài Hermes và đội trợ lý AI hộ mình — dịch vụ tôi đang làm, làm xong trong một buổi — bạn được giảm 500.000đ so với giá niêm yết. Voucher này để trong tài khoản của bạn, không có hạn dùng gấp.</li>
+</ul>
+<p>Không có điều kiện kèm theo. Không cần hoàn tiền, không cần đăng ký gì thêm. Tôi chỉ muốn bạn không tiếc đồng nào đã bỏ ra.</p>
+<p>Toàn bộ 37 bài sẽ lên YouTube trong 4 tháng tới, bắt đầu tuần sau. Nếu bạn vẫn đang dùng khóa cũ, cứ dùng tiếp — nội dung cốt lõi vẫn đúng. Nếu bạn bí chỗ nào, cứ nhắn tin cho tôi như trước.</p>
+<p>Một lần nữa, cảm ơn bạn. Và xin lỗi.</p>
+<p>[ Tên ]</p>
+<p>P/S: Link kênh YouTube và link Club sẽ có trong email tiếp theo, khi video đầu tiên lên sóng.</p>
+<hr />
+<h3 id="22-bai-zalofb-ngan-hon-ang-nhom-khach-cu">2.2. Bài Zalo/FB (ngắn hơn, đăng nhóm khách cũ)</h3>
+<hr />
+<p>Thư ngỏ với mọi người từng mua khóa Hermes của tôi.</p>
+<p>Vài tuần nữa tôi mở miễn phí toàn bộ 37 bài giảng. Ai cũng xem được trên YouTube.</p>
+<p>Nếu bạn đã trả tiền trước đó — xin lỗi bạn. Tôi nói trước ở đây, không giấu.</p>
+<p>Lý do: nội dung ngày càng cũ so với tốc độ Hermes cập nhật, và tôi không muốn bán thứ sẽ lỗi thời. Người cần nó nhất thì phần lớn không dám bỏ tiền mua khóa online.</p>
+<p>Quà cho khách cũ, không điều kiện:
+→ 3 tháng Club miễn phí
+→ Giảm 500k nếu sau này cần dịch vụ cài đặt Hermes + đội trợ lý AI (làm xong trong 1 buổi)</p>
+<p>Không cần làm gì cả. Tôi chỉ không muốn ai tiếc đồng nào đã bỏ ra.</p>
+<p>Cảm ơn mọi người đã tin tôi từ ngày đầu.</p>
+<hr />
+<p><strong>Lưu ý thực thi:</strong>
+- Gửi email TRƯỚC video đầu tiên lên sóng 2–3 ngày. Đừng để khách cũ tự phát hiện trên YouTube rồi tức giận.
+- Chuỗi email kèm theo (nhắc xem video, giới thiệu Club, mời dịch vụ) — giao @mkt-email viết (đã tạo task con, xem mục 6).
+- Ai trả lời thư phàn nàn: trả lời trong ngày, bằng người thật, ký tên thật. Không dùng template.</p>
+<hr />
+<h2 id="3-viet-lai-mo-au-trang-speedreadingvnahermes">3. VIẾT LẠI MỞ ĐẦU TRANG speedreading.vn/ahermes</h2>
+<h3 id="31-trang-gio-lam-gi-quyet-inh">3.1. Trang giờ làm gì — quyết định</h3>
+<p>Hai lựa chọn:</p>
+<p><strong>Lựa chọn A (khuyến nghị): Trang thành landing bán dịch vụ DFY + giới thiệu Club.</strong>
+Lý do: domain speedreading.vn có uy tín sẵn với khách Việt (khách đã từng mua khóa, có lưu trang). Nếu redirect sang YouTube, toàn bộ người gõ địa chỉ cũ hoặc bấm link từ email sẽ rơi vào một kênh — nơi họ có thể lạc sang video khác. Trang giữ vai trò "cửa hàng": ai tự học thì trỏ YouTube, ai bận thì để lại thông tin.</p>
+<p><strong>Lựa chọn B: Redirect sang kênh YouTube.</strong>
+Chỉ nên chọn nếu chưa kịp dựng landing mới. Mất đi chỗ thu thông tin khách tiềm năng.</p>
+<h3 id="32-phuong-an-a-landing-dich-vu-headline-oan-gioi-thieu">3.2. Phương án A — Landing dịch vụ (headline + đoạn giới thiệu)</h3>
+<p><strong>Headline:</strong>
+"Cài Hermes + đội trợ lý AI cho bạn. Làm xong trong một buổi chiều."</p>
+<p><strong>Đoạn giới thiệu:</strong></p>
+<p>Bạn đã xem video, đã thấy Hermes làm được gì. Nhưng giờ là 11 giờ đêm, bạn mở terminal ra và không biết gõ gì tiếp theo. Hoặc bạn cài tới bước API key rồi bỏ — vì cả tuần bạn không có hai tiếng liền để ngồi nghiền.</p>
+<p>Dịch vụ này dành cho bạn. Tôi (và đội hỗ trợ) ngồi vào máy của bạn — trực tiếp hoặc qua điều khiển từ xa — cài Hermes, nối Portal, dựng sẵn 3 hệ thống bạn dùng nhiều nhất, và dạy bạn 30 phút cuối để tự gõ việc đầu tiên. Xong là dùng được ngay hôm đó.</p>
+<p>Ba gói: Cơ bản 1,5 triệu (cài Hermes + 1 hệ thống làm việc) · Nâng cao 2,5 triệu (3 hệ thống + tự động hóa theo giờ) · Gia đình 3,5 triệu (thêm hệ thống học tập, tài chính, sức khỏe cho cả nhà).</p>
+<p>Nếu bạn chịu khó tự học: toàn bộ kiến thức trong dịch vụ này tôi dạy miễn phí trên YouTube, 37 bài. Xem hết là tự làm được. Dịch vụ chỉ dành cho người không có thời gian — tôi bán thời gian của tôi, không bán kiến thức.</p>
+<p>[ Nút: Nhận tư vấn miễn phí 15 phút ] · [ Link nhỏ: Học miễn phí trên YouTube ]</p>
+<h3 id="33-phuong-an-b-trang-hub-headline-oan-gioi-thieu">3.3. Phương án B — Trang hub (headline + đoạn giới thiệu)</h3>
+<p><strong>Headline:</strong>
+"Học dùng Hermes miễn phí — 37 bài, từ cài đặt tới đội ngũ AI."</p>
+<p><strong>Đoạn giới thiệu:</strong></p>
+<p>Đây là trang tổng của series "Hermes cho người mới". 37 bài, chia 5 chương: Cơ bản, Công việc, Gia đình, Nâng cao. Bắt đầu từ chương 1 nếu bạn chưa cài gì cả; vào chương Công việc nếu đã cài rồi.</p>
+<p>Tất cả miễn phí, không cần đăng ký. Nếu làm tới đâu cũng được thì cứ làm tới đó — tôi không giấu phần hay ở đâu cả.</p>
+<p>Nếu bạn bận, hoặc cài hoài không được: tôi có dịch vụ cài đặt trọn gói, làm xong trong một buổi. Xem ở đây.</p>
+<p>[ Nút: Xem playlist trên YouTube ]</p>
+<h3 id="34-khuyen-nghi">3.4. Khuyến nghị</h3>
+<p>Chọn Phương án A. Phương án B chỉ dùng tạm nếu landing A chưa kịp dựng trong tuần đầu tiên của lịch đăng.</p>
+<hr />
+<h2 id="4-bo-noi-dung-ban-dich-vu-dfy">4. BỘ NỘI DUNG BÁN DỊCH VỤ DFY</h2>
+<p>Dịch vụ: "Cài Hermes + đội trợ lý AI cho bạn, làm trong 1 buổi" — 1.5–3.5 triệu/gói (Cơ bản 1,5tr · Nâng cao 2,5tr · Gia đình 3,5tr).</p>
+<h3 id="41-bai-facebookzalo-gioi-thieu-dich-vu">4.1. Bài Facebook/Zalo giới thiệu dịch vụ</h3>
+<p><strong>Tiêu đề — 2 phương án:</strong>
+1. "Cài Hermes cho bạn, làm trong một buổi chiều — dành cho người bận" (CHỌN)
+2. "Tự cài hoài không được? Để tôi cài hộ, bạn ngồi cạnh xem"</p>
+<p>Lý do chọn (1): nói rõ việc làm (cài hộ), thời gian (một buổi), và đối tượng (người bận) — ba thứ người đọc cần trong 3 giây đầu. Không dùng từ "giải pháp", "tối ưu".</p>
+<p><strong>Nội dung:</strong></p>
+<hr />
+<p>Tuần trước một anh khách nhắn tin: "Xem video của bác hay quá. Em cài ba lần, lần cuối kẹt ở bước API key, giờ chả dám mở lại. Em là chủ tiệm may, bận quá, không có hai tiếng liền để ngồi học."</p>
+<p>Tôi nhận cài hộ. Chiều thứ Bảy, ngồi vào máy anh ấy hai tiếng rưỡi. Cài Hermes, nối Portal, dựng ba thứ anh cần nhất: một trợ lý soạn tin nhắn trả lời khách đặt áo, một trợ lý tính giá vải theo size, và một nhắc việc mỗi sáng 7 giây — xin lỗi, 7 giờ. Cuối buổi tôi dạy anh gõ ba câu lệnh đầu tiên, nhìn anh tự chạy được. Anh gọi điện cảm ơn, tôi hơi ngại vì đó đúng là việc tôi làm hàng ngày.</p>
+<p>Dịch vụ đó giờ tôi nhận thêm khách: cài Hermes + đội trợ lý AI, làm xong trong một buổi chiều.</p>
+<p>Bao gồm gì:
+- Cài Hermes lên máy bạn (Windows hoặc Mac), nối Portal, chạy thử thành công trước khi tôi rời máy.
+- Dựng 3 hệ thống chạy được ngay, theo công việc của bạn (không phải bộ mẫu chung cho mọi người).
+- Dạy bạn 30 phút cuối: cách gõ việc, cách sửa khi AI làm sai, cách hỏng thì sửa ai.
+- Hỗ trợ qua Zalo 30 ngày sau buổi cài.</p>
+<p>Ba gói: Cơ bản 1,5 triệu (1 hệ thống) · Nâng cao 2,5 triệu (3 hệ thống + tự chạy theo giờ) · Gia đình 3,5 triệu (thêm học tập, tài chính, sức khỏe cho cả nhà).</p>
+<p>Tôi nói rõ trước: kiến thức trong buổi cài này, tôi dạy hết miễn phí trên YouTube — 37 bài, ai chịu khó cũng tự làm được. Dịch vụ chỉ dành cho người bận hoặc ngại công nghệ. Tôi bán buổi chiều của mình, không bán kiến thức.</p>
+<p>Muốn thì nhắn "CÀI" vào inbox, tôi gọi điện tư vấn 15 phút miễn phí để xem bạn cần gói nào — hoặc không cần gói nào.</p>
+<hr />
+<h3 id="42-bai-blog-ngan-500700-tu-cho-speedreadingvn">4.2. Bài blog ngắn (500–700 từ) cho speedreading.vn</h3>
+<p><strong>Tiêu đề:</strong> "Cài Hermes trong một buổi: dịch vụ cho người bận, không phải cho người lười"</p>
+<p><strong>Meta description:</strong> Dịch vụ cài đặt Hermes Agent và đội trợ lý AI trọn gói trong một buổi chiều — dành cho chủ shop, nhân viên văn phòng, người không rành công nghệ. Kèm 3 gói giá từ 1,5 triệu.</p>
+<hr />
+<p>Hermes là trợ lý AI chạy trên máy bạn. Nó đọc file, gõ lệnh, nhớ việc bạn dạy, và tự chạy vào giờ bạn đặt. Tôi đã dạy cách dùng nó cho hàng trăm người qua 37 bài miễn phí trên YouTube. Nhưng có một nhóm người mà video không cứu được: những người muốn dùng, nhưng không có thời gian ngồi cài.</p>
+<p>Bài này nói về dịch vụ tôi làm cho nhóm người đó.</p>
+<p><strong>Vấn đề không phải bạn kém công nghệ</strong></p>
+<p>Tôi cài Hermes cho khách gần hai chục người trong ba tháng qua. Phần lớn là chủ cửa hàng nhỏ, nhân viên văn phòng, bà mẹ bận con. Không ai trong số đó là người kém công nghệ theo nghĩa thông thường — họ dùng điện thoại giỏi hơn tôi. Vấn đề là thời gian: cài đặt một công cụ như Hermes cần một buổi chiều liền tụ, và người bận rất hiếm khi có một buổi chiều liền tụ.</p>
+<p>Cứ nhìn quy trình cài: tải về, cài Node, đăng ký Portal, lấy API key, chạy lệnh đầu tiên, sửa lỗi khi thiếu thư viện. Ai làm quen với terminal thì mười lăm phút xong. Ai chưa từng mở terminal lần nào thì đây là bốn tiếng, chia thành bốn buổi tối, mỗi buổi đều bị ngắt giữa chừng.</p>
+<p><strong>Dịch vụ làm gì</strong></p>
+<p>Tôi ngồi vào máy của bạn, trực tiếp hoặc qua điều khiển từ xa, trong một buổi chiều. Cụ thể:</p>
+<ol>
+<li>Cài Hermes chạy ổn định trên máy bạn, nối Portal, kiểm tra lệnh đầu tiên thành công. Nếu chưa được, tôi chưa rời máy.</li>
+<li>Dựng ba hệ thống chạy được ngay, chọn theo việc bạn làm hàng ngày — không phải bộ mẫu chung. Tiệm may thì có trợ lý trả lời khách và tính giá; văn phòng thì có trợ lý gộp báo cáo và nhắc việc.</li>
+<li>Dạy bạn ba mươi phút cuối buổi: gõ việc đầu tiên bằng tiếng Việt, sửa khi AI làm sai, và lỗi thường gặp thì tự sửa hay nhờ ai.</li>
+</ol>
+<p>Sau buổi cài, bạn dùng được ngay hôm đó. Hỗ trợ qua Zalo trong 30 ngày.</p>
+<p><strong>Ba gói</strong></p>
+<ul>
+<li>Cơ bản, 1,5 triệu: cài Hermes + 1 hệ thống dùng nhiều nhất.</li>
+<li>Nâng cao, 2,5 triệu: 3 hệ thống + tự chạy theo giờ (báo cáo 7 giờ sáng, nhắc việc, tổng hợp tin).</li>
+<li>Gia đình, 3,5 triệu: thêm hệ thống học tập cho con, quản lý thu chi, nhắc sức khỏe.</li>
+</ul>
+<p><strong>Ai thì không nên mua</strong></p>
+<p>Nói thẳng: nếu bạn chịu khó và có hai tiếng rảnh, đừng mua. Toàn bộ kiến thức tôi mang tới buổi cài đó, tôi đăng miễn phí trên YouTube — 37 bài, chia năm chương. Xem từ chương Cơ bản là tự làm được, không thiếu bước nào. Tôi không cắt kiến thức để bán dịch vụ.</p>
+<p>Còn nếu tuần nào bạn cũng định "cuối tuần ngồi cài" rồi cứ hoãn lại — thì buổi chiều của tôi đáng giá hơn buổi chiều bạn ngồi chửi terminal.</p>
+<p><strong>Bắt đầu thế nào</strong></p>
+<p>Nhắn tin qua Zalo hoặc điền form dưới trang. Tôi gọi điện tư vấn 15 phút miễn phí để xem bạn cần gói nào — hoặc phát hiện ra bạn không cần mua gì cả. Trường hợp thứ hai cũng thường xuyên lắm.</p>
+<p>[ Nút: Nhận tư vấn 15 phút miễn phí ]</p>
+<hr />
+<h3 id="43-ba-mau-reply-comment-youtube-nguoi-xem-hoi-lam-sao-bat-au">4.3. Ba mẫu reply comment YouTube (người xem hỏi "làm sao bắt đầu")</h3>
+<p><strong>Mẫu 1 — Người hỏi chung chung:</strong>
+"Cảm ơn bạn đã xem. Bắt đầu từ đâu: video số 2 trong playlist này (link ở mô tả) — tôi cài Hermes từ đầu trên máy Windows trong video đó. Làm theo tới hết là dùng được. Kẹt ở bước nào thì comment lại đây, tôi trả lời hết trong tuần."</p>
+<p><strong>Mẫu 2 — Người nói không rành/ngại công nghệ:</strong>
+"Mình hiểu cảm giác đó — mình từng cài hỏng ba lần trước khi chạy được. Nếu bạn xem video rồi vẫn thấy ngại, mình có dịch vụ cài hộ trọn gói, làm xong trong một buổi chiều, bạn ngồi cạnh xem. Bạn nhắn mình qua Zalo (link ở mô tả kênh) nếu cần nhé. Còn nếu muốn tự học thì vẫn xem playlist này, đủ hết."</p>
+<p><strong>Mẫu 3 — Người hỏi giá/so sánh với ChatGPT:</strong>
+"Hermes khác ChatGPT ở chỗ chạy trên máy bạn, nhớ lâu dài, và tự tay đọc file/gõ lệnh — video số 2 trong playlist nói rõ chỗ khác. Còn giá: dùng miễn phí, chỉ trả tiền API khi bạn dùng nhiều. Không có phí ẩn. Nếu cần ai cài hộ thì mình có dịch vụ riêng, thông tin ở mô tả kênh."</p>
+<p><strong>Quy tắc trả lời comment:</strong>
+- Trả lời trong 24 giờ, ký bằng tên thật, không ký "Admin".
+- Không để link bán hàng trong comment trừ khi người ta hỏi giá/dịch vụ. Spam link trong comment là cách nhanh nhất để mất khách.
+- Comment hỏi lỗi kỹ thuật: trả lời hết, kể cả ngoài giờ. Đây là chỗ xây uy tín rẻ nhất của kênh.</p>
+<hr />
+<h2 id="5-chien-luoc-cta-trong-video-mien-phi">5. CHIẾN LƯỢC CTA TRONG VIDEO MIỄN PHÍ</h2>
+<h3 id="51-bang-quy-tac-cta">5.1. Bảng quy tắc CTA</h3>
+<table>
+<thead>
+<tr>
+<th>Nhóm video</th>
+<th>Ví dụ</th>
+<th>CTA chính</th>
+<th>Lý do</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Video "tự làm khó" (cài đặt, API key, Cron, Skills, viết Skill, API, model local, multi-agent)</td>
+<td>C1-1, C1-2, C1-7, C2-3, C4-1, C4-4, C4-5</td>
+<td>Dịch vụ DFY</td>
+<td>Người xem vừa thấy việc này mất thời gian → đó là lúc dịch vụ "làm hộ trong 1 buổi" hợp lý nhất</td>
+</tr>
+<tr>
+<td>Video tổng quan / đội ngũ AI / đánh giá công cụ / minh bạch mô hình</td>
+<td>W3, C2-8, C4-7</td>
+<td>Club</td>
+<td>Đây là video nói tới "cách dùng lâu dài", Club bán đúng thứ đó</td>
+</tr>
+<tr>
+<td>Video thực tế hữu ích, dễ làm theo (email, lịch, báo cáo, học tập, sức khỏe, sổ gia đình, mua sắm)</td>
+<td>C2-4, C2-5, C3-1→C3-8</td>
+<td>Không CTA bán (chỉ CTA subscribe + video tiếp)</td>
+<td>Video này xây lòng tin. Bán hàng ở đây phá niềm tin cả chapter</td>
+</tr>
+<tr>
+<td>Video nâng cao về công cụ/hệ sinh thái</td>
+<td>C4-3, C4-6</td>
+<td>Portal/affiliate</td>
+<td>Chỉ 2–3 video có CTA affiliate. Quá nhiều sẽ biến kênh thành kênh bán hàng</td>
+</tr>
+</tbody>
+</table>
+<p>Quy tắc vàng: 1 video = tối đa 1 CTA bán hàng. CTA subscribe luôn có, nhưng đặt sau CTA bán hàng (ai không mua thì vẫn subscribe — khách mai sau).</p>
+<h3 id="52-ba-mau-cta-dung-lai-cho-nhieu-video">5.2. Ba mẫu CTA (dùng lại cho nhiều video)</h3>
+<p><strong>Mẫu CTA dịch vụ DFY (video tự làm khó):</strong>
+"Bạn vừa thấy việc này mất bao lâu rồi đấy. Nếu bạn bận, hoặc nghe tới đây thấy hơi choáng — tôi có dịch vụ cài hộ trọn gói, làm xong trong một buổi chiều. Link ở mô tả. Còn nếu bạn định tự làm: cứ làm, video này đủ để bạn làm tới cùng, tôi không giấu bước nào."</p>
+<p><strong>Mẫu CTA Club:</strong>
+"Nếu bạn muốn đi xa hơn mấy video một mình — có Club của tôi, 99 đến 199k một tháng. Trong đó có buổi hỏi đáp hằng tháng và chỗ hỏi khi bạn bí. Không thích thì thôi, mấy chục video trên kênh vẫn miễn phí và đủ dùng. Link ở mô tả."</p>
+<p><strong>Mẫu CTA Portal/affiliate (chỉ C4-3, C4-6):</strong>
+"Nhân tiện, nếu bạn định dùng Hermes lâu dài, đăng ký Portal qua link ở mô tả sẽ rẻ hơn đăng ký trực tiếp — tôi dùng link đó từ đầu và nói rõ là link hoa hồng của tôi. Bạn không bắt buộc dùng, Portal vẫn có bản miễn phí đủ dùng thường ngày."</p>
+<h3 id="53-luu-y-ao-uc">5.3. Lưu ý đạo đức</h3>
+<ul>
+<li>Không nói "khóa học", "mua khóa", "học phí" trong video miễn phí nữa. Từ vựng mới: "dịch vụ cài đặt", "Club".</li>
+<li>Không hứa kiếm tiền, không hứa "tự động hóa 90% công việc". Video nào cũng nói rõ Hermes làm được gì và KHÔNG làm được gì.</li>
+<li>Link affiliate Portal: xác minh lại link redirect và mức giảm giá với quản lý trước khi ghi vào mô tả video (ghi chú cũ chưa xác nhận).</li>
+</ul>
+<hr />
+<h2 id="6-viec-can-lam-tiep-giao-cac-profile-khac">6. VIỆC CẦN LÀM TIẾP (giao các profile khác)</h2>
+<ol>
+<li>Chuỗi email cho khách cũ + lead dịch vụ DFY (email thông báo mục 2, nhắc xem video, giới thiệu Club, mời tư vấn) → đã tạo task con cho @mkt-email.</li>
+<li>Lịch đăng 16 tuần + kế hoạch social đồng bộ → @mkt-social.</li>
+<li>Dựng landing Phương án A trên speedreading.vn/ahermes → cần profile kỹ thuật (dev), đề xuất quản lý phân công.</li>
+<li>Quay video: script V1–10 có sẵn; video W3 "Vì sao miễn phí" và video chapter 3 (gia đình) cần script mới → @mkt-content (task mới).</li>
+</ol>
+<hr />
+<p><em>Hết file. Mọi con số giá (1,5tr/2,5tr/3,5tr, Club 99–199k) và link đều lấy theo brief task — cần quản lý xác nhận lần cuối trước khi xuất bản nội dung bán hàng.</em></p></div>
+</section>
+    </div>
+  </div>
+</div>
+<script>
+(function () {
+  var links = Array.prototype.slice.call(document.querySelectorAll('.nav-link'));
+  var panels = Array.prototype.slice.call(document.querySelectorAll('.panel'));
+  var crumb = document.getElementById('current-tab');
+  var sidebar = document.getElementById('sidebar');
+  function activate(tabId) {
+    panels.forEach(function (p) { p.classList.toggle('active', p.id === 'sec-' + tabId); });
+    links.forEach(function (l) {
+      var on = l.getAttribute('data-tab') === tabId;
+      l.classList.toggle('active', on);
+      if (on) crumb.textContent = l.querySelector('.nav-label').textContent;
+    });
+    if (window.innerWidth <= 900) sidebar.classList.remove('open');
+    try { localStorage.setItem('sanpham-dash-tab', tabId); } catch (e) {}
+  }
+  links.forEach(function (l) {
+    l.addEventListener('click', function (e) {
+      e.preventDefault(); activate(l.getAttribute('data-tab'));
+    });
+  });
+  var saved = null;
+  try { saved = localStorage.getItem('sanpham-dash-tab'); } catch (e) {}
+  var first = links[0] && links[0].getAttribute('data-tab');
+  if (saved && document.getElementById('sec-' + saved)) activate(saved);
+  else if (first) activate(first);
+})();
+</script>
+</body>
+</html>

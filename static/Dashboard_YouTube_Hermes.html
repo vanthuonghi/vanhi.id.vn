@@ -1,0 +1,3844 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard Kênh YouTube Hermes — 10 video đầu tiên</title>
+<style>
+  :root {
+    --bg: #f5f6f8; --surface: #ffffff; --ink: #1a2233; --muted: #5b6472;
+    --line: #e3e6ec; --accent: #c0392b; --accent-soft: #fdf0ee;
+    --nav-bg: #1a2233; --nav-ink: #c8cfdb; --nav-active: #ffffff;
+    --code-bg: #f0f2f5; --radius: 10px;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0; font-family: -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background: var(--bg); color: var(--ink); font-size: 15px; line-height: 1.65;
+  }
+
+  /* ---- Layout ---- */
+  .shell { display: flex; min-height: 100vh; }
+  .sidebar {
+    width: 300px; flex-shrink: 0; background: var(--nav-bg); color: var(--nav-ink);
+    position: sticky; top: 0; height: 100vh; overflow-y: auto; padding: 0;
+  }
+  .sidebar-head { padding: 22px 20px 16px; border-bottom: 1px solid rgba(255,255,255,.08); }
+  .sidebar-head h1 { font-size: 17px; margin: 0 0 4px; color: #fff; line-height: 1.35; }
+  .sidebar-head p { margin: 0; font-size: 12px; color: #8a93a3; }
+  .sidebar nav ul { list-style: none; margin: 0; padding: 10px 0; }
+  .nav-link {
+    display: flex; align-items: center; gap: 10px; padding: 11px 20px;
+    color: var(--nav-ink); text-decoration: none; font-size: 13.5px;
+    border-left: 3px solid transparent; transition: background .15s, color .15s;
+  }
+  .nav-link:hover { background: rgba(255,255,255,.06); color: #fff; }
+  .nav-link.active { background: rgba(255,255,255,.10); color: var(--nav-active); border-left-color: var(--accent); font-weight: 600; }
+  .nav-icon { font-size: 16px; width: 22px; text-align: center; flex-shrink: 0; }
+  .sidebar-foot { padding: 16px 20px 22px; border-top: 1px solid rgba(255,255,255,.08); font-size: 11.5px; color: #8a93a3; }
+  .sidebar-foot a { color: #e57373; }
+
+  .main { flex: 1; min-width: 0; }
+  .topbar {
+    position: sticky; top: 0; z-index: 20; background: var(--surface);
+    border-bottom: 1px solid var(--line); padding: 12px 28px;
+    display: flex; align-items: center; gap: 14px;
+  }
+  .topbar .menu-btn {
+    display: none; border: 1px solid var(--line); background: var(--surface); color: var(--ink);
+    border-radius: 8px; padding: 6px 12px; font-size: 15px; cursor: pointer;
+  }
+  .breadcrumb { font-size: 12.5px; color: var(--muted); }
+  .breadcrumb b { color: var(--ink); }
+
+  .panels { padding: 28px; max-width: 1080px; }
+  .panel { display: none; }
+  .panel.active { display: block; animation: fadein .18s ease; }
+  @keyframes fadein { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+
+  .panel-inner {
+    background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 34px 40px 40px;
+  }
+
+  /* ---- Typography trong nội dung markdown ---- */
+  .panel-inner h1 { font-size: 24px; margin: 0 0 18px; padding-bottom: 12px; border-bottom: 3px solid var(--accent); line-height: 1.3; }
+  .panel-inner h2 { font-size: 19px; margin: 34px 0 12px; padding-top: 8px; line-height: 1.35; }
+  .panel-inner h3 { font-size: 16.5px; margin: 26px 0 8px; color: #2c3a52; }
+  .panel-inner h4 { font-size: 15px; margin: 20px 0 6px; color: #2c3a52; }
+  .panel-inner p { margin: 10px 0; }
+  .panel-inner a { color: #b03a2e; }
+  .panel-inner ul, .panel-inner ol { padding-left: 26px; margin: 10px 0; }
+  .panel-inner li { margin: 4px 0; }
+  .panel-inner strong { color: #16203a; }
+  .panel-inner hr { border: none; border-top: 1px solid var(--line); margin: 28px 0; }
+  .panel-inner blockquote {
+    margin: 16px 0; padding: 10px 16px; border-left: 4px solid var(--accent);
+    background: var(--accent-soft); border-radius: 0 8px 8px 0; color: #4a2b28;
+  }
+  .panel-inner code {
+    background: var(--code-bg); padding: 2px 6px; border-radius: 5px;
+    font-family: "SF Mono", Menlo, Consolas, monospace; font-size: .88em; color: #c0392b;
+  }
+  .panel-inner pre {
+    background: #1e2733; color: #e8ecf2; padding: 14px 16px; border-radius: 8px;
+    overflow-x: auto; font-size: 13px; line-height: 1.55;
+  }
+  .panel-inner pre code { background: none; color: inherit; padding: 0; }
+  .panel-inner table {
+    border-collapse: collapse; width: 100%; margin: 16px 0; font-size: 13.5px;
+    display: block; overflow-x: auto;
+  }
+  .panel-inner th, .panel-inner td { border: 1px solid var(--line); padding: 8px 11px; text-align: left; vertical-align: top; }
+  .panel-inner th { background: #f0f2f6; font-weight: 600; }
+  .panel-inner tr:nth-child(even) td { background: #fafbfc; }
+
+  /* ---- Mobile ---- */
+  @media (max-width: 900px) {
+    .sidebar {
+      position: fixed; left: 0; top: 0; z-index: 40; transform: translateX(-100%);
+      transition: transform .2s ease; box-shadow: 0 0 40px rgba(0,0,0,.3);
+    }
+    .sidebar.open { transform: none; }
+    .topbar .menu-btn { display: block; }
+    .panels { padding: 16px; }
+    .panel-inner { padding: 20px 18px 26px; }
+  }
+</style>
+</head>
+<body>
+<div class="shell">
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-head">
+      <h1>Kênh YouTube Hermes</h1>
+      <p>Dashboard 10 video đầu tiên · 12/10/2026</p>
+    </div>
+    <nav><ul>
+<li><a href="#sec-khoitao" data-tab="khoitao" class="nav-link"><span class="nav-icon">🚀</span><span class="nav-label">1. Bản khởi động (10 video)</span></a></li>
+<li><a href="#sec-chienluoc" data-tab="chienluoc" class="nav-link"><span class="nav-icon">🎯</span><span class="nav-label">2. Chiến lược kênh</span></a></li>
+<li><a href="#sec-seo" data-tab="seo" class="nav-link"><span class="nav-icon">🔍</span><span class="nav-label">3. SEO: 10 tiêu đề + thumbnail</span></a></li>
+<li><a href="#sec-script15" data-tab="script15" class="nav-link"><span class="nav-icon">🎬</span><span class="nav-label">4. Script Video 1–5 (Cơ bản)</span></a></li>
+<li><a href="#sec-script610" data-tab="script610" class="nav-link"><span class="nav-icon">🎬</span><span class="nav-label">5. Script Video 6–10 (Nâng cao)</span></a></li>
+<li><a href="#sec-social" data-tab="social" class="nav-link"><span class="nav-icon">📣</span><span class="nav-label">6. Shorts + Đa nền tảng</span></a></li>
+<li><a href="#sec-leadmag" data-tab="leadmag" class="nav-link"><span class="nav-icon">📩</span><span class="nav-label">7. Lead magnet + Email</span></a></li>
+    </ul></nav>
+    <div class="sidebar-foot">
+      Link affiliate: <a href="https://vanhi.id.vn/nous">vanhi.id.vn/nous</a><br>
+      Khóa học: <a href="https://speedreading.vn/ahermes">speedreading.vn/ahermes</a>
+    </div>
+  </aside>
+
+  <div class="main">
+    <div class="topbar">
+      <button class="menu-btn" onclick="document.getElementById('sidebar').classList.toggle('open')">☰</button>
+      <div class="breadcrumb">Kênh YouTube Hermes → <b id="current-tab">1. Bản khởi động (10 video)</b></div>
+    </div>
+    <div class="panels">
+<section class="panel" id="sec-khoitao">
+<div class="panel-inner"><h1 id="kenh-youtube-hermes-toan-nang-chien-luoc-10-video-au-tien">Kênh YouTube "Hermes Toàn Năng" — Chiến lược + 10 video đầu tiên</h1>
+<blockquote>
+<p>Ngày lập: 12/10/2026 · Chuẩn bị cho buổi quay hôm nay (thứ 2)</p>
+</blockquote>
+<hr />
+<h2 id="1-inh-vi-kenh">1. Định vị kênh</h2>
+<table>
+<thead>
+<tr>
+<th>Hạng mục</th>
+<th>Nội dung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Tên kênh đề xuất</strong></td>
+<td>Hermes Toàn Năng — AI cho người Việt</td>
+</tr>
+<tr>
+<td><strong>Tagline</strong></td>
+<td>"Dạy bạn dùng trợ lý AI miễn phí — từ công việc đến gia đình"</td>
+</tr>
+<tr>
+<td><strong>Đối tượng</strong></td>
+<td>Dân văn phòng VN 25-45, chủ SME 1-3 người, người làm content, phụ huynh bận rộn</td>
+</tr>
+<tr>
+<td><strong>USP</strong></td>
+<td>Không review AI cho vui — hướng dẫn CÀI ĐẶT ĐƯỢC + DÙNG ĐƯỢC NGAY trong buổi chiều hôm đó. Mỗi video kết thúc bằng một việc cụ thể người xem làm được ngay.</td>
+</tr>
+<tr>
+<td><strong>Định dạng</strong></td>
+<td>Faceless: quay màn hình + voiceover tiếng Việt (VieNeuTTS/ElevenLabs), caption, B-roll</td>
+</tr>
+<tr>
+<td><strong>Kiếm tiền</strong></td>
+<td>Người xem đăng ký Nous Portal qua link affiliate: <strong>https://vanhi.id.vn/nous</strong> (giảm $15) → về lâu dài: khóa học "Nhân Sự Toàn Năng Hermes" (https://speedreading.vn/ahermes, 239k)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="vi-sao-ngach-nay-ung-luc">Vì sao ngách này đúng lúc</h3>
+<ul>
+<li>Hermes Agent (Nous Research) đang là công cụ mã nguồn mở nổi lên, nhưng <strong>chưa có kênh tiếng Việt nào hướng dẫn bài bản</strong> → mở ngách sớm, ít cạnh tranh.</li>
+<li>Người Việt ngại AI vì "không biết cài". Video "cài đặt từ A-Z" giải đúng nỗi sợ đó.</li>
+<li>"Miễn phí" là hook mạnh nhất với thị trường VN — Portal cho model free để bắt đầu không tốn 1 đồng.</li>
+</ul>
+<hr />
+<h2 id="2-lo-trinh-10-video-3-giai-oan">2. Lộ trình 10 video — 3 giai đoạn</h2>
+<h3 id="giai-oan-1-co-ban-v1-v4-tin-va-dung-uoc">Giai đoạn 1 — CƠ BẢN (V1-V4): "Tin và Dùng được"</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Chủ đề</th>
+<th>Mục tiêu</th>
+<th>CTA chính</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>V1</strong></td>
+<td>Hermes Agent là gì — thuê nhân viên AI miễn phí 24/7</td>
+<td>Hiểu Hermes khác ChatGPT thế nào: chạy trên máy bạn, có bộ nhớ, kết nối Telegram</td>
+<td>Subscribe + xem V2</td>
+</tr>
+<tr>
+<td><strong>V2</strong></td>
+<td>Cài đặt Hermes từ A-Z (Mac &amp; Windows) — không lỗi</td>
+<td>Xem xong cài được ngay trong 10 phút</td>
+<td>Subscribe + comment kết quả</td>
+</tr>
+<tr>
+<td><strong>V3</strong></td>
+<td><strong>Đăng ký Nous Portal + lấy model miễn phí</strong> ⭐</td>
+<td>Có tài khoản + credit free để chạy Hermes</td>
+<td><strong>ĐĂNG KÝ QUA LINK MÔ TẢ</strong> (video bán hàng chính)</td>
+</tr>
+<tr>
+<td><strong>V4</strong></td>
+<td>10 câu lệnh cơ bản đầu tiên</td>
+<td>Dùng được luôn: viết nội dung, đọc file, tính toán</td>
+<td>Subscribe</td>
+</tr>
+</tbody>
+</table>
+<h3 id="giai-oan-2-ung-dung-cong-viec-v5-v7-tiet-kiem-gio">Giai đoạn 2 — ỨNG DỤNG CÔNG VIỆC (V5-V7): "Tiết kiệm giờ"</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Chủ đề</th>
+<th>Mục tiêu</th>
+<th>CTA chính</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>V5</strong></td>
+<td>Hermes nhớ bạn là ai — Memory &amp; cá nhân hóa</td>
+<td>Thiết lập trợ lý "biết mình"</td>
+<td>Subscribe</td>
+</tr>
+<tr>
+<td><strong>V6</strong></td>
+<td>Nhân viên AI đọc 200 trang PDF trong 30 giây (Excel/Word/PDF)</td>
+<td>Xử lý file văn phòng tự động</td>
+<td>Link mô tả</td>
+</tr>
+<tr>
+<td><strong>V7</strong></td>
+<td>Dạy AI một lần, dùng mãi mãi — Skills</td>
+<td>Tái sử dụng quy trình riêng</td>
+<td>Link mô tả</td>
+</tr>
+</tbody>
+</table>
+<h3 id="giai-oan-3-gia-inh-nang-cao-v8-v10-song-cung-ai">Giai đoạn 3 — GIA ĐÌNH &amp; NÂNG CAO (V8-V10): "Sống cùng AI"</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Chủ đề</th>
+<th>Mục tiêu</th>
+<th>CTA chính</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>V8</strong></td>
+<td>Trợ lý nhắc bạn mỗi sáng 7h — Cron &amp; tự động hóa</td>
+<td>Task chạy nền không cần nhờ</td>
+<td>Link mô tả</td>
+</tr>
+<tr>
+<td><strong>V9</strong></td>
+<td>Hermes trong gia đình — nhắc lịch, thực đơn, hỗ trợ con học</td>
+<td>AI không chỉ để làm việc</td>
+<td>Link mô tả</td>
+</tr>
+<tr>
+<td><strong>V10</strong></td>
+<td>Điều khiển Hermes từ Telegram + xây đội ngũ AI ⭐</td>
+<td>Toàn cảnh: 1 người + nhiều trợ lý AI</td>
+<td><strong>Đăng ký Portal + khóa học</strong></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="3-pheu-chuyen-oi">3. Phễu chuyển đổi</h2>
+<pre><code>Xem video (miễn phí, giá trị thật)
+   ↓ CTA đăng ký Portal
+Đăng ký Nous Portal qua https://vanhi.id.vn/nous (bạn nhận hoa hồng)
+   ↓ CTA lead magnet
+Tải checklist → thu email (FluentCRM trên crm.speedreading.vn)
+   ↓ nurture 5 email
+Giới thiệu khóa học speedreading.vn/ahermes (239k)
+</code></pre>
+<p><strong>Quy tắc CTA:</strong>
+- V1-V2: chỉ seeding giá trị, CTA nhẹ (subscribe).
+- <strong>V3 là video bán hàng chính</strong> — CTA đăng ký Portal đặt giữa video (demo lấy model free) VÀ cuối video.
+- V4-V10: link Portal trong 2 dòng đầu description + CTA cuối video.
+- Mọi video đều có lead magnet link ở description (email capture).</p>
+<hr />
+<h2 id="4-kpi-90-ngay-au">4. KPI 90 ngày đầu</h2>
+<table>
+<thead>
+<tr>
+<th>Chỉ số</th>
+<th>Mục tiêu T90</th>
+<th>Ghi chú</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Subscribers</td>
+<td>500-1.000</td>
+<td>Tập trung chất lượng hơn số lượng giai đoạn đầu</td>
+</tr>
+<tr>
+<td>Views/video trung bình</td>
+<td>300-1.000</td>
+<td>Series liên hoàn tăng retention</td>
+</tr>
+<tr>
+<td>CTR thumbnail</td>
+<td>&gt;6%</td>
+<td>A/B test 2 thumbnail/video</td>
+</tr>
+<tr>
+<td>Retention</td>
+<td>&gt;50%</td>
+<td>Hook 15 giây đầu quyết định</td>
+</tr>
+<tr>
+<td>Click affiliate Portal</td>
+<td>50-150</td>
+<td>Đo qua link vanhi.id.vn/nous</td>
+</tr>
+<tr>
+<td>Email list</td>
+<td>100-300</td>
+<td>Lead magnet từ V4 trở đi</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Lịch xuất bản:</strong> 2-3 video/tuần. Quay theo batch — hôm nay quay V1-V4 (cùng bối cảnh, cùng cảnh cài đặt), tuần sau quay V5-V7 + V8-V10.</p>
+<hr />
+<h2 id="5-lich-quay-hom-nay-trua-nay-bat-au">5. Lịch quay HÔM NAY (trưa nay bắt đầu)</h2>
+<p><strong>Nguyên tắc: quay V2 (cài đặt) TRƯỚC V1</strong>, vì cảnh cài đặt trên máy sạch phải chuẩn bị; V1 chủ yếu là lời thoại + B-roll, quay sau không sao. Quay V3 ngay sau V2 vì dùng chung cảnh Portal.</p>
+<table>
+<thead>
+<tr>
+<th>Thứ tự</th>
+<th>Video</th>
+<th>Thời lượng ước tính</th>
+<th>Ghi chú sản xuất</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><strong>V2 Cài đặt</strong> (quay trước)</td>
+<td>45-60 ph</td>
+<td>Cần cảnh terminal sạch; quay Mac, chèn ảnh Windows</td>
+</tr>
+<tr>
+<td>2</td>
+<td><strong>V3 Đăng ký Portal</strong></td>
+<td>30-45 ph</td>
+<td>Cần tài khoản Portal thật để demo; ⭐ video quan trọng nhất</td>
+</tr>
+<tr>
+<td>3</td>
+<td><strong>V1 Hermes là gì</strong></td>
+<td>30-45 ph</td>
+<td>Nhiều B-roll, ít quay màn hình</td>
+</tr>
+<tr>
+<td>4</td>
+<td><strong>V4 10 câu lệnh</strong></td>
+<td>45-60 ph</td>
+<td>Nhiều demo thực tế — chuẩn bị sẵn file mẫu để đọc/viết</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Tips tiết kiệm thời gian:</strong>
+- Quay liên tục từng cụm 5-10 phút rồi nghỉ — đừng dừng quay giữa câu.
+- Mở sẵn tất cả app cần demo trước khi bấm record.
+- Lỗi đọc sai → dừng 2 giây, đọc lại từ đầu câu (dễ cắt).
+- Sau khi quay xong, đưa voiceover cho build-video (VieNeuTTS) lồng tự động.</p>
+<hr />
+<h2 id="6-deliverable-cua-team-ang-chay-nen">6. Deliverable của team (đang chạy nền)</h2>
+<table>
+<thead>
+<tr>
+<th>Thành viên</th>
+<th>File bàn giao</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>mkt-manager</td>
+<td>~/YouTube_Hermes_ChienLuoc_10Video.md (chiến lược chi tiết + KPI)</td>
+</tr>
+<tr>
+<td>mkt-seo</td>
+<td>~/YouTube_Hermes_SEO_10Video.md (10 tiêu đề + mô tả + thumbnail)</td>
+</tr>
+<tr>
+<td>mkt-content</td>
+<td>~/YouTube_Hermes_Script_V1-5.md + ~/YouTube_Hermes_Script_V6-10.md (script chi tiết)</td>
+</tr>
+<tr>
+<td>mkt-social</td>
+<td>~/YouTube_Hermes_Social_Plan.md (shorts + lịch đăng đa nền tảng)</td>
+</tr>
+<tr>
+<td>mkt-email-ops</td>
+<td>~/YouTube_Hermes_LeadMagnet_Plan.md (lead magnet + 5 email nurture)</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>File này là bản khởi động để quay ngay hôm nay; team sẽ bổ sung script đầy đủ, SEO pack và kế hoạch phân phối trong ngày.</p>
+</blockquote></div>
+</section>
+<section class="panel" id="sec-chienluoc">
+<div class="panel-inner"><h1 id="chien-luoc-kenh-youtube-hermes-lo-trinh-10-video-au">Chiến lược kênh YouTube Hermes + Lộ trình 10 video đầu</h1>
+<blockquote>
+<p>Tài liệu nội bộ — Dành cho chủ kênh YouTube faceless tiếng Việt
+Ngách: Trí tuệ nhân tạo tự động cho Doanh nghiệp vừa &amp; nhỏ và Gia đình Việt Nam
+Ngày lập: 12/10/2026</p>
+</blockquote>
+<hr />
+<h2 id="muc-luc">Mục lục</h2>
+<ol>
+<li><a href="#1-định-vị-kênh">Định vị kênh</a></li>
+<li><a href="#2-lộ-trình-10-video-đầu-tiên">Lộ trình 10 video đầu tiên</a></li>
+<li><a href="#3-phễu-chuyển-đổi">Phễu chuyển đổi</a></li>
+<li><a href="#4-kpi-90-ngày-đầu--lịch-xuất-bản">KPI 90 ngày đầu &amp; Lịch xuất bản</a></li>
+<li><a href="#5-lịch-quay-cho-hôm-nay">Lịch quay cho hôm nay</a></li>
+</ol>
+<hr />
+<h2 id="1-inh-vi-kenh">1. Định vị kênh</h2>
+<h3 id="11-ten-kenh-e-xuat">1.1 Tên kênh đề xuất</h3>
+<table>
+<thead>
+<tr>
+<th>Hạng mục</th>
+<th>Nội dung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tên kênh chính</td>
+<td><strong>Hermes Việt Nam</strong></td>
+</tr>
+<tr>
+<td>Tên thay thế</td>
+<td>Trợ lý Hermes / Hermes Tiếng Việt / Nhà Hermes</td>
+</tr>
+<tr>
+<td>Tagline</td>
+<td><em>"Tự động hóa công việc với Trợ lý AI Hermes — dễ như nhắn tin"</em></td>
+</tr>
+<tr>
+<td>Tiêu đề kênh (banner)</td>
+<td>Hướng dẫn Hermes từ con số 0 đến thành thạo</td>
+</tr>
+<tr>
+<td>Mô tả kênh</td>
+<td>Kênh hướng dẫn sử dụng Hermes Agent — trợ lý AI mã nguồn mở của Nous Research — bằng tiếng Việt, từ cài đặt đến tự động hóa công việc và gia đình.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="12-oi-tuong-muc-tieu">1.2 Đối tượng mục tiêu</h3>
+<table>
+<thead>
+<tr>
+<th>Nhóm đối tượng</th>
+<th>Đặc điểm</th>
+<th>Nỗi đau</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Dân văn phòng 25–45 tuổi</td>
+<td>Làm việc trên máy tính, quen công cụ online</td>
+<td>Ngập trong việc lặp lại: gộp báo cáo, soạn email, xử lý bảng tính</td>
+</tr>
+<tr>
+<td>Chủ doanh nghiệp vừa &amp; nhỏ</td>
+<td>1–20 nhân sự, không có bộ phận công nghệ</td>
+<td>Không đủ ngân sách thuê lập trình viên, muốn tự động hóa</td>
+</tr>
+<tr>
+<td>Người làm nội dung</td>
+<td>Sản xuất video/bài viết/ảnh</td>
+<td>Tốn thời gian viết kịch bản, mô tả, đăng bài nhiều nền tảng</td>
+</tr>
+</tbody>
+</table>
+<h3 id="13-iem-khac-biet-so-voi-kenh-anh-gia-ai-thong-thuong">1.3 Điểm khác biệt so với kênh đánh giá AI thông thường</h3>
+<table>
+<thead>
+<tr>
+<th>Kênh AI thông thường</th>
+<th>Kênh Hermes Việt Nam</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Xem 5 phút rồi thôi</td>
+<td>Đi từ cài đặt → dùng thật → tự động hóa, mỗi video là một bước cụ thể</td>
+</tr>
+<tr>
+<td>Nói về nhiều công cụ một lần</td>
+<td>Chuyên sâu MỘT công cụ mạnh, dạy đến cùng</td>
+</tr>
+<tr>
+<td>Khán giả xem mà không biết làm gì tiếp</td>
+<td>Mỗi video kết thúc bằng việc khán giả LÀM ĐƯỢC ngay điều gì đó</td>
+</tr>
+<tr>
+<td>Kiếm tiền bằng quảng cáo</td>
+<td>Kiếm tiền bằng liên kết hợp tác (khán giả nhận giảm giá, kênh nhận hoa hồng) — không lừa dối</td>
+</tr>
+<tr>
+<td>Không có hệ sinh thái</td>
+<td>Kết nối thẳng vào khóa học "Nhân Sự Toàn Năng Hermes" cho người muốn đi sâu</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Tóm lại điểm bán hàng độc nhất:</strong> Kênh không "review cho vui" — kênh dạy bạn biến Hermes thành trợ lý thật trong công việc và gia đình, hoàn toàn bằng tiếng Việt, từng bước có thể làm theo ngay trong ngày.</p>
+<hr />
+<h2 id="2-lo-trinh-10-video-au-tien">2. Lộ trình 10 video đầu tiên</h2>
+<h3 id="giai-oan-1-co-ban-video-14">Giai đoạn 1 — "Cơ bản" (Video 1–4)</h3>
+<p><em>Mục tiêu giai đoạn: người xem hoàn toàn mới hiểu Hermes là gì và cài đặt xong trên máy mình.</em></p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Tiêu đề video</th>
+<th>Mục tiêu</th>
+<th>Câu kêu gọ hành động (liên kết hợp tác)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Hermes là gì? Trợ lý AI làm được gì mà ChatGPT không làm được?</td>
+<td>Giải thích Hermes bằng ngôn ngữ đời thường, khán giả biết đây là công cụ gì và dùng để làm gì</td>
+<td>"Đăng ký tài khoản qua link bên dưới để được giảm 15 USD — hoàn toàn miễn phí khi bắt đầu"</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Cài Hermes trên máy tính trong 3 phút (Windows &amp; Mac)</td>
+<td>Khán giả cài đặt xong Hermes trên máy mình</td>
+<td>"Đăng ký tài khoản qua link mô tả để nhận ưu đãi 15 USD trước khi bước tiếp theo"</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Đăng ký tài khoản Nous Portal &amp; kết nối Hermes (miễn phí)</td>
+<td>Khán giả đăng ký xong tài khoản và kết nối được Hermes</td>
+<td>"Dùng link trong mô tả để đăng ký — một tài khoản dùng 300+ mô hình AI và tiết kiệm 15 USD"</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Chat với Hermes: 10 câu hỏi đầu tiên nên thử</td>
+<td>Khán giả trò chuyện được và thấy ngay kết quả thực tế</td>
+<td>"Đăng ký qua link mô tả để cùng trải nghiệm, nhận ngay 15 USD giảm giá"</td>
+</tr>
+</tbody>
+</table>
+<h3 id="giai-oan-2-ung-dung-cong-viec-video-57">Giai đoạn 2 — "Ứng dụng công việc" (Video 5–7)</h3>
+<p><em>Mục tiêu giai đoạn: chứng minh Hermes tiết kiệm thời gian công việc thực sự.</em></p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Tiêu đề video</th>
+<th>Mục tiêu</th>
+<th>Câu kêu gọ hành động (liên kết hợp tác)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>5</td>
+<td>Hermes xử lý file Excel, PDF &amp; Word tự động</td>
+<td>Khán giả để Hermes đọc, gộp, tóm tắt tài liệu trong 1 phút</td>
+<td>"Đăng ký tài khoản qua link mô tả để dùng thử tính năng này, giảm 15 USD"</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Dạy Hermes nhớ việc nhà bạn (tính năng Kỹ năng)</td>
+<td>Khán giả tạo được quy trình làm việc cho Hermes tự thực hiện lại</td>
+<td>"Đăng ký qua link trong mô tả, nhận 15 USD để bắt đầu miễn phí"</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Hermes nhớ bạn là ai (tính năng Trí nhớ)</td>
+<td>Khán giả hiểu và bật tính năng trí nhớ, Hermes cá nhân hóa theo mình</td>
+<td>"Đăng ký qua link mô tả — giảm ngay 15 USD cho tài khoản mới"</td>
+</tr>
+</tbody>
+</table>
+<h3 id="giai-oan-3-gia-inh-nang-cao-video-810">Giai đoạn 3 — "Gia đình &amp; Nâng cao" (Video 8–10)</h3>
+<p><em>Mục tiêu giai đoạn: khán giả coi Hermes là trợ lý 24/7 cho cả nhà, không chỉ công việc.</em></p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Tiêu đề video</th>
+<th>Mục tiêu</th>
+<th>Câu kêu gọ hành động (liên kết hợp tác)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>8</td>
+<td>Đặt Hermes tự động nhắc việc mỗi ngày (Tự động theo lịch)</td>
+<td>Khán giả đặt được việc tự động chạy theo giờ/ngày</td>
+<td>"Đăng ký qua link mô tả để dùng thử, tiết kiệm 15 USD"</td>
+</tr>
+<tr>
+<td>9</td>
+<td>Hermes trong gia đình: nhắc con học, lên thực đơn, soạn tin nhắn</td>
+<td>Khán giả thấy cách dùng Hermes cho việc nhà hàng ngày</td>
+<td>"Đăng ký tài khoản qua link mô tả — nhận 15 USD, dùng thử miễn phí"</td>
+</tr>
+<tr>
+<td>10</td>
+<td>Cả đội ngũ AI làm việc cùng bạn (Kết nối đa nền tảng)</td>
+<td>Khán giả biết cách giao việc cho nhiều trợ lý AI chạy song song và nhận kết quả qua điện thoại</td>
+<td>"Đăng ký qua link mô tả để trải nghiệm đầy đủ, giảm 15 USD"</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="3-pheu-chuyen-oi">3. Phễu chuyển đổi</h2>
+<h3 id="31-at-cau-keu-goi-hanh-ong-o-au-trong-moi-video">3.1 Đặt câu kêu gọi hành động ở đâu trong mỗi video</h3>
+<table>
+<thead>
+<tr>
+<th>Vị trí trong video</th>
+<th>Nội dung</th>
+<th>Mục đích</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0:00–0:30 (mở đầu)</td>
+<td>Nhắc link đăng ký kèm ưu đãi 15 USD</td>
+<td>Bắt người xem có ý định ngay từ đầu</td>
+</tr>
+<tr>
+<td>Giữa video (1 lần)</td>
+<td>Nhắc lại ngắn khi demo tính năng hay</td>
+<td>Ghi nhớ giữa lúc khán giả đang hứng thú</td>
+</tr>
+<tr>
+<td>Cuối video</td>
+<td>Tổng kết + link + tặng bộ checklist</td>
+<td>Chốt hành động</td>
+</tr>
+<tr>
+<td>Mô tả video (dòng đầu)</td>
+<td>Link đăng ký đầy đủ</td>
+<td>Người xem kỹ sẽ tìm ở đây</td>
+</tr>
+<tr>
+<td>Gim bình luận</td>
+<td>Link + ưu đãi</td>
+<td>Nơi nhìn thấy đầu tiên khi đọc bình luận</td>
+</tr>
+</tbody>
+</table>
+<h3 id="32-video-ban-hang-chinh">3.2 Video "bán hàng" chính</h3>
+<blockquote>
+<p><strong>Video số 3 — "Đăng ký tài khoản Nous Portal &amp; kết nối Hermes (miễn phí)"</strong> là video chuyển đổi trung tâm.
+Lý do: đây là bước bắt buộc sau khi cài đặt, khán giả đang có nhu cầu cao nhất, và hành động đăng ký diễn ra ngay trong video. Mọi video khác chỉ cần nhắc nhẹ, video 3 là nơi dẫn dắt trực tiếp tới link.</p>
+</blockquote>
+<h3 id="33-qua-thu-hut-lead-magnet-e-xuat">3.3 Quà thu hút (lead magnet) đề xuất</h3>
+<table>
+<thead>
+<tr>
+<th>Hạng mục</th>
+<th>Nội dung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tên</td>
+<td><strong>"Checklist 10 việc Hermes làm thay bạn trong 1 giờ"</strong> (file PDF)</td>
+</tr>
+<tr>
+<td>Nội dung</td>
+<td>10 công việc văn phòng/gia đình kèm câu lệnh mẫu để sao chép dùng ngay</td>
+</tr>
+<tr>
+<td>Cách nhận</td>
+<td>Bình luận từ khóa "HERMES" hoặc điền email → tự động gửi</td>
+</tr>
+<tr>
+<td>Mục đích</td>
+<td>Thu thập danh sách email để chăm sóc lâu dài, đồng thời lọc người thực sự quan tâm</td>
+</tr>
+</tbody>
+</table>
+<h3 id="34-lo-trinh-nguoi-xem-tu-xem-video-en-khoa-hoc">3.4 Lộ trình người xem: từ xem video đến khóa học</h3>
+<pre><code>Xem video YouTube
+      ↓
+Nhận checklist PDF (lead magnet)
+      ↓
+Đăng ký tài khoản qua link hợp tác (giảm 15 USD)
+      ↓
+Dùng thử Hermes thực tế 1–2 tuần
+      ↓
+Muốn đi sâu → Khóa học &quot;Nhân Sự Toàn Năng Hermes&quot;
+(giá ưu đãi 239.000đ / giá gốc 499.000đ)
+</code></pre>
+<p><strong>Nguyên tắc phễu:</strong> Không bán khóa học ngay từ video đầu. Để khán giả tự trải nghiệm giá trị miễn phí trước — người dùng hài lòng sẽ tự tìm đến khóa học khi cần nâng cao.</p>
+<hr />
+<h2 id="4-kpi-90-ngay-au-lich-xuat-ban">4. KPI 90 ngày đầu &amp; Lịch xuất bản</h2>
+<h3 id="41-chi-so-muc-tieu-muc-tieu-noi-bo-khong-phai-so-lieu-thi-truong">4.1 Chỉ số mục tiêu (mục tiêu nội bộ, không phải số liệu thị trường)</h3>
+<table>
+<thead>
+<tr>
+<th>Chỉ số</th>
+<th>Mục tiêu 30 ngày</th>
+<th>Mục tiêu 60 ngày</th>
+<th>Mục tiêu 90 ngày</th>
+<th>Cách đo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Người đăng ký kênh</td>
+<td>300</td>
+<td>600</td>
+<td>1.000</td>
+<td>Bảng điều khiển YouTube</td>
+</tr>
+<tr>
+<td>Lượt xem tích lũy</td>
+<td>3.000</td>
+<td>8.000</td>
+<td>15.000</td>
+<td>Bảng điều khiển YouTube</td>
+</tr>
+<tr>
+<td>Tỷ lệ nhấp hình thu nhỏ</td>
+<td>4%</td>
+<td>5%</td>
+<td>5–6%</td>
+<td>YouTube Analytics</td>
+</tr>
+<tr>
+<td>Nhấp vào link hợp tác</td>
+<td>100</td>
+<td>250</td>
+<td>450</td>
+<td>Đếm lượt nhấp trên link</td>
+</tr>
+<tr>
+<td>Số tài khoản đăng ký qua link</td>
+<td>20</td>
+<td>55</td>
+<td>110</td>
+<td>Báo cáo liên kết</td>
+</tr>
+<tr>
+<td>Tỷ lệ đăng ký / nhấp</td>
+<td>20%</td>
+<td>22%</td>
+<td>25%</td>
+<td>Tính = đăng ký ÷ nhấp</td>
+</tr>
+<tr>
+<td>Bộ checklist tải về</td>
+<td>50</td>
+<td>150</td>
+<td>300</td>
+<td>Công cụ gửi email tự động</td>
+</tr>
+<tr>
+<td>Đăng ký khóa học</td>
+<td>2</td>
+<td>6</td>
+<td>12</td>
+<td>Hệ thống bán khóa học</td>
+</tr>
+</tbody>
+</table>
+<h3 id="42-lich-xuat-ban-e-xuat-23-video-moi-tuan">4.2 Lịch xuất bản đề xuất (2–3 video mỗi tuần)</h3>
+<table>
+<thead>
+<tr>
+<th>Tuần</th>
+<th>Video phát hành</th>
+<th>Ghi chú</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Video 1, 2, 3</td>
+<td>Mở màn kênh, tập trung vào video bán hàng số 3 sớm</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Video 4, 5, 6</td>
+<td>Duy trì nhịp 3 video/tuần</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Video 7, 8</td>
+<td>Nghỉ 1 video để chỉnh thumbnail/kịch bản</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Video 9, 10</td>
+<td>Kết thúc loạt 10 video</td>
+</tr>
+<tr>
+<td>5–13</td>
+<td>2–3 video/tuần</td>
+<td>Bắt đầu loạt mới dựa trên bình luận và thắc mắc của khán giả</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Quy tắc đăng:</strong> cố định khung giờ (ví dụ 19h30 thứ Ba, Năm, Bảy) để khán giả hình thành thói quen.</p>
+<hr />
+<h2 id="5-lich-quay-cho-hom-nay">5. Lịch quay cho hôm nay</h2>
+<h3 id="51-thu-tu-quay-10-video-trong-1-buoi">5.1 Thứ tự quay 10 video trong 1 buổi</h3>
+<p>Thứ tự dựa trên nguyên tắc: quay video phụ thuộc cảnh/môi trường trước, dùng chung một lần cài đặt cho nhiều video.</p>
+<table>
+<thead>
+<tr>
+<th>Thứ tự quay</th>
+<th>Video</th>
+<th>Lý do xếp trước</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Video 1 — Hermes là gì</td>
+<td>Không phụ thuộc cảnh nào, quay thoải mái đầu buổi khi tinh thần tốt nhất</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Video 2 — Cài đặt</td>
+<td>Cài mới MỘT LẦN, môi trường sạch để ghi hình rõ ràng</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Video 3 — Đăng ký tài khoản</td>
+<td>Quay ngay sau khi cài xong, cùng môi trường, không phải cài lại</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Video 4 — Chat cơ bản</td>
+<td>Dùng chung môi trường vừa cài, khán giả thấy tính liên tục</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Video 5 — Xử lý file</td>
+<td>Chuẩn bị sẵn file mẫu Excel/PDF, quay liên tiếp trong cùng cảnh máy tính</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Video 6 — Tính năng Kỹ năng</td>
+<td>Cùng cảnh, chỉ đổi nội dung demo</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Video 7 — Tính năng Trí nhớ</td>
+<td>Cùng cảnh</td>
+</tr>
+<tr>
+<td>8</td>
+<td>Video 8 — Tự động theo lịch</td>
+<td>Cần cấu hình tính năng tự động, làm trên cùng máy đã thiết lập</td>
+</tr>
+<tr>
+<td>9</td>
+<td>Video 9 — Hermes trong gia đình</td>
+<td>Chuyển cảnh "gia đình" sau khi xong phần công việc</td>
+</tr>
+<tr>
+<td>10</td>
+<td>Video 10 — Đội ngũ &amp; đa nền tảng</td>
+<td>Video phức tạp nhất, quay cuối khi đã quen tay và có thể ghép cảnh cũ</td>
+</tr>
+</tbody>
+</table>
+<h3 id="52-meo-tiet-kiem-thoi-gian">5.2 Mẹo tiết kiệm thời gian</h3>
+<ol>
+<li><strong>Viết kịch bản dài 1 câu cho cả 10 video trước khi ngồi vào máy quay</strong> — không sáng tạo lúc quay.</li>
+<li><strong>Cùng một trang phục/cảnh nền cho cả buổi</strong> — khán giả không nhận ra video quay cách nhau vài tuần.</li>
+<li><strong>Quay giọng đọc (voiceover) cho tất cả video vào CUỐI buổi</strong> — lúc đã hiểu rõ toàn bộ nội dung, đọc mạch lạc hơn.</li>
+<li><strong>Ghi màn hình một lần, cắt nhiều đoạn</strong> — thao tác chuột chậm rãi, rõ ràng để không phải quay lại.</li>
+<li><strong>Chuẩn bị sẵn file mẫu (Excel, PDF, ảnh) trước khi quay</strong> — tránh mất thời gian tạo dữ liệu giả lúc quay.</li>
+<li><strong>Đừng cố hoàn hảo từng video ngay lúc quay</strong> — quay xong cả 10 rồi mới biên tập, sửa lỗi hàng loạt nhanh hơn nhiều.</li>
+<li><strong>Nghỉ 10 phút giữa mỗi video</strong> để giữ năng lượng giọng đọc — giọng mệt sẽ nghe rõ trong video faceless.</li>
+</ol>
+<hr />
+<p><em>Hết tài liệu. Mọi câu kêu gọi hành động trong 10 video đều hướng tới link hợp tác: https://vanhi.id.vn/nous</em></p></div>
+</section>
+<section class="panel" id="sec-seo">
+<div class="panel-inner"><h1 id="seo-pack-series-10-video-youtube-hermes-agent-tieng-viet">SEO Pack: Series 10 Video YouTube — Hermes Agent (Tiếng Việt)</h1>
+<p><strong>Ngày:</strong> 12/10/2026
+<strong>Thực hiện:</strong> SEO Specialist (mkt-seo)
+<strong>Đối tượng:</strong> Dân văn phòng, chủ SME, người dùng cá nhân muốn dùng AI miễn phí
+<strong>Link affiliate:</strong> https://vanhi.id.vn/nous (đăng ký Nous Portal, giảm 15 USD)
+<strong>Link khóa học:</strong> https://speedreading.vn/ahermes (khi phù hợp)</p>
+<blockquote>
+<p><strong>Ghi chú về số liệu:</strong> File này KHÔNG dùng dữ liệu Volume/Độ khó từ công cụ trả phí
+(Ahrefs/Semrush/Keyword Planner) vì không có quyền truy cập. Mọi đánh giá độ khó bên dưới
+là <strong>ƯỚC LƯỢNG ĐỊNH TÍNH</strong>, suy ra từ phân tích SERP thực tế ngày 12/10/2026 (ai đang xếp hạng,
+chất lượng nội dung đó, mật độ kết quả). Không có số Volume tuyệt đối nào — chỉ có phân loại
+THẤP / TRUNG BÌNH / CAO. Xem Phụ lục A để biết căn cứ quan sát được.</p>
+</blockquote>
+<hr />
+<h2 id="tong-quan-chien-luoc-series">TỔNG QUAN CHIẾN LƯỢC SERIES</h2>
+<p><strong>Mục tiêu:</strong> Chiếm top YouTube tiếng Việt cho cụm từ khóa "Hermes Agent" + các biến thể
+ứng dụng thực tế, rồi dùng series để chuyển đổi qua link Nous Portal.</p>
+<p><strong>Căn cứ từ nghiên cứu thực tế (ngày 12/10/2026):</strong></p>
+<ol>
+<li>Từ khóa THƯƠNG HIỆU ("Hermes Agent", "Hermes Desktop", "Nous Portal") — trên Google VN
+   chỉ xuất hiện trang tài liệu/đại lý (hermes.ai.vn, hermes-ai.net, hermesagents.net),
+   trên YouTube VN chỉ có 3-4 video và đều theo hướng VPS/Hostinger. → Cơ hội lớn, ước lượng độ khó THẤP.</li>
+<li>Từ khóa ĐẦU có nhu cầu cao ("AI agent là gì", "trợ lý AI miễn phí") — bị các trang uy tín
+   chiếm (Aduca, Fchat, Cogover, VNPT AI, Multilogin, CellphoneS). → KHÔNG đứng riêng, chỉ dùng làm modifier.</li>
+<li><strong>GÓC TRỐNG (không đối thủ nào phủ):</strong> cài trên MÁY CÁ NHÂN Mac/Windows, model MIỄN PHí
+   qua Nous Portal, xử lý FILE VĂN PHÒNG, dùng trong GIA ĐÌNH. Toàn bộ video đối thủ đều
+   dài 36-49 phút, hướng VPS, dùng OpenRouter. Series này đi ngược lại: ngắn, local, miễn phí.</li>
+</ol>
+<p><strong>Cấu trúc series:</strong>
+- Video 1-3: Giới thiệu + cài đặt + lấy model miễn phí — kéo người mới từ con số 0
+- Video 4-7: Thực hành sâu (lệnh, file, skills, memory) — giữ chân người xem
+- Video 8-10: Ứng dụng rộng (tự động, gia đình, Telegram) — mở rộng đối tượng</p>
+<p><strong>Mẹo SEO chung:</strong>
+- Affiliate link https://vanhi.id.vn/nous đặt trong 2 DÒNG ĐẦU của mỗi description
+- Link khóa học https://speedreading.vn/ahermes ở video có nội dung đào tạo sâu (1, 5, 6, 8, 9, 10)
+- Mỗi video có timeline chapter đầy đủ — YouTube index chapter vào kết quả tìm kiếm
+- End screen mỗi video trỏ về video tiếp theo trong series để tăng watch time chuỗi
+- Playlist: "Hermes Agent Từ A-Z Cho Người Mới" — giúp YouTube hiểu chủ đề series</p>
+<hr />
+<h2 id="video-1-hermes-agent-la-gi-gioi-thieu">VIDEO 1: HERMES AGENT LÀ GÌ? — GIỚI THIỆU</h2>
+<h3 id="tieu-e-e-xuat-2-phuong-an">Tiêu đề đề xuất (2 phương án)</h3>
+<p><strong>Phương án A</strong> (45 ký tự) — ƯU TIÊN</p>
+<blockquote>
+<p>Hermes Agent Là Gì? Trợ Lý AI Miễn Phí Tự Học</p>
+</blockquote>
+<p><strong>Phương án B</strong> (45 ký tự)</p>
+<blockquote>
+<p>Hermes Agent Là Gì? Khác ChatGPT Như Thế Nào?</p>
+</blockquote>
+<p><strong>Phương án C (dự phòng)</strong> (45 ký tự)</p>
+<blockquote>
+<p>Hermes Agent Là Gì? Giới Thiệu Từ Nous Research</p>
+</blockquote>
+<h3 id="mo-ta-description">Mô tả (Description)</h3>
+<p>Bạn đang nghe nói về "AI Agent" nhưng chưa biết nó là gì và làm sao để dùng thử MIỄN PHÍ? Hermes Agent — trợ lý AI mã nguồn mở từ Nous Research — chính là câu trả lời.</p>
+<p>Đăng ký Nous Portal ngay để nhận 15 USD credit miễn phí: https://vanhi.id.vn/nous</p>
+<p>Sở hữu khóa học đầy đủ "AI Agent Cho Người Đi Làm": https://speedreading.vn/ahermes</p>
+<p>TRONG VIDEO NÀY:
+0:00 — Giới thiệu: AI Agent khác gì ChatGPT?
+1:30 — Hermes Agent là ai? Tại sao lại "tự cải thiện"?
+3:15 — Tính năng nổi bật: Skills, Memory, Cron, Telegram…
+5:00 — Hermes so với Claude Code, Codex, OpenClaw
+7:20 — Ai nên dùng Hermes? Dân văn phòng, SME, dev, gia đình
+9:00 — Demo nhanh: hỏi đáp, xử lý file, chạy tác vụ nền
+11:30 — Lộ trình series 10 video cho người mới
+12:15 — CTA: Đăng ký kênh + link Nous Portal</p>
+<p>🔔 Đăng ký kênh để không bỏ lỡ các video tiếp theo trong series!</p>
+<h1 id="hermesagent-aiagent-trolyai-nousresearch-aimienphi">HermesAgent #AIAgent #TroLyAI #NousResearch #AIMienPhi</h1>
+<h3 id="5-tags">5 Tags</h3>
+<p><code>Hermes Agent</code>, <code>AI Agent là gì</code>, <code>trợ lý AI mã nguồn mở</code>, <code>Nous Research Hermes</code>, <code>AI miễn phí cho dân văn phòng</code></p>
+<h3 id="thumbnail">Thumbnail</h3>
+<p><strong>Text:</strong> HERMES AGENT LÀ GÌ?</p>
+<p><strong>Gợi ý Canva:</strong>
+- Phong cách: Tối giản (minimal), công nghệ
+- Background: gradient tím-xanh đậm (#1a0533 → #0a1628)
+- Text chính: màu trắng (#FFFFFF), font bold, size lớn, chính giữa
+- Text phụ nhỏ phía dưới: "Trợ lý AI mã nguồn mở ✦" màu xanh dương (#00D4FF)
+- Element: Logo Nous Research góc phải
+- Hiệu ứng: glow nhẹ quanh text chính</p>
+<h3 id="tu-khoa">Từ khóa</h3>
+<p><strong>Keyword chính:</strong> Hermes Agent là gì
+<strong>Keyword phụ:</strong> AI agent mã nguồn mở, trợ lý AI miễn phí, Hermes Agent vs ChatGPT</p>
+<hr />
+<h2 id="video-2-cai-at-hermes-tu-a-z-tren-mac-windows">VIDEO 2: CÀI ĐẶT HERMES TỪ A-Z TRÊN MAC / WINDOWS</h2>
+<h3 id="tieu-e-e-xuat-2-phuong-an_1">Tiêu đề đề xuất (2 phương án)</h3>
+<p><strong>Phương án A</strong> (48 ký tự) — ƯU TIÊN</p>
+<blockquote>
+<p>Cài Hermes Agent Trên Mac &amp; Windows Trong 5 Phút</p>
+</blockquote>
+<p><strong>Phương án B</strong> (48 ký tự)</p>
+<blockquote>
+<p>Hướng Dẫn Cài Hermes Agent Từ A-Z Không Cần Code</p>
+</blockquote>
+<h3 id="mo-ta-description_1">Mô tả (Description)</h3>
+<p>Cài Hermes Agent KHÔNG cần VPS, không cần biết code, không cần thẻ tín dụng — chỉ cần máy Mac hoặc Windows và 5 phút. Hướng dẫn CHI TIẾT từng bước trong video này.</p>
+<p>Đăng ký Nous Portal lấy model miễn phí: https://vanhi.id.vn/nous</p>
+<p>TRONG VIDEO NÀY:
+0:00 — Cần chuẩn bị gì trước khi cài
+1:00 — Cách 1: Tải Hermes Desktop (khuyên dùng cho người mới)
+4:30 — Cách 2: Cài bằng lệnh terminal (Mac/Windows)
+8:00 — Kiểm tra Hermes đã cài thành công chưa
+9:30 — Sửa 3 lỗi thường gặp khi cài (PATH, Python, proxy)
+12:00 — Bước tiếp theo: kết nối model</p>
+<p>🔔 Đăng ký kênh để không bỏ lỡ video tiếp theo!</p>
+<h1 id="hermesagent-caidathermes-huongdanaituaz-nousresearch-aiagent">HermesAgent #CaiDatHermes #HuongDanAITuAZ #NousResearch #AIAgent</h1>
+<h3 id="5-tags_1">5 Tags</h3>
+<p><code>cài đặt Hermes Agent</code>, <code>hướng dẫn Hermes từ đầu</code>, <code>Hermes Mac Windows</code>, <code>cài AI agent miễn phí</code>, <code>Hermes Agent setup</code></p>
+<h3 id="thumbnail_1">Thumbnail</h3>
+<p><strong>Text:</strong> CÀI HERMES A-Z</p>
+<p><strong>Gợi ý Canva:</strong>
+- Phong cách: Flat design, hướng dẫn (tutorial)
+- Background: xanh đen #0D1117 (tone công nghệ)
+- Text chính: màu xanh lá #00FF88 (tạo cảm giác "bắt đầu"/"GO")
+- Dòng phụ: "TRONG 5 PHÚT" màu trắng, size nhỏ hơn
+- Element: Logo Mac + Windows cạnh nhau ở góc dưới
+- Đồng hồ đếm ngược nhỏ góc phải để tăng urgency</p>
+<h3 id="tu-khoa_1">Từ khóa</h3>
+<p><strong>Keyword chính:</strong> cài đặt Hermes Agent
+<strong>Keyword phụ:</strong> cài Hermes trên Windows, cài Hermes trên Mac, hướng dẫn Hermes Agent</p>
+<hr />
+<h2 id="video-3-ang-ky-tai-khoan-nous-portal-lay-model-mien-phi">VIDEO 3: ĐĂNG KÝ TÀI KHOẢN NOUS PORTAL + LẤY MODEL MIỄN PHÍ</h2>
+<h3 id="tieu-e-e-xuat-2-phuong-an_2">Tiêu đề đề xuất (2 phương án)</h3>
+<p><strong>Phương án A</strong> (42 ký tự) — ƯU TIÊN</p>
+<blockquote>
+<p>Đăng Ký Nous Portal: Lấy Model AI Miễn Phí</p>
+</blockquote>
+<p><strong>Phương án B</strong> (45 ký tự)</p>
+<blockquote>
+<p>Nous Portal Là Gì? Lấy AI Miễn Phí Cho Hermes</p>
+</blockquote>
+<h3 id="mo-ta-description_2">Mô tả (Description)</h3>
+<p>Làm sao để Hermes Agent có "trí tuệ"? Bạn cần một tài khoản Nous Portal — cổng model AI miễn phí và trả phí từ Nous Research. Trong video này, mình hướng dẫn đăng ký và lấy model miễn phí đầu tiên.</p>
+<p>NHẬN 15 USD credit khi đăng ký qua link: https://vanhi.id.vn/nous</p>
+<p>Đây là bước quan trọng để Hermes có thể trả lời, phân tích file, và chạy tác vụ cho bạn.</p>
+<p>TRONG VIDEO NÀY:
+0:00 — Nous Portal là gì? Vì sao cần nó?
+1:30 — Các gói dịch vụ: Free, Plus, Super, Ultra
+3:00 — Hướng dẫn đăng ký từng bước (có hình ảnh)
+5:00 — Danh sách model MIỄN PHÍ đang có trên Portal
+7:30 — Kết nối Nous Portal vào Hermes bằng 1 lệnh
+9:30 — Kiểm tra kết nối thành công
+11:00 — Mẹo tiết kiệm credit khi dùng
+12:30 — CTA</p>
+<p>🔔 Nhấn Subscribe để theo dõi series!</p>
+<h1 id="nousportal-hermesagent-modelaimienphi-apikey-nousresearch">NousPortal #HermesAgent #ModelAIMienPhi #APIKey #NousResearch</h1>
+<h3 id="5-tags_2">5 Tags</h3>
+<p><code>Nous Portal</code>, <code>đăng ký Nous Portal</code>, <code>model AI miễn phí</code>, <code>API key Hermes</code>, <code>Nous Research account</code></p>
+<h3 id="thumbnail_2">Thumbnail</h3>
+<p><strong>Text:</strong> NOUS PORTAL FREE</p>
+<p><strong>Gợi ý Canva:</strong>
+- Background: tối, trung tâm thẻ "FREE" màu xanh lá phát sáng
+- Text: tím đậm #7B2FF7 (màu đặc trưng Nous)
+- Icon: Key / Lock nhỏ bên cạnh text
+- Tem giảm giá đỏ "GIẢM 15$" góc trên phải
+- Logo các model (Hermes, Ling, Step) mờ xung quanh</p>
+<h3 id="tu-khoa_2">Từ khóa</h3>
+<p><strong>Keyword chính:</strong> Nous Portal đăng ký
+<strong>Keyword phụ:</strong> model AI miễn phí, lấy API key AI miễn phí, Nous Research portal</p>
+<hr />
+<h2 id="video-4-10-cau-lenh-co-ban-au-tien-voi-hermes-agent">VIDEO 4: 10 CÂU LỆNH CƠ BẢN ĐẦU TIÊN VỚI HERMES AGENT</h2>
+<h3 id="tieu-e-e-xuat-2-phuong-an_3">Tiêu đề đề xuất (2 phương án)</h3>
+<p><strong>Phương án A</strong> (45 ký tự) — ƯU TIÊN</p>
+<blockquote>
+<p>10 Câu Lệnh Hermes Agent Cơ Bản Cho Người Mới</p>
+</blockquote>
+<p><strong>Phương án B</strong> (49 ký tự)</p>
+<blockquote>
+<p>10 Lệnh Hermes Agent Người Mới Phải Biết Đầu Tiên</p>
+</blockquote>
+<h3 id="mo-ta-description_3">Mô tả (Description)</h3>
+<p>Đã cài Hermes xong nhưng chưa biết bắt đầu từ đâu? 10 câu lệnh (prompt) này sẽ giúp bạn làm quen với trợ lý AI mã nguồn mở nhanh nhất — không cần nhớ tài liệu dày cộp.</p>
+<p>Đăng ký Nous Portal ngay tại: https://vanhi.id.vn/nous</p>
+<p>TRONG VIDEO NÀY:
+0:00 — Chuẩn bị: mở Hermes CLI/TUI
+1:00 — #1: Câu hỏi cơ bản
+2:00 — #2: Yêu cầu viết email
+3:15 — #3: Tóm tắt nội dung web
+4:30 — #4: Soạn thảo kế hoạch công việc
+5:45 — #5: Phân tích văn bản
+7:00 — #6-8: Tìm kiếm file + phân tích thư mục
+9:15 — #9: Tạo file markdown tự động
+10:30 — #10: Hỏi lịch sử chat (session memory)
+11:45 — Mẹo: prompt hay hơn = kết quả tốt hơn
+12:30 — CTA</p>
+<p>🔔 Subscribe để học thêm các kỹ năng nâng cao!</p>
+<h1 id="hermesagent-caulenhhermes-trolyai-prompthay-aiagentcoban">HermesAgent #CâuLệnhHermes #TroLyAI #PromptHay #AIAgentCoBan</h1>
+<h3 id="5-tags_3">5 Tags</h3>
+<p><code>câu lệnh Hermes Agent</code>, <code>Hermes cơ bản</code>, <code>prompt Hermes cho người mới</code>, <code>AI agent command</code>, <code>Hermes Agent tutorial</code></p>
+<h3 id="thumbnail_3">Thumbnail</h3>
+<p><strong>Text:</strong> 10 LỆNH ĐẦU TIÊN</p>
+<p><strong>Gợi ý Canva:</strong>
+- Background: gradient xám-đen #1A1A2E → #0F0F1A
+- Text chính: màu vàng gold #FFD700 (nổi bật giữa nền tối)
+- Dòng phụ: "HERMES AGENT" màu trắng
+- Element: Dấu "&gt;" hoặc dấu nhắc terminal "$" bên trái text
+- Style terminal matrix, có glow xanh nhẹ</p>
+<h3 id="tu-khoa_3">Từ khóa</h3>
+<p><strong>Keyword chính:</strong> câu lệnh Hermes Agent
+<strong>Keyword phụ:</strong> Hermes cơ bản, prompt AI agent đầu tiên, làm quen Hermes</p>
+<hr />
+<h2 id="video-5-hermes-xu-ly-file-van-phong-excel-pdf-word-soan-bao-cao">VIDEO 5: HERMES XỬ LÝ FILE VĂN PHÒNG (EXCEL / PDF / WORD) — SOẠN BÁO CÁO</h2>
+<h3 id="tieu-e-e-xuat-2-phuong-an_4">Tiêu đề đề xuất (2 phương án)</h3>
+<p><strong>Phương án A</strong> (40 ký tự) — ƯU TIÊN</p>
+<blockquote>
+<p>Hermes Soạn Báo Cáo Excel &amp; Word Tự Động</p>
+</blockquote>
+<p><strong>Phương án B</strong> (49 ký tự)</p>
+<blockquote>
+<p>AI Xử Lý File Văn Phòng: Tiết Kiệm 5 Giờ Mỗi Tuần</p>
+</blockquote>
+<h3 id="mo-ta-description_4">Mô tả (Description)</h3>
+<p>Bạn mất hàng giờ gộp file Excel, copy-paste dữ liệu vào Word, tạo báo cáo PDF? Hermes Agent làm tất cả cho bạn trong vài giây — hoàn toàn trên máy local, không lo rò rỉ dữ liệu.</p>
+<p>Affiliate link (ưu tiên hàng đầu): https://vanhi.id.vn/nous</p>
+<p>Khóa học thực hành AI Agent cho dân văn phòng: https://speedreading.vn/ahermes</p>
+<p>TRONG VIDEO NÀY:
+0:00 — Demo trước: từ file thô thành báo cáo trong 2 phút
+2:00 — Đọc và tóm tắt file PDF dài
+5:00 — Xử lý Excel: gộp dữ liệu, tính toán, tạo biểu đồ
+9:00 — Soạn báo cáo Word tự động từ dữ liệu
+13:00 — Quy trình chuẩn: ra lệnh → Hermes làm → bạn duyệt
+16:00 — Mẹo tránh lỗi khi AI đọc file tiếng Việt</p>
+<p>🔔 Subscribe ngay để xem các video thực hành tiếp theo!</p>
+<h1 id="hermesagent-xulyfileai-excelai-wordai-baocaotudong">HermesAgent #XuLyFileAI #ExcelAI #WordAI #BaoCaoTuDong</h1>
+<h3 id="5-tags_4">5 Tags</h3>
+<p><code>xử lý Excel bằng AI</code>, <code>Hermes Agent file văn phòng</code>, <code>AI soạn báo cáo</code>, <code>Hermes PDF Word</code>, <code>tự động hoá văn phòng AI</code></p>
+<h3 id="thumbnail_4">Thumbnail</h3>
+<p><strong>Text:</strong> BÁO CÁO TỰ ĐỘNG</p>
+<p><strong>Gợi ý Canva:</strong>
+- Background: trắng sạch #FFFFFF (cảm giác văn phòng chuyên nghiệp)
+- Text: xanh đậm #1B4F7E, font hiện đại
+- Icon: Excel (.xlsx) + Word (.docx) + PDF cạnh nhau
+- Bên trái chồng giấy lộn xộn, bên phải báo cáo gọn gàng có dấu tích xanh
+- Chữ nhỏ màu đỏ: "TIẾT KIỆM 5 GIỜ/TUẦN"</p>
+<h3 id="tu-khoa_4">Từ khóa</h3>
+<p><strong>Keyword chính:</strong> Hermes xử lý file văn phòng
+<strong>Keyword phụ:</strong> AI soạn báo cáo tự động, AI đọc file PDF, AI xử lý Excel</p>
+<hr />
+<h2 id="video-6-skills-day-hermes-quy-trinh-rieng-cua-ban">VIDEO 6: SKILLS — DẠY HERMES QUY TRÌNH RIÊNG CỦA BẠN</h2>
+<h3 id="tieu-e-e-xuat-2-phuong-an_5">Tiêu đề đề xuất (2 phương án)</h3>
+<p><strong>Phương án A</strong> (43 ký tự) — ƯU TIÊN</p>
+<blockquote>
+<p>Dạy Hermes Agent Quy Trình Riêng Với Skills</p>
+</blockquote>
+<p><strong>Phương án B</strong> (40 ký tự)</p>
+<blockquote>
+<p>Hermes Skills: AI Học Việc Của Riêng Bạn</p>
+</blockquote>
+<h3 id="mo-ta-description_5">Mô tả (Description)</h3>
+<p>Sức mạnh thật của Hermes không phải lần đầu bạn hỏi — mà là lần thứ 50, khi nó đã NHỚ cách bạn muốn việc được làm. Video này dạy bạn tạo Skill: dạy Hermes quy trình soạn báo cáo tuần của riêng bạn, để lần sau chỉ cần 1 câu lệnh.</p>
+<p>Đăng ký Nous Portal ngay: https://vanhi.id.vn/nous</p>
+<p>Khóa học AI Agent cho người đi làm: https://speedreading.vn/ahermes</p>
+<p>TRONG VIDEO NÀY:
+0:00 — Skill khác Memory ở đâu?
+2:00 — Ví dụ thực: dạy Hermes quy trình báo cáo tuần
+5:00 — Tạo skill đầu tiên bằng cách nhờ Hermes tự viết
+8:00 — Dùng lại skill ở lần làm việc sau
+10:00 — Sửa và cải thiện skill theo thời gian
+12:00 — Các skill có sẵn nên dùng ngay</p>
+<p>🔔 Subscribe để xem video về Memory — tính năng tiếp theo!</p>
+<h1 id="hermesskills-hermesagent-skillai-tudonghoacongviec-trolyai">HermesSkills #HermesAgent #SkillAI #TuDongHoaCongViec #TroLyAI</h1>
+<h3 id="5-tags_5">5 Tags</h3>
+<p><code>Hermes Skills</code>, <code>tạo skill Hermes Agent</code>, <code>dạy AI quy trình riêng</code>, <code>AI agent tự học</code>, <code>Hermes Agent skill tutorial</code></p>
+<h3 id="thumbnail_5">Thumbnail</h3>
+<p><strong>Text:</strong> DẠY AI QUY TRÌNH</p>
+<p><strong>Gợi ý Canva:</strong>
+- Background: xanh navy #1B2838
+- Text: xanh dương neon #00BFFF
+- Icon: Bàn tay người đưa "tờ giấy quy trình" cho robot nhỏ màu tím
+- Dòng phụ vàng: "1 LẦN DẠY — DÙNG MÃI"
+- Hiệu ứng: ánh sáng gradient từ giữa toả ra</p>
+<h3 id="tu-khoa_5">Từ khóa</h3>
+<p><strong>Keyword chính:</strong> Hermes Agent Skills
+<strong>Keyword phụ:</strong> dạy AI quy trình làm việc, tạo skill cho AI agent, Hermes skill</p>
+<hr />
+<h2 id="video-7-memory-hermes-nho-ban-va-ca-nhan-hoa">VIDEO 7: MEMORY — HERMES NHỚ BẠN VÀ CÁ NHÂN HOÁ</h2>
+<h3 id="tieu-e-e-xuat-2-phuong-an_6">Tiêu đề đề xuất (2 phương án)</h3>
+<p><strong>Phương án A</strong> (42 ký tự) — ƯU TIÊN</p>
+<blockquote>
+<p>Hermes Memory: AI Nhớ Bạn Qua Mọi Lần Dùng</p>
+</blockquote>
+<p><strong>Phương án B</strong> (36 ký tự)</p>
+<blockquote>
+<p>Cách Hermes Agent Nhớ Và Cá Nhân Hóa</p>
+</blockquote>
+<h3 id="mo-ta-description_6">Mô tả (Description)</h3>
+<p>Điểm chết người của ChatGPT: mỗi lần mở lại là phải giới thiệu lại mình từ đầu. Hermes Agent khác — nó nhớ bạn là ai, bạn thích gì, cách bạn làm việc, qua MỌI lần dùng.</p>
+<p>Đăng ký Nous Portal trải nghiệm Memory ngay: https://vanhi.id.vn/nous</p>
+<p>TRONG VIDEO NÀY:
+0:00 — Demo: Hermes nhớ thông tin qua nhiều phiên
+2:00 — Memory hoạt động thế nào (giải thích đơn giản)
+4:00 — Cách cho Hermes nhớ đúng thứ bạn cần
+6:00 — Xem và chỉnh sửa những gì Hermes đang nhớ
+8:30 — Memory vs Skills — phân biệt rõ
+10:00 — Bảo mật: kiểm soát thông tin cá nhân</p>
+<p>🔔 Subscribe và bật chuông để học tiếp về Cron!</p>
+<h1 id="hermesmemory-aibonho-canhanhoaai-hermesagent-trolyaithongminh">HermesMemory #AIBoNho #CaNhanHoaAI #HermesAgent #TroLyAIThongMinh</h1>
+<h3 id="5-tags_6">5 Tags</h3>
+<p><code>Hermes Memory</code>, <code>AI agent nhớ người dùng</code>, <code>cá nhân hoá AI agent</code>, <code>bộ nhớ Hermes</code>, <code>Hermes Agent memory tutorial</code></p>
+<h3 id="thumbnail_6">Thumbnail</h3>
+<p><strong>Text:</strong> AI NHỚ BẠN</p>
+<p><strong>Gợi ý Canva:</strong>
+- Background: tím pastel #2D1B4E (cảm giác "kỷ niệm")
+- Text: màu hồng tím #E83E8C
+- Icon: Robot cầm cuốn sổ ghi chú, phía sau dòng thời gian nhiều ngày
+- Dòng phụ xanh cyan: "KHÔNG QUÊN"
+- Hiệu ứng sao mờ hoặc vòng tròn đồng tâm</p>
+<h3 id="tu-khoa_6">Từ khóa</h3>
+<p><strong>Keyword chính:</strong> Hermes Agent Memory
+<strong>Keyword phụ:</strong> AI nhớ người dùng, trợ lý AI cá nhân hóa, Hermes memory là gì</p>
+<hr />
+<h2 id="video-8-cron-nhac-viec-tu-ong-tro-ly-chay-nen">VIDEO 8: CRON / NHẮC VIỆC TỰ ĐỘNG — TRỢ LÝ CHẠY NỀN</h2>
+<h3 id="tieu-e-e-xuat-2-phuong-an_7">Tiêu đề đề xuất (2 phương án)</h3>
+<p><strong>Phương án A</strong> (35 ký tự) — ƯU TIÊN</p>
+<blockquote>
+<p>Hermes Cron: Trợ Lý AI Tự Chạy 24/7</p>
+</blockquote>
+<p><strong>Phương án B</strong> (43 ký tự)</p>
+<blockquote>
+<p>Tự Động Hóa Việc Nhàm Chán Với Hermes Agent</p>
+</blockquote>
+<h3 id="mo-ta-description_7">Mô tả (Description)</h3>
+<p>Bạn có muốn mỗi sáng thứ Hai mở mail đã có bản tin tuần, mỗi tối có nhắc nhở việc cần làm, mà KHÔNG phải ngồi ra lệnh? Cron của Hermes biến trợ lý AI thành nhân viên chạy nền.</p>
+<p>Đăng ký Nous Portal để chạy Hermes 24/7: https://vanhi.id.vn/nous</p>
+<p>Khóa học "AI Agent cho người đi làm" có phần Cron chuyên sâu: https://speedreading.vn/ahermes</p>
+<p>TRONG VIDEO NÀY:
+0:00 — Cron là gì (không dùng thuật ngữ khó)
+1:30 — Ví dụ 1: báo cáo tự động mỗi sáng thứ Hai
+5:00 — Ví dụ 2: nhắc nhở việc nhàm chán hàng ngày
+8:00 — Ví dụ 3: theo dõi giá/đối thủ định kỳ
+11:00 — Hermes báo kết quả về đâu (Telegram/email)
+13:00 — Lưu ý chi phí khi chạy nền</p>
+<p>🔔 Subscribe để xem ứng dụng Hermes trong gia đình!</p>
+<h1 id="hermescron-aichaynen-nhacviectudong-tudonghoaai-hermesagent">HermesCron #AIChayNen #NhacViecTuDong #TuDongHoaAI #HermesAgent</h1>
+<h3 id="5-tags_7">5 Tags</h3>
+<p><code>Hermes Cron</code>, <code>AI agent chạy nền</code>, <code>lập lịch tự động AI</code>, <code>cron job Hermes</code>, <code>nhắc việc AI tự động</code></p>
+<h3 id="thumbnail_7">Thumbnail</h3>
+<p><strong>Text:</strong> AI TỰ CHẠY 24/7</p>
+<p><strong>Gợi ý Canva:</strong>
+- Background: xanh đậm #0B192C (màn hình terminal ban đêm)
+- Text: xanh lá #00FF41 (màu chữ terminal classic)
+- Element: Đồng hồ/cron expression "0 7 * * *" cách điệu
+- Hoặc robot đang ngủ (Zzz) nhưng xung quanh thông báo tự phát sinh
+- Dòng phụ trắng: "BẠN NGỦ — AI LÀM"</p>
+<h3 id="tu-khoa_7">Từ khóa</h3>
+<p><strong>Keyword chính:</strong> Hermes Cron tự động
+<strong>Keyword phụ:</strong> AI chạy nền, nhắc việc AI tự động, tự động hóa báo cáo</p>
+<hr />
+<h2 id="video-9-hermes-trong-gia-inh-nhac-lich-thuc-on-hoc-tap">VIDEO 9: HERMES TRONG GIA ĐÌNH (NHẮC LỊCH, THỰC ĐƠN, HỌC TẬP)</h2>
+<h3 id="tieu-e-e-xuat-2-phuong-an_8">Tiêu đề đề xuất (2 phương án)</h3>
+<p><strong>Phương án A</strong> (43 ký tự) — ƯU TIÊN</p>
+<blockquote>
+<p>Hermes Cho Gia Đình: Nhắc Lịch, Nấu Ăn, Học</p>
+</blockquote>
+<p><strong>Phương án B</strong> (42 ký tự)</p>
+<blockquote>
+<p>Trợ Lý AI Gia Đình Miễn Phí — Hermes Agent</p>
+</blockquote>
+<h3 id="mo-ta-description_8">Mô tả (Description)</h3>
+<p>Ai bảo AI chỉ để làm việc? Tôi dùng Hermes Agent quản lý cả nhà: nhắc lịch học của con, gợi ý thực đơn theo nguyên liệu còn trong tủ, nhắc sinh nhật, lên kế hoạch cuối tuần. Tất cả miễn phí, riêng tư, chạy ngay trên máy nhà bạn.</p>
+<p>Đăng ký Nous Portal để dùng thử: https://vanhi.id.vn/nous</p>
+<p>Khóa học cho con đọc nhanh &amp; học tập hiệu quả: https://speedreading.vn/ahermes</p>
+<p>TRONG VIDEO NÀY:
+0:00 — Vì sao dùng AI cho gia đình chứ không chỉ công việc
+2:00 — Nhắc lịch học, lịch tiêm, sinh nhật
+5:00 — Gợi ý thực đơn theo nguyên liệu có sẵn
+8:00 — Hỗ trợ con học bài (giải thích, tạo câu hỏi)
+11:00 — Lên kế hoạch chi tiêu và việc nhà
+13:00 — Thiết lập cho cả nhà dùng chung an toàn</p>
+<p>🔔 Subscribe để xem video cuối series: Kết nối Telegram + xây đội ngũ AI!</p>
+<h1 id="hermesgiadinh-aigiadinh-nhaviecgiadinh-hermesagent-aichocuocsong">HermesGiaDinh #AIGiaDinh #NhaViecGiaDinh #HermesAgent #AIChoCuocSong</h1>
+<h3 id="5-tags_8">5 Tags</h3>
+<p><code>Hermes gia đình</code>, <code>AI trong gia đình</code>, <code>AI nhắc lịch</code>, <code>trợ lý AI cho cuộc sống</code>, <code>AI học tập cho con</code></p>
+<h3 id="thumbnail_8">Thumbnail</h3>
+<p><strong>Text:</strong> AI CHO CẢ NHÀ</p>
+<p><strong>Gợi ý Canva:</strong>
+- Background: cam ấm #FF6B35 hoặc vàng nhạt #F5E6D3 (khác biệt với video kỹ thuật)
+- Text: trắng hoặc nâu đậm #2C1810
+- Icon: 🏠 ngôi nhà hoặc 👨‍👩‍👧‍👦
+- Dòng phụ: "NHẮC LỊCH • THỰC ĐƠN • HỌC TẬP"
+- Tem đỏ "MIỄN PHÍ" góc trên</p>
+<h3 id="tu-khoa_8">Từ khóa</h3>
+<p><strong>Keyword chính:</strong> trợ lý AI gia đình
+<strong>Keyword phụ:</strong> AI quản lý việc nhà, AI nhắc lịch cho con, AI gợi ý thực đơn</p>
+<hr />
+<h2 id="video-10-ket-noi-telegram-xay-oi-ngu-ai-agent">VIDEO 10: KẾT NỐI TELEGRAM + XÂY ĐỘI NGŨ AI AGENT</h2>
+<h3 id="tieu-e-e-xuat-2-phuong-an_9">Tiêu đề đề xuất (2 phương án)</h3>
+<p><strong>Phương án A</strong> (46 ký tự) — ƯU TIÊN</p>
+<blockquote>
+<p>Kết Nối Hermes Agent Với Telegram Trong 3 Phút</p>
+</blockquote>
+<p><strong>Phương án B</strong> (45 ký tự)</p>
+<blockquote>
+<p>Xây Đội Ngũ AI Agent Với Hermes — Đa Nền Tảng</p>
+</blockquote>
+<h3 id="mo-ta-description_9">Mô tả (Description)</h3>
+<p>Video CUỐI CÙNG của series — và cũng là video biến Hermes từ "phần mềm trên máy tính" thành TRỢ LÝ ĐI THEO BẠN MỌI NƠI: nhắn tin Telegram là ra lệnh được ngay. Tôi cũng chỉ cách để nhiều agent làm việc song song như một đội ngũ.</p>
+<p>Đăng ký Nous Portal (giảm 15 USD): https://vanhi.id.vn/nous</p>
+<p>Khóa học AI Agent doanh nghiệp: https://speedreading.vn/ahermes</p>
+<p>TRONG VIDEO NÀY:
+0:00 — Tạo bot Telegram (không cần biết code)
+2:00 — Kết nối bot với Hermes
+4:00 — Ra lệnh cho Hermes từ điện thoại
+6:00 — Nhận kết quả tự động về Telegram
+8:30 — Xây "đội ngũ": nhiều agent cho nhiều việc
+12:00 — Tổng kết series + lộ trình nâng cao
+13:30 — Các bước tiếp theo của bạn</p>
+<p>🔔 Cảm ơn bạn đã xem hết series! Subscribe và bật chuông để không bỏ lỡ series nâng cao tiếp theo.</p>
+<h1 id="hermestelegram-aiagenttelegram-multiagent-hermesgateway-aidoanhnghiep">HermesTelegram #AIAgentTelegram #MultiAgent #HermesGateway #AIDoanhNghiep</h1>
+<h3 id="5-tags_9">5 Tags</h3>
+<p><code>Hermes Telegram bot</code>, <code>kết nối AI agent với Telegram</code>, <code>multi-agent Hermes</code>, <code>Telegram AI agent doanh nghiệp</code>, <code>Hermes Gateway</code></p>
+<h3 id="thumbnail_9">Thumbnail</h3>
+<p><strong>Text:</strong> AI TRONG TELEGRAM</p>
+<p><strong>Gợi ý Canva:</strong>
+- Background: gradient tím-xanh đặc trưng Hermes
+- Text: xanh Telegram #0088CC
+- Icon: Logo Telegram + logo Hermes kết hợp
+- Điện thoại hiển thị chat Telegram, tin nhắn "Đã xong báo cáo ✓"
+- Dòng phụ: "RA LỆNH MỌI LÚC"</p>
+<h3 id="tu-khoa_9">Từ khóa</h3>
+<p><strong>Keyword chính:</strong> Hermes Agent Telegram
+<strong>Keyword phụ:</strong> kết nối Telegram với AI, AI agent đa nền tảng, Hermes Gateway</p>
+<hr />
+<h1 id="phu-luc-a-can-cu-nghien-cuu-tu-khoa-quan-sat-ngay-12102026">PHỤ LỤC A: CĂN CỨ NGHIÊN CỨU TỪ KHÓA (quan sát ngày 12/10/2026)</h1>
+<p>Đánh giá định tính — KHÔNG có số Volume tuyệt đối vì không dùng công cụ trả phí.</p>
+<table>
+<thead>
+<tr>
+<th>Cụm từ khóa</th>
+<th>Đối thủ quan sát được</th>
+<th>Độ khó (ước lượng)</th>
+<th>Khuyến nghị</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Hermes Agent</td>
+<td>Google VN: trang tài liệu đại lý (hermes.ai.vn, hermes-ai.net, hermesagents.net). YouTube VN: 3-4 video, đều hướng VPS/Hostinger</td>
+<td><strong>THẤP</strong></td>
+<td>Ưu tiên số 1. Đứng đầu series, làm video local/máy cá nhân để khác biệt</td>
+</tr>
+<tr>
+<td>Hermes Desktop</td>
+<td>Gần như không có nội dung tiếng Việt</td>
+<td><strong>RẤT THẤP</strong></td>
+<td>Video 2 nên nhắc đến, có thể làm video riêng sau này</td>
+</tr>
+<tr>
+<td>Nous Portal</td>
+<td>Không có nội dung tiếng Việt nào trên SERP</td>
+<td><strong>RẤT THẤP</strong></td>
+<td>Video 3 — dễ lên top sớm nhất series</td>
+</tr>
+<tr>
+<td>Hermes Skills / Memory / Cron</td>
+<td>Tài liệu tiếng Anh + 1-2 bài blog VN (Viblo)</td>
+<td><strong>THẤP</strong></td>
+<td>Video 6, 7, 8 — nội dung VN dễ hiểu gần như trống</td>
+</tr>
+<tr>
+<td>AI agent là gì</td>
+<td>Aduca, Fchat, Cogover, VNPT AI, Multilogin, Studocu</td>
+<td><strong>CAO</strong></td>
+<td>Chỉ dùng làm modifier trong tiêu đề, không đứng riêng</td>
+</tr>
+<tr>
+<td>Trợ lý AI miễn phí</td>
+<td>CellphoneS (top 16 app), nhiều app nhỏ</td>
+<td><strong>CAO</strong></td>
+<td>Chỉ dùng làm modifier</td>
+</tr>
+<tr>
+<td>AI soạn báo cáo / AI xử lý Excel</td>
+<td>Reportmaker, Kimi, Copilot, Formula Bot, GPTExcel</td>
+<td><strong>TRUNG BÌNH–CAO</strong></td>
+<td>Góc vào: 1 công cụ làm TẤT CẢ, miễn phí, không cài thêm app</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Kênh đối thủ trực tiếp trên YouTube tiếng Việt (nên xem trước khi quay):</strong>
+- Metics Media — 3 video, 36-41 phút, hướng VPS Hostinger + OpenRouter
+- Richard Quang — 49 phút, hướng VPS + Zalo CSKH
+- Một kênh khác — 30 phút, VPS + Telegram</p>
+<p>→ Tất cả đều dài, phức tạp, tốn tiền VPS. Series này thắng bằng: ngắn gọn, chạy trên
+máy cá nhân, dùng model MIỄN PHÍ, không cần kiến thức kỹ thuật.</p>
+<hr />
+<h1 id="phu-luc-b-ghi-chu-trien-khai-cho-content-team">PHỤ LỤC B: GHI CHÚ TRIỂN KHAI CHO CONTENT TEAM</h1>
+<ol>
+<li>
+<p><strong>Thứ tự ưu tiên sản xuất</strong> (dễ lên top trước): video 3 (Nous Portal) → video 2 (cài đặt)
+   → video 1 (giới thiệu) → video 7 (Memory) → video 10 (Telegram). Các video này phụ thuộc
+   thương hiệu, độ khó thấp, dễ có impression sớm để kéo cả series.</p>
+</li>
+<li>
+<p><strong>Tên kênh/series</strong> nên chứa "Hermes" để tận dụng brand search đang tăng.</p>
+</li>
+<li>
+<p><strong>Playlist:</strong> "Hermes Agent Từ A-Z Cho Người Mới" — thứ tự 1→10.</p>
+</li>
+<li>
+<p><strong>Affiliate link</strong> đã đặt đúng 2 dòng đầu mỗi description (theo yêu cầu).</p>
+</li>
+<li>
+<p><strong>End screen</strong> mỗi video trỏ về video tiếp theo để tăng watch time chuỗi.</p>
+</li>
+<li>
+<p><strong>Trung thực với người xem:</strong> nêu rõ phần nào miễn phí, phần nào cần trả phí khi dùng
+   model lớn trên Nous Portal — tránh hiểu nhầm và mất uy tín kênh.</p>
+</li>
+<li>
+<p><strong>Đo lường:</strong> theo dõi Impression CTR (mục tiêu &gt;4%) và Average View Duration qua YouTube
+   Studio; nếu CTR thấp, đổi thumbnail TRƯỚC khi đổi tiêu đề.</p>
+</li>
+<li>
+<p><strong>Thời điểm thấy kết quả thực:</strong> với từ khóa thương hiệu độ khó thấp, thường 2-4 tuần có
+   impression đầu tiên; với các từ khóa trung bình-khó, cần 3-6 tháng nội dung đều đặn.
+   Không hứa top ngay — đây là kỷ luật dài hạn.</p>
+</li>
+</ol>
+<hr />
+<h1 id="phu-luc-c-toi-uu-bo-sung">PHỤ LỤC C: TỐI ƯU BỔ SUNG</h1>
+<ol>
+<li><strong>Closed Captions:</strong> Tải file SRT tiếng Việt cho mỗi video — YouTube index nội dung CC vào search</li>
+<li><strong>End Screen:</strong> 20s cuối mỗi video, link tới video tiếp theo trong series</li>
+<li><strong>Cards:</strong> Thẻ ở giữa video (phút 3-5) link tới https://vanhi.id.vn/nous</li>
+<li><strong>Comment ghim:</strong> Pin comment có link affiliate + câu hỏi gợi tương tác</li>
+<li><strong>Community Posts:</strong> Sau mỗi video đăng 1 post hỏi đáp liên quan để tăng tương tác kênh</li>
+<li><strong>Chapters:</strong> Luôn đánh dấu chapter trong description (như mẫu) — YouTube ưu tiên video có chapter</li>
+</ol></div>
+</section>
+<section class="panel" id="sec-script15">
+<div class="panel-inner"><h1 id="script-5-video-youtube-series-hermes-agent-cho-nguoi-moi">SCRIPT 5 VIDEO YOUTUBE — SERIES "HERMES AGENT CHO NGƯỜI MỚI"</h1>
+<h2 id="giai-oan-1-co-ban-video-15">Giai đoạn 1: Cơ bản (Video 1–5)</h2>
+<p>Kênh faceless: quay màn hình + voiceover tiếng Việt (VieNeuTTS hoặc ElevenLabs), không lộ mặt.
+Mỗi script: HOOK 15 giây → NỘI DUNG CHÍNH → CTA 30 giây cuối.
+Lời thoại 600–900 từ/script (video 6–10 phút). Ghi chú B-roll kèm theo.</p>
+<p>Nguồn tham chiếu: https://hermes-agent.nousresearch.com/docs (installation, quickstart, nous-portal, cli-commands, memory, profiles). Nội dung đã đối chiếu tài liệu chính thức — không hứa tính năng không có.</p>
+<p>GHI CHÚ SẢN XUẤT CHUNG (áp cho cả series):
+- Thumbnail: logo Hermes + màn hình terminal + chữ to. Tông tối (đen/xanh đậm), font sans đậm.
+- Intro 3 giây: animation logo Hermes xoay nhẹ, nhạc nền nhỏ.
+- Mỗi video kết thúc: màn hình end-card gồm 2 nút — "Đăng ký Nous Portal (link mô tả)" và "Video tiếp theo".
+- Voiceover: giọng Nam/Bắc trung tính, tốc độ 1.0–1.05x, ngắt nghỉ tự nhiên ở dấu phẩy. Không đọc dấu ngoặc kép.
+- Link mô tả (MỌI video): https://vanhi.id.vn/nous — affiliate, giảm 15 USD (theo brief của quản lý — CẦN XÁC MINH LẠI trước khi quay: con số giảm giá và link redirect).
+- Hashtag gợi ý: #HermesAgent #AI #NousResearch #TroLyAI #CongNghe</p>
+<p>═══════════════════════════════════════════════════════</p>
+<h1 id="video-1-hermes-agent-la-gi">VIDEO 1: "HERMES AGENT LÀ GÌ"</h1>
+<p>═══════════════════════════════════════════════════════</p>
+<p>PHƯƠNG ÁN TIÊU ĐỀ:
+1. "Thuê nhân viên AI miễn phí, làm việc 24/7 ngay trên máy bạn" (chọn)
+2. "Hermes Agent là gì? Trợ lý AI nhớ mọi thứ, chạy local"
+3. "Hermes Agent vs ChatGPT: Khác nhau ở điểm nào?"</p>
+<p>LÝ DO CHỌN (1): Hook brief là "nhân viên AI miễn phí 24/7" — câu này vừa có lợi ích rõ (miễn phí, 24/7), vừa gây tò mò (nhân viên AI là cái gì). CTR cao hơn các phương án thuần giải thích.</p>
+<p>META DESCRIPTION: Hermes Agent là trợ lý AI mã nguồn mở của Nous Research — chạy ngay trên máy bạn, có bộ nhớ bền vững, đọc file, gõ lệnh, kết nối Telegram. Video này giải thích Hermes khác ChatGPT ở đâu và ai nên dùng.</p>
+<p>[HOOK — 15 GIÂY]</p>
+<p>[QUAY MÀN HÌNH: màn hình desktop bình thường, chuột rê qua vài icon file]</p>
+<p>[VOICEOVER]
+"Bạn dùng ChatGPT mỗi ngày. Nhưng bạn có biết — có một trợ lý AI chạy ngay trên chính máy tính của bạn. Nó nhớ mọi thứ bạn dạy nó. Nó tự tay đọc file, gõ lệnh, lướt web. Và nó làm việc 24 trên 7 mà không đòi tăng lương. Nó tên là Hermes Agent. Trong 7 phút tới, tôi sẽ cho bạn thấy nó khác ChatGPT ở điểm nào — và tại sao tôi nghĩ đây là cách mọi người sẽ dùng AI kể từ năm nay."</p>
+<p>[NỘI DUNG CHÍNH]</p>
+<p>ĐOẠN 1: CHATGPT CÓ GIỚI HẠN CỦA NÓ</p>
+<p>[QUAY MÀN HÌNH: giao diện chat web của một AI bất kỳ, đóng tab]</p>
+<p>[VOICEOVER]
+"Trước hết, công bằng mà nói — ChatGPT rất hay. Tôi vẫn dùng hàng ngày. Nhưng nó có một giới hạn cơ bản: nó chỉ là một cái hộp chat. Mở tab mới, cuộc trò chuyện cũ bay màu. Nó không đọc được file trên máy bạn. Không chạy được lệnh. Không tự làm gì cả. Bạn hỏi, nó trả lời. Xong thì thôi. Còn nếu bạn cần một thứ thực sự làm việc — thì sao?"</p>
+<p>ĐOẠN 2: HERMES AGENT LÀ GÌ</p>
+<p>[QUAY MÀN HÌNH: terminal, gõ lệnh "hermes --version"]</p>
+<p>[VOICEOVER]
+"Hermes Agent là trợ lý AI mã nguồn mở, do Nous Research xây dựng. Đây là phòng lab đứng sau các mô hình Hermes, Nomos và Psyche — nói cách khác, họ là dân đào tạo model thật, không phải kẻ bọc lại API của người khác.</p>
+<p>Điểm khác biệt lớn nhất: Hermes không phải chatbot trong trình duyệt. Nó là một agent — một chương trình tự hành động. Bạn cài nó trên máy mình, trên VPS 5 đô một tháng, hoặc trong Docker. Nó chạy local, dữ liệu nằm ở chỗ bạn. Và bạn không buộc phải ngồi trước terminal — bạn nhắn tin cho nó qua Telegram, Discord, Slack, WhatsApp, và hàng chục nền tảng khác. Nó nhận lệnh từ điện thoại, còn việc thì chạy trên máy bạn."</p>
+<p>ĐOẠN 3: NHỮNG GÌ CHỈ HERMES LÀM ĐƯỢC</p>
+<p>[QUAY MÀN HÌNH: demo nhanh — Hermes đọc file, chạy lệnh ls trong thư mục, trả kết quả. 20–30 giây, cắt ghép nhanh]</p>
+<p>[VOICEOVER]
+"Để tôi liệt kê nhanh bốn thứ ChatGPT không có.</p>
+<p>Thứ nhất: bộ nhớ bền vững. Hermes ghi nhớ bạn là ai, bạn thích gì, project của bạn ra sao — và nhớ qua các phiên làm việc. Lần sau mở máy lên, nó không hỏi lại 'bạn là ai' nữa.</p>
+<p>Thứ hai: nó có tay chân. Nó đọc và viết file, chạy lệnh terminal, tra web, duyệt web, tạo ảnh, đọc giọng nói. Hơn sáu chục công cụ tích hợp sẵn.</p>
+<p>Thứ ba: nó học được cách làm việc của bạn. Gọi là Skills — mỗi khi bạn dạy nó một quy trình, nó lưu lại thành skill và tự dùng lại lần sau.</p>
+<p>Thứ tư: nó tự chạy. Đặt lịch cho nó — ví dụ mỗi sáng 9 giờ tìm tin AI và gửi tóm tắt vào Telegram — nó tự làm, không cần bạn online. Đó là việc mà một chatbot web không bao giờ làm được."</p>
+<p>ĐOẠN 4: AI NÀO CŨI DÙNG ĐƯỢC — VÀ CHI PHÍ</p>
+<p>[QUAY MÀN HÌNH: danh sách provider trong "hermes model"]</p>
+<p>[VOICEOVER]
+"Một câu hỏi chắc bạn đang nghĩ: não của nó là gì? Câu trả lời là — cái gì bạn muốn. Hermes hoạt động với Nous Portal, OpenRouter, OpenAI, Anthropic, Google, hoặc bất kỳ API nào tương thích OpenAI. Bạn có thể đổi model giữa phiên chỉ bằng một lệnh slash.</p>
+<p>Và Hermes bản thân nó — phần mềm — thì miễn phí hoàn toàn, giấy phép mã nguồn mở MIT. Bạn chỉ trả tiền cho model bạn chọn dùng. Muốn chi phí bằng zero luôn? Chạy model local bằng Ollama trên máy bạn, không cần tài khoản, không cần API key, không có đồng nào rời khỏi máy. Chậm hơn model đám mây, nhưng hoàn toàn miễn phí."</p>
+<p>ĐOẠN 5: AI NÊN XEM</p>
+<p>[QUAY MÀN HÌNH: gõ câu lệnh mẫu, Hermes trả lời]</p>
+<p>[VOICEOVER]
+"Vậy ai nên dùng Hermes? Theo tôi: bất kỳ ai đã chán cảnh 'hỏi AI xong rồi tự làm lại từ đầu'. Dân làm content — vì nó viết và lưu file. Dân kinh doanh nhỏ — vì nó kết nối Telegram và tự báo cáo. Dân lập trình — vì nó đọc repo và chạy test. Và cả người chỉ muốn một trợ lý thực sự nhớ mình là ai.</p>
+<p>Trong series này, tôi sẽ cài đặt cùng bạn từng bước — từ lệnh cài đầu tiên, đăng ký Portal, cho đến cách dạy nó nhớ bạn. Một loạt video, đi từ số không đến có một nhân viên AI làm việc thật."</p>
+<p>[CTA — 30 GIÂY CUỐI]</p>
+<p>[QUAY MÀN HÌNH: end-card + terminal hiện "hermes setup --portal"]</p>
+<p>[VOICEOVER]
+"Bước tiếp theo trong series là cài Hermes. Nhưng trước khi cài — bạn cần một tài khoản Nous Portal để cắm não cho nó. Link đăng ký của tôi nằm ở mô tả video này, đăng ký qua đó được giảm 15 đô, và bạn có quyền truy cập hơn 300 model AI đỉnh nhất trong một tài khoản. Giá hiện tại thì bạn xem trực tiếp trên trang nhé. Nhấn đăng ký ngay bây giờ, rồi qua video số 2, tôi cài đặt Hermes từ A đến Z cho bạn xem. Đừng quên like và subscribe để không miss phần tiếp theo."</p>
+<p>[GHI CHÚ B-ROLL — VIDEO 1]
+- Cắt cảnh điện thoại nhắn tin Telegram với bot Hermes (nếu chưa có, quay màn hình desktop giả lập, hoặc bỏ — thay bằng ảnh minh họa).
+- Ảnh logo Nous Research (lấy từ trang chủ).
+- Nhạc nền: nhịp chậm, volume 15%, nhỏ đi ở đoạn demo terminal.
+- Chèn text on-screen "MIT license — miễn phí" khi nhắc mã nguồn mở.
+- Chèn text "24/7" lớn ở giữa màn hình lúc hook.</p>
+<p>═══════════════════════════════════════════════════════</p>
+<h1 id="video-2-cai-at-hermes-tu-a-z">VIDEO 2: "CÀI ĐẶT HERMES TỪ A-Z"</h1>
+<p>═══════════════════════════════════════════════════════</p>
+<p>PHƯƠNG ÁN TIÊU ĐỀ:
+1. "Cài Hermes Agent trên máy bạn trong 60 giây (Mac + Windows)" (chọn)
+2. "Hướng dẫn cài Hermes Agent từ A-Z cho người mới"
+3. "Lỗi 'command not found' khi cài Hermes? Xem ngay"</p>
+<p>LÝ DO CHỌN (1): Số liệu cụ thể "60 giây" tạo cam kết thời gian rõ ràng, kèm "Mac + Windows" bắt đúng cả hai hệ điều hành phổ biến ở VN.</p>
+<p>META DESCRIPTION: Hướng dẫn cài Hermes Agent từ đầu: lệnh curl cho Mac/Linux/WSL2, lệnh PowerShell cho Windows, chạy hermes setup và hermes doctor, xử lý các lỗi thường gặp khi cài đặt.</p>
+<p>[HOOK — 15 GIÂY]</p>
+<p>[QUAY MÀN HÌNH: đồng hồ đếm ngược trên màn hình, bên cạnh terminal trống]</p>
+<p>[VOICEOVER]
+"Một lệnh. Một phút. Xong. Hôm nay tôi cài Hermes Agent cho bạn xem từ đầu đến cuối — trên cả Mac và Windows — kèm theo cách sửa đúng ba lỗi khiến đa số người cài xong bỏ cuộc. Nếu bạn đang xem series này, mở terminal lên và làm theo cùng tôi luôn."</p>
+<p>[NỘI DUNG CHÍNH]</p>
+<p>ĐOẠN 1: YÊU CẦU TRƯỚC KHI CÀI</p>
+<p>[QUAY MÀN HÌNH: terminal gõ "git --version"]</p>
+<p>[VOICEOVER]
+"Trước khi bắt đầu, bạn cần có trên máy: Git, curl, và tar — trên hầu hết Mac và Linux đã có sẵn. Còn Python? Đừng lo. Hermes tự quản Python của nó, bạn không cần cài gì thêm. Trình cài sẽ tự tải mọi thứ nó cần, kể cả Node, ripgrep và FFmpeg."</p>
+<p>ĐOẠN 2: CÁI TRÊN MAC VÀ LINUX</p>
+<p>[QUAY MÀN HÌNH: gõ từng ký tự lệnh, nhấn Enter, màn hình chạy cài đặt — để nguyên tiếng gõ và output thật]</p>
+<p>[VOICEOVER]
+"Trên Mac, Linux, hoặc WSL2, bạn mở terminal và chạy đúng một dòng lệnh này: curl, gạch chéo, hermes-agent.nousresearch.com, install.sh, pipe bash. Tôi để nguyên lệnh ở mô tả video, bạn copy dán là được.</p>
+<p>Nhấn Enter. Trình cài sẽ clone source code, dựng môi trường Python riêng, tải các công cụ phụ trợ. Bạn sẽ thấy nó chạy một loạt dòng trạng thái. Quá trình này mất khoảng một phút, tùy mạng. Xong rồi — đó, cài xong."</p>
+<p>ĐOẠN 3: CÁI TRÊN WINDOWS</p>
+<p>[QUAY MÀN HÌNH: mở PowerShell, gõ lệnh iex irm]</p>
+<p>[VOICEOVER]
+"Trên Windows thì khác một chút. Mở PowerShell — không phải Command Prompt — và chạy lệnh iex irm, dẫn tới install.ps1. Cơ chế y hệt: nó tự cài Git nếu máy bạn chưa có, rồi dựng toàn bộ môi trường. Cảnh báo nhỏ: nếu bạn không thích dùng dòng lệnh, trang chủ Hermes có bộ cài desktop cho cả Mac và Windows, chỉ việc tải về và chạy. Nhưng trong video này tôi dùng đường dòng lệnh, vì nó giống nhau trên mọi máy."</p>
+<p>ĐOẠN 4: KHỞI ĐỘNG LẦN ĐẦU</p>
+<p>[QUAY MÀN HÌNH: gõ "source ~/.bashrc" rồi "hermes"]</p>
+<p>[VOICEOVER]
+"Sau khi cài xong, có một bước nhiều người bỏ sót — nạp lại shell. Gõ source, dấu ngã, gạch chéo, bashrc — hoặc zshrc nếu bạn dùng zsh. Rồi gõ chữ hermes. Lần đầu chạy, nó hiện banner chào mừng, kèm theo một trình setup hướng dẫn bạn chọn model và cấu hình."</p>
+<p>ĐOẠN 5: SETUP — BA CON ĐƯỜNG</p>
+<p>[QUAY MÀN HÌNH: menu setup hiện ra, chọn Quick Setup]</p>
+<p>[VOICEOVER]
+"Trình setup cho bạn ba lựa chọn. Quick Setup là đăng nhập bằng Nous Portal — nhanh nhất, không API key. Full Setup là bạn tự khai báo từng nhà cung cấp. Còn Blank Slate là phiên bản tối giản — chỉ bật file và terminal, tất cả công cụ khác tắt, dành cho người muốn tự bật từng thứ. Lời khuyên của tôi: người mới chọn Quick Setup. Một tài khoản Portal, mọi thứ chạy. Tôi sẽ hướng dẫn đăng ký Portal ở video số 3."</p>
+<p>ĐOẠN 6: HERMES DOCTOR — THỢ SỬA ẢNH</p>
+<p>[QUAY MÀN HÌNH: gõ "hermes doctor", cho thấy output kiểm tra]</p>
+<p>[VOICEOVER]
+"Còn nếu có gì đó không ổn, bạn có một mệnh lệnh cần nhớ: hermes doctor. Nó quét toàn bộ cấu hình và nói cho bạn biết chính xác cái gì đang thiếu, sửa như thế nào. Đây là lệnh đầu tiên nên chạy khi Hermes chạy không đúng. Tôi coi nó như bác sĩ gia đình của Hermes vậy."</p>
+<p>ĐOẠN 7: BA LỖI HAY GẶP</p>
+<p>[QUAY MÀN HÌNH: lần lượt demo 3 lỗi và cách sửa, cắt nhanh]</p>
+<p>[VOICEOVER]
+"Giờ đến phần bạn chờ — ba lỗi khiến đa số người bỏ cuộc.</p>
+<p>Lỗi một, phổ biến nhất: gõ hermes mà máy báo 'command not found'. Nguyên nhân gần như luôn là shell chưa nạp lại PATH. Quay lại Đoạn 4, gõ source, nạp lại, xong. Hoặc kiểm tra biến PATH có chứa thư mục .local/bin chưa.</p>
+<p>Lỗi hai: Hermes mở ra nhưng trả lời rỗng hoặc báo lỗi model. Cực kỳ đơn giản — bạn chưa chọn nhà cung cấp model. Chạy hermes model, chọn provider, đăng nhập, xong.</p>
+<p>Lỗi ba: sau khi update, cấu hình cũ biến mất. Chạy hermes config check để kiểm tra, rồi hermes config migrate để chuyển cấu hình cũ sang định dạng mới. Và nhớ quy tắc vàng từ tài liệu chính thức: nếu Hermes không trò chuyện bình thường được, đừng thêm tính năng nào nữa. Sửa cho xong một cuộc chat sạch đã, hãy tính chuyện kết nối Telegram, cron hay skills sau."</p>
+<p>[CTA — 30 GIÂY CUỐI]</p>
+<p>[QUAY MÀN HÌNH: terminal hiện "hermes" đang chạy]</p>
+<p>[VOICEOVER]
+"Vậy là máy bạn đã có Hermes. Nhưng nó còn thiếu một bộ não. Video tiếp theo — video quan trọng nhất series — tôi sẽ đăng ký tài khoản Nous Portal qua link ở mô tả, chọn model phù hợp để bắt đầu, và cắm não cho Hermes chạy thật. Nhấn đăng ký qua link mô tả ngay bây giờ để làm theo cùng video 3 nhé. Subscribe để không miss."</p>
+<p>[GHI CHÚ B-ROLL — VIDEO 2]
+- Quay thật lệnh cài, không cắt ghép quá nhiều ở đoạn lệnh chạy — người xem cần thấy nó thật.
+- Chèn text on-screen từng lệnh khi giới thiệu (font monospace, nền tối).
+- Ảnh chụp màn hình menu setup 3 chế độ, zoom vào dòng Quick Setup.
+- Nhạc: tiết tấu nhanh nhẹ ở đoạn lệnh chạy.</p>
+<p>═══════════════════════════════════════════════════════</p>
+<h1 id="video-3-ang-ky-nous-portal-lay-model">VIDEO 3: "ĐĂNG KÝ NOUS PORTAL + LẤY MODEL"</h1>
+<p>═══════════════════════════════════════════════════════
+(VIDEO BÁN HÀNG CHÍNH CỦA SERIES)</p>
+<p>PHƯƠNG ÁN TIÊU ĐỀ:
+1. "Đăng ký Nous Portal — não cho Hermes Agent (giảm 15 USD)" (chọn)
+2. "Hermes Agent cần não gì? Đăng ký Portal trong 5 phút"
+3. "300+ model AI, 1 tài khoản: Hướng dẫn Nous Portal cho Hermes"</p>
+<p>LÝ DO CHỌN (1): Có con số giảm giá cụ thể trong tiêu đề → thu hút click mạnh; "não cho Hermes Agent" nối tiếp video 2, tạo momentum series.</p>
+<p>META DESCRIPTION: Hướng dẫn đăng ký tài khoản Nous Portal qua link affiliate (giảm 15 USD), chọn model phù hợp cho Hermes Agent, bật Tool Gateway (web search, tạo ảnh, TTS, browser) — tất cả trong một lệnh hermes setup --portal.</p>
+<p>[HOOK — 15 GIÂY]</p>
+<p>[QUAY MÀN HÌNH: browser mở trang Portal, chuột lướt qua danh sách model dài]</p>
+<p>[VOICEOVER]
+"Hermes đã cài xong. Giờ nó cần một bộ não. Và bộ não tốt nhất, rẻ nhất, ít đau đầu nhất để cắm vào Hermes — là Nous Portal. Một tài khoản. Hơn 300 model AI. Và đăng ký qua link ở mô tả thì được giảm 15 đô. Năm phút, tôi làm cùng bạn từng bước."</p>
+<p>[NỘI DUNG CHÍNH]</p>
+<p>ĐOẠN 1: NOUS PORTAL LÀ GÌ</p>
+<p>[QUAY MÀN HÌNH: slide/keynote đơn giản "1 subscription → 300+ models"]</p>
+<p>[VOICEOVER]
+"Nous Portal là giao thức đăng ký tập trung của Nous Research — chính phòng lab tạo ra Hermes. Nếu tự cấu hình, bạn cần: một key cho model, một tài khoản web search, một tài khoản tạo ảnh, một key cho browser, một key cho giọng nói. Năm đăng ký, năm bảng điều khiển, năm lần nạp tiền.</p>
+<p>Portal gộp tất cả thành một. Một đăng nhập. Một hóa đơn. Hơn 300 model từ Anthropic, OpenAI, Google, DeepSeek, Qwen, xAI, NVIDIA — tất cả trong một tài khoản."</p>
+<p>ĐOẠN 2: ĐĂNG KÝ QUA LINK</p>
+<p>[QUAY MÀN HÌNH: mở link vanhi.id.vn/nous trong browser, cho thấy trang Portal]</p>
+<p>[VOICEOVER]
+"Giờ tôi đăng ký cho bạn xem. Link đăng ký ở ngay phần mô tả — vanhi.id.vn/nous. Đăng ký qua link đó, bạn được giảm 15 đô so với đăng ký trực tiếp. Cách duy nhất tôi kiếm được từ series này là qua link affiliate — bạn được giá tốt hơn, tôi có động lực làm thêm video. Cả hai cùng thắng.</p>
+<p>Bấm vào link, chọn đăng ký, điền email, tạo mật khẩu, rồi chọn gói phù hợp. Giá gói tôi không đọc ra trong video vì nó thay đổi — bạn xem trực tiếp trên trang. Muốn tập làm quen trước? Ở cuối video tôi chỉ cách dùng Hermes hoàn toàn miễn phí."</p>
+<p>ĐOẠN 3: LỆNH THẦN THÁNH</p>
+<p>[QUAY MÀN HÌNH: terminal, gõ "hermes setup --portal", browser mở ra đăng nhập]</p>
+<p>[VOICEOVER]
+"Đăng ký xong, quay lại terminal. Gõ đúng lệnh này: hermes, setup, gạch gạch, portal. Một lệnh làm năm việc: mở trình duyệt đăng nhập Portal; lưu token xác thực vào máy bạn; đặt Nous làm nhà cung cấp model; cho bạn chọn model mặc định; và bật Tool Gateway. Xong là chat được ngay. Không API key. Không file .env lỉnh kỉnh. Không nạp tiền lẻ năm chỗ."</p>
+<p>ĐOẠN 4: CHỌN MODEL NÀO CHO AGENT</p>
+<p>[QUAY MÀN HÌNH: danh sách model trong picker, chọn claude-sonnet-4.6]</p>
+<p>[VOICEOVER]
+"Phần quan trọng — chọn model. Portal có hơn 300 model, nhưng không phải model nào cũng làm tốt việc 'làm agent'. Agent nghĩa là model phải liên tục ra quyết định gọi công cụ — đọc file, chạy lệnh, lặp lại — chứ không phải trò chuyện một lần rồi thôi.</p>
+<p>Đề xuất từ tài liệu chính thức: Claude Sonnet 4.6 của Anthropic là lựa chọn tổng quát tốt nhất. GPT-5.5 Pro nếu cần suy luận mạnh. Gemini 3 Pro nếu làm việc với ngữ cảnh cực dài. DeepSeek V4 Pro nếu muốn tiết kiệm cho code. Đổi model bất kỳ lúc nào bằng lệnh gạch chéo model.</p>
+<p>Nhưng mà — có một cái bẫy tôi phải cảnh báo. Trong danh sách Portal có model Hermes 4 của chính Nous, giá giảm sâu. Đừng chọn nó để làm agent. Hermes 4 là model chat, không phải model ra quyết định gọi công cụ — nó sẽ vật lộn với vòng lặp đa bước. Đây là cảnh báo của chính Nous Research, không phải ý kiến cá nhân tôi. Muốn chạy Hermes 4 thì dùng ở nơi khác; trong Hermes Agent hãy chọn model agentic."</p>
+<p>ĐOẠN 5: TOOL GATEWAY, XÁC MINH VÀ CHẠY THỬ</p>
+<p>[QUAY MÀN HÌNH: gõ "hermes portal info", cho thấy bảng trạng thái xanh; rồi chat với Hermes, yêu cầu tìm kiếm web]</p>
+<p>[VOICEOVER]
+"Đăng ký Portal xong, bạn không chỉ có model. Bạn có Tool Gateway — năm nhóm công cụ chạy qua một đăng nhập: tra web, tạo ảnh với chín model, tổng hợp giọng nói, duyệt web đám mây, và terminal sandbox. Không cần tài khoản FAL, key OpenAI hay Browserbase — tất cả đã nằm trong subscription. Kiểm tra bằng hermes portal info; dòng nào không hiện 'via Nous Portal', tôi chỉ cách sửa ở cuối video. Rồi gõ hermes chat, thử: 'Tìm trên web về Hermes Agent và tóm tắt 3 kết quả đầu' — thấy nó gọi web_search qua gateway, là đường ống đã thông."</p>
+<p>ĐOẠN 6: CÁCH DÙNG MIỄN PHÍ HOÀN TOÀN</p>
+<p>[QUAY MÀN HÌNH: logo Ollama / terminal gõ lệnh ollama]</p>
+<p>[VOICEOVER]
+"Còn nếu chưa muốn bỏ đồng nào: Hermes bản thân nó miễn phí, giấy phép mã nguồn mở. Bạn chạy model local bằng Ollama ngay trên máy — không tài khoản, không API key, không tốn một đồng. Hoặc dùng model miễn phí trên OpenRouter để tập. Chậm hơn model đám mây, nhưng đủ để học. Có kinh phí rồi quay lại Portal, mọi thứ vẫn nguyên. Và Portal thi thoảng có model miễn phí theo chương trình khuyến mãi — chú ý trên trang quản lý gói."</p>
+<p>ĐOẠN 7: SỬA LỖI NHANH</p>
+<p>[QUAY MÀN HÌNH: 3 lỗi thường gặp với lệnh sửa]</p>
+<p>[VOICEOVER]
+"Ba lỗi Portal hay gặp, sửa trong mười giây. Một: portal info báo 'not logged in' — gõ lại hermes portal. Hai: báo đang dùng provider khác — cấu hình lệch, gõ hermes model, chọn lại Nous Portal. Ba: giữa phiên báo 're-authentication required' — token hết hạn, gõ hermes auth add nous. Muốn mở trang quản lý gói, gõ hermes portal open."</p>
+<p>[CTA — 30 GIÂY CUỐI]</p>
+<p>[QUAY MÀN HÌNH: end-card, link to hiển thị rõ, rồi terminal đang chạy]</p>
+<p>[VOICEOVER]
+"Nếu bạn chưa bấm lúc nãy — đây là lúc. Link đăng ký Portal ở mô tả, vanhi.id.vn/nous, giảm 15 đô, hơn 300 model. Mở terminal, gõ hermes setup --portal, và bạn đã có một nhân viên AI có não. Video tiếp theo: mười câu lệnh cơ bản đầu tiên — mười cách ra lệnh để Hermes làm việc thật. Comment bạn chọn model nào nhé. Subscribe, hẹn gặp video sau."</p>
+<p>[GHI CHÚ B-ROLL — VIDEO 3]
+- Đây là video bán hàng: CTA giữa video (đoạn 2) VÀ cuối video — đều phải hiện text on-screen "LINK Ở MÔ TẢ 👇" rõ to.
+- Quay màn hình đăng ký Portal thật; che email/mật khẩu bằng hình mờ khi quay.
+- Hiện text overlay khi nhắc "Hermes 4 ≠ model cho agent" — cảnh báo này tạo trust.
+- Chèn logo các nhà model (Anthropic, OpenAI, Google...) nhanh khi liệt kê 300+ model.
+- KHÔNG đọc giá cụ thể gói trong lời thoại — thay bằng "xem giá hiện tại trên trang", vì giá thay đổi.</p>
+<p>═══════════════════════════════════════════════════════</p>
+<h1 id="video-4-10-cau-lenh-co-ban-au-tien">VIDEO 4: "10 CÂU LỆNH CƠ BẢN ĐẦU TIÊN"</h1>
+<p>═══════════════════════════════════════════════════════</p>
+<p>PHƯƠNG ÁN TIÊU ĐỀ:
+1. "10 câu lệnh đầu tiên nên ra khi mới dùng Hermes Agent" (chọn)
+2. "Hermes Agent cơ bản: 10 lệnh trong 8 phút"
+3. "ChatGPT chỉ biết nói — Hermes thì LÀM"</p>
+<p>LÝ DO CHỌN (1): "10 câu lệnh" là con số cụ thể, dạng listicle dễ xem; "nên ra khi mới dùng" nhắm đúng người vừa xem series từ video 1–3.</p>
+<p>META DESCRIPTION: Mười câu lệnh đầu tiên nên thử với Hermes Agent: đọc file, tóm tắt project, kiểm tra đĩa, tính toán, tham chiếu file bằng @, viết nội dung ra file, vision, slash commands — kèm so sánh nhanh với ChatGPT.</p>
+<p>[HOOK — 15 GIÂY]</p>
+<p>[QUAY MÀN HÌNH: terminal mở, con trỏ nhấp nháy]</p>
+<p>[VOICEOVER]
+"Máy bạn đã có Hermes, não đã cắm Portal. Giờ — ra lệnh thôi. Đây là mười câu lệnh đầu tiên tôi dùng, xếp theo thứ tự từ dễ đến hay. Mỗi câu mở ra một siêu năng lực. Lấy giấy bút ra, hoặc chí ít thì bấm like để mai còn tìm."</p>
+<p>[NỘI DUNG CHÍNH]</p>
+<p>ĐOẠN 0: LỆNH SỐ 0 — MỞ CỬA</p>
+<p>[QUAY MÀN HÌNH: gõ "hermes" rồi "hermes --tui"]</p>
+<p>[VOICEOVER]
+"Lệnh số không, trước cả mười: gõ hermes để mở phiên chat. Nếu thích giao diện hiện đại hơn, hermes gạch gạch tui — có overlay, chọn bằng chuột, nhìn cứ như app. Cả hai dùng chung session và lệnh, bạn thử rồi chọn cái mình thích."</p>
+<p>ĐOẠN 1: LỆNH 1–2 — NHÌN VÀO MÁY BẠN</p>
+<p>[QUAY MÀN HÌNH: gõ câu 1, Hermes chạy lệnh liệt kê thư mục]</p>
+<p>[VOICEOVER]
+"Một. 'Cho tôi biết thư mục hiện tại có gì, và file nào trông giống project chính nhất.' Chú ý cái đang xảy ra: nó không đoán. Nó chạy lệnh liệt kê file trên máy bạn, đọc, rồi trả lời. Đây là lần đầu ChatGPT của bạn biết 'nhìn' vào máy bạn.</p>
+<p>Hai. 'Tóm tắt project này trong năm gạch đầu dòng, và cho tôi biết file chính để bắt đầu.' Tương tự, nhưng lần này nó đọc sâu hơn — đọc file cấu hình, đọc code — rồi tổng hợp."</p>
+<p>ĐOẠN 2: LỆNH 3 — LÁI TERMINAL</p>
+<p>[QUAY MÀN HÌNH: gõ câu về disk usage, cho thấy output bảng]</p>
+<p>[VOICEOVER]
+"Ba. 'Ổ đĩa của tôi đang dùng bao nhiêu? Liệt kê năm thư mục lớn nhất.' Nó tự gõ lệnh kiểm tra đĩa, chạy, thu thập kết quả, trình bày lại gọn gàng cho bạn. Bạn không cần nhớ lệnh shell phức tạp. Bạn nói tiếng người, nó lo phần máy."</p>
+<p>ĐOẠN 3: LỆNH 4 — TÍNH TOÁN</p>
+<p>[QUAY MÀN HÌNH: gõ phép tính phức tạp kèm yêu cầu giải thích]</p>
+<p>[VOICEOVER]
+"Bốn. Tính toán. Thử một phép tính dài — ví dụ tính lãi suất kép, hoặc một công thức thống kê. Nhờ có môi trường chạy code, nó tính bằng Python, không phải tính bằng 'đoán' như mấy model cũ. Và nó giải thích từng bước, để bạn kiểm chứng được."</p>
+<p>ĐOẠN 4: LỆNH 5 — THAM CHIẾU FILE BẰNG @</p>
+<p>[QUAY MÀN HÌNH: gõ lệnh có @, cho thấy file được đính kèm]</p>
+<p>[VOICEOVER]
+"Năm, và đây là câu tôi dùng nhiều nhất mỗi ngày: tham chiếu file bằng dấu a còng. Gõ 'đọc và tóm tắt file @bao-cao.pdf' — Hermes tự đính file đó vào ngữ cảnh và xử lý. Tài liệu Word, Excel, notebook, PDF — đều đọc được. Muốn hỏi về cả một thư mục, bạn cũng còng được. Đây là cách nhanh nhất để biến một đống file thành câu trả lời."</p>
+<p>ĐOẠN 5: LỆNH 6 — VIẾT RA FILE</p>
+<p>[QUAY MÀN HÌNH: yêu cầu viết bài, cho thấy file .md được tạo ra]</p>
+<p>[VOICEOVER]
+"Sáu. 'Viết giúp tôi bản nháp bài đăng mạng xã hội về chủ đề X, khoảng 150 từ, lưu ra file bai-dang.md.' Và đây là khác biệt lớn với chatbot: nó không chỉ trả lời trong khung chat — nó tạo file thật trên máy bạn. Mở ra, sửa tiếp, dùng luôn."</p>
+<p>ĐOẠN 6: LỆNH 7 — NHÌN ẢNH</p>
+<p>[QUAY MÀN HÌNH: dán ảnh vào clipboard, Hermes phân tích]</p>
+<p>[VOICEOVER]
+"Bảy. Dán ảnh. Chụp màn hình lỗi, ảnh biểu đồ, ảnh hóa đơn — dán thẳng vào phiên chat. Hermes có thị giác, nó đọc được ảnh và trả lời. Bạn lỗi compiler thì dán ảnh lỗi, nó chỉ chỗ cần sửa."</p>
+<p>ĐOẠN 7: LỆNH 8–9 — SLASH COMMANDS</p>
+<p>[QUAY MÀN HÌNH: gõ "/" cho thấy menu thả xuống]</p>
+<p>[VOICEOVER]
+"Tám và chín: các lệnh slash. Gõ dấu gạch chéo, một menu thả xuống hiện ra. Gạch chéo help xem mọi lệnh. Gạch chéo model để đổi não giữa phiên. Gạch chéo personality rồi thử từ 'pirate' xem — nó sẽ trả lời như cướp biển, khá vui. Những lệnh này điều khiển phiên làm việc, học mười phút là thuộc."</p>
+<p>ĐOẠN 8: LỆNH 10 — DÙNG TRONG SCRIPT VÀ TIẾP PHIÊN</p>
+<p>[QUAY MÀN HÌNH: gõ "hermes chat -q" rồi "hermes --continue"]</p>
+<p>[VOICEOVER]
+"Mười. Hai lệnh cho người đi làm. Hermes chat gạch q, trong ngoặc kép một câu hỏi — nó trả lời xong thoát luôn, để bạn nhúng vào script tự động. Và hermes gạch gạch continue — tiếp tục đúng phiên hôm qua, không phải kể lại từ đầu. Mỗi lần gõ hermes là một phiên mới, còn continue thì nối lại cái cũ."</p>
+<p>ĐOẠN 9: SO SÁNH NHANH VỚI CHATGPT</p>
+<p>[QUAY MÀN HÌNH: chia đôi màn hình — ChatGPT tab vs Hermes terminal]</p>
+<p>[VOICEOVER]
+"Tóm lại một câu cho đoạn này: ChatGPT biết nói. Hermes biết làm. Bạn hỏi ChatGPT phân tích tài chính, nó viết cho bạn một bài văn. Bạn bảo Hermes phân tích tài chính, nó đọc file số liệu trên máy bạn, chạy tính toán, viết ra báo cáo, và nhớ lần sau bạn cần định dạng nào. Đó là khác biệt giữa người tư vấn và người làm."</p>
+<p>[CTA — 30 GIÂY CUỐI]</p>
+<p>[QUAY MÀN HÌNH: end-card]</p>
+<p>[VOICEOVER]
+"Mười câu lệnh này là nền móng. Nhưng điều làm tôi gắn bó với Hermes nhất thì chưa nói — nó nhớ bạn. Video tiếp theo: cài bộ nhớ, cá nhân hóa, biến nó thành trợ lý riêng của bạn. Còn nếu bạn chưa có não cho Hermes — link đăng ký Portal ở mô tả, giảm 15 đô. Subscribe, like nếu hữu ích, hẹn video 5."</p>
+<p>[GHI CHÚ B-ROLL — VIDEO 4]
+- Chia màn hình so sánh ở đoạn cuối: tạo ảnh tĩnh hoặc quay hai tab.
+- Chèn số thứ tự 1→10 to trên màn hình khi chuyển mỗi câu lệnh.
+- Giữ nguyên tố thật của terminal output — đừng làm đẹp quá, sự thật tạo trust.</p>
+<p>═══════════════════════════════════════════════════════</p>
+<h1 id="video-5-hermes-nho-ban-la-ai-memory-profile">VIDEO 5: "HERMES NHỚ BẠN LÀ AI (MEMORY + PROFILE)"</h1>
+<p>═══════════════════════════════════════════════════════</p>
+<p>PHƯƠNG ÁN TIÊU ĐỀ:
+1. "Dạy Hermes nhớ bạn: Memory &amp; Profile cho người mới" (chọn)
+2. "Hermes Agent quên rồi? Sửa memory trong 2 phút"
+3. "Biến Hermes thành trợ lý RIÊNG của bạn"</p>
+<p>LÝ DO CHỌN (1): "Nhớ bạn" là cảm xúc cốt lõi của video; "cho người mới" giữ đúng series. Phương án 2 hấp dẫn hơn nếu kênh đã có lượng tìm kiếm lỗi — cân nhắc A/B test sau.</p>
+<p>META DESCRIPTION: Cách Hermes Agent ghi nhớ bạn qua các phiên làm việc: MEMORY.md và USER.md, cách kiểm tra bộ nhớ, phiên làm việc mới với /new, tạo profile riêng cho từng công việc, và sửa lỗi 'Hermes quên'.</p>
+<p>[HOOK — 15 GIÂY]</p>
+<p>[QUAY MÀN HÌNH: màn hình desktop, mở terminal]</p>
+<p>[VOICEOVER]
+"Điều khiến tôi gắn bó với Hermes nhất, không phải nó giỏi bao nhiêu. Mà là nó nhớ. Nhớ tôi thích câu trả lời ngắn. Nhớ project tôi đang làm. Nhớ tôi ghét bị giải thích dài dòng. Mỗi sáng mở máy, không phải giới thiệu lại mình từ đầu. Video này tôi chỉ bạn cách biến nó thành trợ lý riêng — qua đúng hai file."</p>
+<p>[NỘI DUNG CHÍNH]</p>
+<p>ĐOẠN 1: VẤN ĐỀ CỦA MỌI CHATBOT</p>
+<p>[QUAY MÀN HÌNH: tab chat mới trống]</p>
+<p>[VOICEOVER]
+"Bạn biết cảnh này. Mở ChatGPT, tab mới, trang trắng. Bạn lại phải giải thích: tôi làm content, tôi thích tiếng Việt, đừng dùng markdown nặng, project tôi là cái này. Mỗi lần. Mỗi ngày. Vì bộ nhớ của chatbot web gắn với phiên chat, không gắn với bạn.</p>
+<p>Hermes giải quyết đúng cái đó. Và cơ chế của nó đơn giản đến bất ngờ — chỉ hai file."</p>
+<p>ĐOẠN 2: HAI FILE THẦN THÁNH</p>
+<p>[QUAY MÀN HÌNH: gõ "cat ~/.hermes/memories/MEMORY.md" và USER.md]</p>
+<p>[VOICEOVER]
+"Trong thư mục hermes, thư mục con memories, có hai file. File MEMORY.md — giới hạn 2.200 ký tự — là sổ tay của chính Hermes: nó ghi môi trường làm việc, quy ước dự án, bài học rút ra. File USER.md — giới hạn 1.375 ký tự — là hồ sơ về bạn: tên bạn, phong cách giao tiếp bạn thích, thói quen làm việc, sở trường kỹ thuật.</p>
+<p>Hai file này được nạp tự động vào não của Hermes mỗi khi phiên làm việc bắt đầu. Tự động. Bạn không cần làm gì cả — chỉ cần nó có nội dung."</p>
+<p>ĐOẠN 3: CÁCH DẠY NÓ NHỚ</p>
+<p>[QUAY MÀN HÌNH: chat "nhớ giúp tôi...", rồi cat file ra xem entry]</p>
+<p>[VOICEOVER]
+"Cách dạy nó nhớ đơn giản thế này. Trong phiên chat, bạn cứ nói tự nhiên: 'Nhớ giúp tôi là tôi thích câu trả lời ngắn gọn.' Hoặc: 'Nhớ là máy tôi dùng macOS.' Hermes tự động quyết định lưu vào memory hay user, và ghi xuống file. Nó lưu cả khi bạn sửa nó: 'Đừng dùng sudo cho Docker, tôi đã ở trong nhóm docker' — câu đó đi thẳng vào bộ nhớ như một quy tắc.</p>
+<p>Nó lưu loại gì? Sở thích của bạn, môi trường kỹ thuật, quy ước dự án, việc đã hoàn thành, và mọi thứ bạn yêu cầu rõ ràng. Và nó KHÔNG lưu những thứ vụn vặt — như 'hôm nay trời đẹp' — vì bộ nhớ có giới hạn ký tự. Giới hạn đó là có chủ ý: não phải gọn mới nhanh."</p>
+<p>ĐOẠN 4: KIỂM CHỨNG — ĐỪNG TIN, HÃY XEM</p>
+<p>[QUAY MÀN HÌNH: cat file MEMORY.md thật]</p>
+<p>[VOICEOVER]
+"Lời khuyên quan trọng nhất video này: đừng chỉ tin khi nó nói 'tôi đã nhớ'. Hãy mở file ra xem. Gõ cat, dấu ngã, hermes, memories, MEMORY.md. Entry của bạn có ở đó không? Có — tốt. Không — nghĩa là nó nói nhớ mà không thèm gọi công cụ lưu. Hiện tượng này hay xảy ra với model nhỏ, tầm dưới 30 tham số. Cách sửa: nhấn mạnh hơn — 'dùng công cụ memory để lưu dòng này' — và nếu vẫn không được, đổi sang model lớn hơn. Một lần nữa: mắt thấy mới tin."</p>
+<p>ĐOẠN 5: PHIÊN LÀM VIỆC MỚI — /new</p>
+<p>[QUAY MÀN HÌNH: gõ /new, mở phiên mới, hỏi lại xem nó còn nhớ]</p>
+<p>[VOICEOVER]
+"Một chi tiết nhiều người vấp: bộ nhớ được 'đóng băng' tại thời điểm phiên bắt đầu. Nghĩa là bạn vừa dạy nó một điều trong phiên hôm nay — phiên ngày mai nó mới thấy. Muốn thấy ngay, gõ gạch chéo new để mở phiên mới. Thói quen tốt: mỗi khi xong một việc hoặc đổi chủ đề, gõ /new. Phiên mới, não gọn, bộ nhớ được nạp lại đầy đủ."</p>
+<p>ĐOẠN 6: PROFILE — MỘT NHÂN VIÊN, NHIỀU VAI</p>
+<p>[QUAY MÀN HÌNH: gõ "hermes profile create congviec"]</p>
+<p>[VOICEOVER]
+"Giờ đến phần nâng cao nhẹ: profile. Nếu bạn muốn một Hermes cho công việc, một Hermes khác cho dự án cá nhân — mỗi trợ lý có não, bộ nhớ, kỹ năng riêng — bạn tạo profile. Gõ hermes profile create, rồi đặt tên, ví dụ 'congviec'. Từ đó, hermes gạch p congviec mở đúng trợ lý đó, với bộ nhớ nằm riêng trong thư mục profile của nó.</p>
+<p>Lưu ý vàng: đừng chạy hai Hermes cùng trỏ vào một profile. Hai tiến trình cùng ghi một bộ nhớ sẽ loạn hết lên. Mỗi công việc, một profile."</p>
+<p>ĐOẠN 7: CÁ TÍNH — SOUL.MD</p>
+<p>[QUAY MÀN HÌNH: mở file SOUL.md trong editor]</p>
+<p>[VOICEOVER]
+"Một điểm cộng cuối: file SOUL.md — đó là nơi bạn định nghĩa tính cách mặc định cho Hermes. Muốn nó trả lời thẳng thắn kiểu kỹ sư, hay nhẹ nhàng kiểu trợ lý sáng tạo — bạn viết vào đấy một lần, và mọi phiên đều theo. Đó là khác biệt giữa một công cụ và một người đồng nghiệp hiểu bạn."</p>
+<p>[CTA — 30 GIÂY CUỐI]</p>
+<p>[QUAY MÀN HÌNH: end-card]</p>
+<p>[VOICEOVER]
+"Vậy là xong giai đoạn cơ bản. Bạn đã có Hermes: hiểu nó là gì, cài được, có não qua Portal, ra lệnh thành thạo, và biến nó thành trợ lý nhớ mình. Giai đoạn tiếp theo của series, tôi sẽ dạy bạn dạy nó làm việc tự động — cron, skills, và kết nối Telegram. Nhưng trước khi đi tiếp: nếu bạn chưa có não cho Hermes, link đăng ký Portal ở mô tả, giảm 15 đô, hơn 300 model. Bình luận cho tôi biết bạn dạy Hermes nhớ điều gì nhé. Subscribe để không miss giai đoạn 2. Hẹn gặp lại."</p>
+<p>[GHI CHÚ B-ROLL — VIDEO 5]
+- Quay thật lệnh cat file memory — sự thật của file trên máy tạo trust cao nhất.
+- Chèn text on-screen khi nhắc giới hạn ký tự: "2.200 ký tự — não gọn mới nhanh".
+- Ảnh minh họa hai file MEMORY.md / USER.md (mockup terminal) cho người xem điện thoại.
+- Đoạn /new: cắt nhanh hai màn hình — phiên cũ vs phiên mới.</p>
+<p>═══════════════════════════════════════════════════════</p>
+<h1 id="phu-luc-bang-kiem-tra-truoc-khi-quay-moi-video">PHỤ LỤC: BẢNG KIỂM TRA TRƯỚC KHI QUAY MỖI VIDEO</h1>
+<p>═══════════════════════════════════════════════════════</p>
+<p>□ Đã cài Hermes trên máy quay, chạy thật mọi lệnh trong script
+□ Đã đăng nhập Portal (dùng tài khoản affiliate của mình, che thông tin nhạy cảm khi quay)
+□ Link mô tả: https://vanhi.id.vn/nous — XÁC MINH LẠI trước khi publish (link redirect + mức giảm giá, theo brief quản lý)
+□ Giá gói Portal: KHÔNG đọc cụ thể trong lời thoại — chỉ "xem giá hiện tại trên trang"
+□ Model khuyến nghị trong script: Claude Sonnet 4.6, GPT-5.5 Pro, Gemini 3 Pro, DeepSeek V4 Pro (theo tài liệu Portal chính thức — kiểm tra lại catalog trước ngày quay vì catalog cập nhật liên tục)
+□ Cảnh báo Hermes 4 không dùng cho agent — PHẢI có trong video 3 (theo tài liệu chính thức của Nous)
+□ End-card mỗi video: link Portal + next video
+□ Voiceover: đọc thử toàn bộ một lần trước khi thu — mục tiêu 6–10 phút/video</p>
+<p>Nguồn tham chiếu cho mọi script: hermes-agent.nousresearch.com/docs
+(installation, quickstart, integrations/nous-portal, guides/run-hermes-with-nous-portal,
+reference/cli-commands, user-guide/features/memory, user-guide/profiles)</p></div>
+</section>
+<section class="panel" id="sec-script610">
+<div class="panel-inner"><h1 id="script-series-youtube-hermes-agent-tieng-viet-video-6-10">SCRIPT SERIES YOUTUBE "HERMES AGENT TIẾNG VIỆT" — VIDEO 6-10</h1>
+<p>Kênh faceless: quay màn hình + voiceover tiếng Việt, không lộ mặt.
+Nguồn tham chiếu: hermes-agent.nousresearch.com/docs + lệnh CLI thật (<code>hermes cron</code>, <code>hermes gateway</code>, <code>hermes profile</code>).
+Quy ước: [QUAY MÀN HÌNH: ...] = hướng dẫn quay; [VOICEOVER: ...] = lời thoại; [B-ROLL: ...] = hình minh họa/ghi chú dựng.
+Mỗi video 6-10 phút, lời thoại 600-900 từ.</p>
+<hr />
+<h2 id="video-6-nhan-vien-ai-oc-200-trang-pdf-trong-30-giay-hermes-xu-ly-file-van-phong">VIDEO 6 — "Nhân viên AI đọc 200 trang PDF trong 30 giây: Hermes xử lý file văn phòng"</h2>
+<h3 id="hook-15-giay">[HOOK — 15 giây]</h3>
+<p>[QUAY MÀN HÌNH: màn hình desktop, mở một file PDF dài ~200 trang, chuột lăn nhanh cho thấy số trang]</p>
+<p>[VOICEOVER]
+Tôi có một file PDF hai trăm trang. Báo cáo thị trường, tiếng Anh, đầy bảng biểu. Đọc hết thì mất một buổi chiều. Tóm tắt thì mất thêm một buổi nữa. Vừa rồi tôi đưa nó cho Hermes — trợ lý AI chạy ngay trên máy tôi. Chưa đầy một phút sau, tôi có bản tóm tắt từng phần, các con số quan trọng được trích ra sẵn, và một file báo cáo bằng tiếng Việt viết lại gọn gàng. Trong video này tôi chỉ cho bạn cách làm điều đó — với PDF, Word và Excel — không cần bạn mở từng file một lần nữa.</p>
+<p>[GHI CHÚ GIỌNG: nói chậm, tự tin. Không hô hào. "Chưa đầy một phút" là thật trong demo — quay thật, không tua.]</p>
+<h3 id="noi-dung-chinh">[NỘI DUNG CHÍNH]</h3>
+<p><strong>Đoạn 1 — Vấn đề thật (0:15 - 1:30)</strong></p>
+<p>[QUAY MÀN HÌNH: chia đôi màn hình — bên trái folder đầy file PDF/Excel bừa bộn, bên phải một trang giấy trắng]</p>
+<p>[VOICEOVER]
+Nếu bạn làm văn phòng, chắc bạn quen cảnh này: cuối tháng có mười file Excel cần gộp, một đống hợp đồng PDF cần rà số liệu, một báo cáo Word cần viết lại theo mẫu mới. Làm tay thì nguyên một buổi tối. Sao chép dữ liệu từ bảng này sang bảng kia thì vừa chán vừa dễ sai. Vấn đề không phải bạn chậm. Vấn đề là bạn đang làm việc của một cái máy photocopy, trong khi máy đó đã có từ hai mươi năm nay.</p>
+<p>Hermes giải quyết khác: nó đọc file trực tiếp trên máy bạn, hiểu nội dung, rồi viết ra file mới đúng định dạng bạn cần. Không upload lên đâu cả. File nằm ở đâu thì nó đọc ở đó.</p>
+<p>[QUAY MÀN HÌNH: terminal, gõ <code>ls -la ~/TaiLieu/BaoCao/</code> cho thấy các file thật]</p>
+<p>[VOICEOVER]
+Đây là folder báo cáo của tôi. Một file PDF hai trăm trang, hai file Excel doanh số, một file Word mẫu báo cáo. Tôi sẽ cho Hermes làm việc với cả bốn.</p>
+<p><strong>Đoạn 2 — Đọc: PDF, Word, Excel (1:30 - 3:30)</strong></p>
+<p>[QUAY MÀN HÌNH: gõ lệnh trong Hermes CLI — dùng prompt tự nhiên tiếng Việt, KHÔNG cần gõ lệnh phức tạp]</p>
+<p>[VOICEOVER]
+Tôi chỉ cần nói chuyện bình thường. "Đọc file báo-cao-thi-truong.pdf, tóm tắt từng chương, trích ra mọi con số về thị trường Việt Nam, ghi vào file tom-tat.md". Gõ Enter. Và đợi.</p>
+<p>[B-ROLL: quay time-lapse màn hình đang chạy, có đồng hồ đếm góc màn hình cho thấy thời gian thật]</p>
+<p>[VOICEOVER]
+Trong lúc nó chạy, tôi giải thích nhanh bên trong chuyện gì. Hermes không "nhìn" file PDF như bạn nhìn. Nó dùng bộ đọc tài liệu riêng — đọc trực tiếp lớp chữ, trích bảng biểu, xử lả file scan cần OCR. Với Excel, nó không đọc như văn bản — nó đọc từng sheet, từng cột, rồi tính toán bằng code. Không phải đọc số rồi đoán. Với file scan chất lượng kém, nó tự kích hoạt skill OCR. Còn nếu file quá lớn, nó đọc theo từng phần rồi ghép lại, chứ không bỏ giữa chừng.</p>
+<p>[QUAY MÀN HÌNH: kết quả hiện ra — file tom-tat.md với các đề mục và bảng số liệu tiếng Việt; mở file bằng trình soạn thảo cho viewer thấy rõ]</p>
+<p>[VOICEOVER]
+Xong. Hai trăm trang, tóm tắt có cấu trúc, số liệu Việt Nam được gom riêng. Phần tôi phải làm bây giờ chỉ là đọc lại và kiểm chứng — chứ không phải đọc lại hai trăm trang.</p>
+<p><strong>Đoạn 3 — Viết: tự soạn báo cáo (3:30 - 5:30)</strong></p>
+<p>[QUAY MÀN HÌNH: gõ yêu cầu mới — "Gộp hai file Excel doanh số, tính tổng theo tháng, tạo file Word báo cáo theo mẫu mau-bao-cao.docx"]</p>
+<p>[VOICEOVER]
+Đọc thì hay, nhưng điểm mạnh thật sự là viết. Tôi gộp hai file Excel doanh số, bảo nó tính tổng theo tháng, rồi tạo một file Word báo cáo theo đúng mẫu công ty tôi đang dùng.</p>
+<p>[QUAY MÀN HÌNH: chạy lệnh; sau đó mở file Word kết quả, lăn qua các bảng số liệu đã tính sẵn]</p>
+<p>[VOICEOVER]
+Hermes viết file Word, Excel, PowerPoint bằng thư viện chuyên dụng — không phải chép văn bản vào file rồi đổi tên đuôi. Nghĩa là bảng vẫn là bảng, công thức vẫn là công thức, định dạng giống mẫu bạn đưa. Bạn muốn sửa sau cũng mở được bằng Word bình thường.</p>
+<p>Giờ đến phần quan trọng nhất, và tôi muốn nói thẳng. AI đọc nhanh, nhưng nó có thể sai — nhất là với số liệu trong file scan mờ, hay bảng lệch cột. Nên quy tắc của tôi: mọi con số AI trích ra, tôi đối chiếu lại lần cuối trước khi gửi đi. Nó giúp tôi tiết kiệm chín mươi phần trăm thời gian, không phải một trăm. Chín mươi phần trăm đó đã đủ thay đổi cả buổi chiều của bạn.</p>
+<p>[GHI CHÚ QUAY: dừng lại một nhịp, nhìn thẳng ống kính — hoặc trên faceless, để voiceover chậm lại. Câu này xây dựng niềm tin.]</p>
+<p><strong>Đoạn 4 — Ba quy trình nên thử ngay (5:30 - 6:20)</strong></p>
+<p>[VOICEOVER]
+Ba việc bạn làm ngay tối nay được. Một: đọc file PDF dài và tóm tắt. Hai: gộp nhiều file Excel và tính tổng. Ba: viết báo cáo Word từ dữ liệu có sẵn. Ba việc này chiếm phần lớn thời gian văn phòng, và Hermes làm được cả ba chỉ bằng một câu yêu cầu bằng tiếng Việt.</p>
+<p>Một lưu ý nhỏ: nếu bạn làm việc với hàng trăm file mỗi ngày, đừng gõ lại cùng một câu yêu cầu. Hãy dạy Hermes quy trình đó một lần — và đó chính là nội dung video tiếp theo: Skills.</p>
+<h3 id="cta-30-giay-cuoi">[CTA — 30 giây cuối]</h3>
+<p>[QUAY MÀN HÌNH: màn hình cuối — logo kênh + danh sách 5 video đã đăng và video sắp tới]</p>
+<p>[VOICEOVER]
+Nếu bạn chưa cài Hermes, hai video đầu tiên trong series này hướng dẫn từng bước — kênh tôi có link đăng ký Nous Portal trong phần mô tả, đăng ký một tài khoản là dùng được tất cả công cụ: tìm kiếm web, tạo ảnh, giọng đọc, và duyệt web. Nhấn đăng ký kênh để không miss video sau — video tiếp theo tôi dạy bạn cách dạy Hermes quy trình riêng của bạn, dạy một lần dùng mãi. Cảm ơn bạn đã xem.</p>
+<hr />
+<h2 id="video-7-day-ai-mot-lan-dung-mai-mai-skills-trong-hermes">VIDEO 7 — "Dạy AI một lần, dùng mãi mãi: Skills trong Hermes"</h2>
+<h3 id="hook-15-giay_1">[HOOK — 15 giây]</h3>
+<p>[QUAY MÀN HÌNH: terminal, gõ lệnh <code>/bao-cao-tuan</code> rồi Enter; kết quả chạy tự động]</p>
+<p>[VOICEOVER]
+Tuần trước tôi dạy Hermes cách viết báo cáo tuần cho công ty tôi. Đầu tuần này tôi gõ bốn chữ — "bao-cao-tuan" — và nó làm nguyên một báo cáo hoàn chỉnh trong hai phút. Tôi không nhắc lại yêu cầu. Tôi không giải thích lại quy trình. Nó nhớ. Video này chỉ cho bạn cách làm điều đó: biến một quy trình bạn giải thích một lần thành một skill — mà Hermes gọi là kỹ năng — dùng mãi mãi.</p>
+<h3 id="noi-dung-chinh_1">[NỘI DUNG CHÍNH]</h3>
+<p><strong>Đoạn 1 — Skill là gì, và khác gì trí nhớ (0:15 - 1:40)</strong></p>
+<p>[VOICEOVER]
+Ở video trước tôi có nói về Memory — Hermes nhớ bạn là ai, thích gì. Skill khác. Memory là nó nhớ bạn. Skill là nó nhớ cách làm việc. Nếu memory trả lời câu hỏi "ai tôi", thì skill trả lời câu hỏi "làm thế nào".</p>
+<p>Ví dụ đơn giản. Mỗi thứ Hai tôi phải gộp số liệu từ ba file Excel, viết báo cáo một trang, gửi email cho sếp. Nếu nhờ AI mỗi lần, tôi phải gõ lại yêu cầu mỗi lần — và còn phải nhớ đủ chi tiết. Nhưng nếu tôi dạy nó một lần, lần sau tôi chỉ gõ một lệnh ngắn.</p>
+<p>[QUAY MÀN HÌNH: mở thư mục ~/.hermes/skills/ — cho thấy cấu trúc thư mục, các skill sẵn có như docx, xlsx, pdf, pptx]</p>
+<p>[VOICEOVER]
+Về mặt kỹ thuật, skill chỉ là một thư mục chứa file hướng dẫn tên là SKILL.md. Mọi skill nằm trong thư mục skills, trong thư mục Hermes của bạn. Hermes cài sẵn hàng chục skill — đọc viết Word, Excel, PowerPoint, PDF, email, lịch — nhưng điểm mạnh là bạn tạo skill của riêng mình.</p>
+<p><strong>Đoạn 2 — Ba cách tạo skill (1:40 - 3:40)</strong></p>
+<p>[QUAY MÀN HÌNH: gõ <code>/learn</code> với một URL tài liệu]</p>
+<p>[VOICEOVER]
+Cách thứ nhất: học từ tài liệu. Bạn gõ "/learn", rồi dán link tài liệu — trang API của một phần mềm, hướng dẫn sử dụng. Hermes đọc tài liệu đó, rút ra quy trình, và gói thành skill. Cách thứ hai: học từ một thư mục — ví dụ bạn có bộ SDK của công ty, bảo nó đọc và học phần xác thực và phân trang.</p>
+<p>[QUAY MÀN HÌNH: demo cách quan trọng nhất — sau khi vừa làm xong một việc với Hermes, gõ <code>/learn how I just ...</code>]</p>
+<p>[VOICEOVER]
+Cách thứ ba là cách tôi dùng nhiều nhất — và nó rất đơn giản. Bạn vừa chỉ Hermes làm một việc, từng bước, trong cuộc hội thoại. Xong rồi, bạn gõ "/learn", rồi mô tả lại — "học cách tôi vừa làm báo cáo tuần". Hermes nhìn lại chính cuộc hội thoại vừa rồi, trích ra các bước, và viết thành skill.</p>
+<p>Chú ý điểm này: nó ghi lại quy trình, không phải ghi lại câu chuyện. Nó không lưu "hôm thứ Ba tôi gộp file A và B". Nó lưu quy tắc: "báo cáo tuần gồm ba phần, dữ liệu lấy từ file pattern này, tính tổng theo tháng, xuất file Word theo mẫu". Cách ghi đó mới dùng lại được.</p>
+<p><strong>Đoạn 3 — Dùng lại: slash command, gộp skill, và kéo về từ cộng đồng (3:40 - 5:20)</strong></p>
+<p>[QUAY MÀN HÌNH: gõ <code>/bao-cao-tuan</code> — demo chạy thật]</p>
+<p>[VOICEOVER]
+Từ lúc đó, mỗi skill là một lệnh bắt đầu bằng dấu gạch chéo. Gõ tên skill, đưa tham số, xong. Không cần nhớ quy trình — quy trình nằm trong skill.</p>
+<p>Nếu một công việc cần nhiều skill cùng lúc — ví dụ đọc PDF, rồi trích bảng, rồi viết Excel — bạn có thể gộp chúng thành một "bundle", một lệnh duy nhất gọi cả ba. Gõ một lần, cả chuỗi việc chạy.</p>
+<p>[QUAY MÀN HÌNH: gõ <code>hermes skills search</code> với một từ khóa, rồi <code>hermes skills install</code>]</p>
+<p>[VOICEOVER]
+Và bạn không cần tự làm tất cả. Hermes có Skills Hub — kho skill cộng đồng, theo chuẩn mở. Bạn tìm theo từ khóa, xem trước nội dung, cài bằng một dòng lệnh. Có skill của bên thứ ba, có skill chính thức — ví dụ kết nối Google Workspace, Notion, GitHub. Cài về là dùng được ngay.</p>
+<p>[B-ROLL: quay nhanh danh sách skill trong Hub — cho thấy có nhiều lựa chọn]</p>
+<p><strong>Đoạn 4 — Skill tự hoàn thiện (5:20 - 6:20)</strong></p>
+<p>[VOICEOVER]
+Điểm cuối, và theo tôi là điều làm Hermes khác hẳn. Skill không nằm im. Mỗi lần dùng, nếu có chỗ vướng, Hermes tự sửa skill đó cho lần sau chạy trơn hơn. Bạn có thể bật chế độ xin phép trước khi nó sửa — khuyến nghị nếu bạn dùng model nhỏ. Có skill không dùng một thời gian, hệ thống tự lưu trữ chứ không bao giờ xóa mất. Nói cách khác, Hermes càng dùng càng giỏi việc của bạn — vì nó học từ chính việc nó đã làm.</p>
+<p>Nếu bạn chưa xem video trước về xử lý file — quay lại xem, vì video này là bước tiếp theo tự nhiên của nó.</p>
+<h3 id="cta-30-giay-cuoi_1">[CTA — 30 giây cuối]</h3>
+<p>[VOICEOVER]
+Bài tập tối nay của bạn: chọn một việc lặp lại bạn làm hằng tuần. Làm với Hermes một lần, từng bước. Rồi gõ "/learn" và dạy nó. Ngày mai bạn sẽ chỉ mất mười giây. Đăng ký kênh để xem tiếp video sau — tôi chỉ cho cách để Hermes tự chạy việc nền theo lịch, mỗi sáng bảy giờ, không cần bạn nhờ. Cảm ơn bạn đã xem.</p>
+<hr />
+<h2 id="video-8-tro-ly-nhac-ban-moi-sang-7-gio-khong-can-ban-nho-cron-trong-hermes">VIDEO 8 — "Trợ lý nhắc bạn mỗi sáng 7 giờ, không cần bạn nhờ: Cron trong Hermes"</h2>
+<h3 id="hook-15-giay_2">[HOOK — 15 giây]</h3>
+<p>[QUAY MÀN HÌNH: điện thoại — tin nhắn Telegram lúc 7:00 sáng; sau đó chuyển sang màn hình máy tính]</p>
+<p>[VOICEOVER]
+Bảy giờ sáng. Điện thoại tôi rung. Không phải báo thức. Là tin nhắn từ trợ lý AI: tin tức công nghệ trong ngày, lịch họp hôm nay, và một cảnh báo — giá token API mà tôi theo dõi vừa tăng mười phần trăm. Tôi chưa dậy, chưa mở máy tính, chưa nhờ ai cả. Video này chỉ cho bạn cách lên lịch cho Hermes tự chạy — nhắc việc, tổng hợp tin tức, gửi báo cáo — tất cả chạy nền.</p>
+<h3 id="noi-dung-chinh_2">[NỘI DUNG CHÍNH]</h3>
+<p><strong>Đoạn 1 — Cron là gì, ai cần (0:15 - 1:30)</strong></p>
+<p>[VOICEOVER]
+Cron là bộ hẹn giờ. Bạn đặt một việc và một thời điểm, Hermes tự chạy đúng giờ đó — kể cả khi bạn đang ngủ, kể cả khi máy tính chạy suốt đêm như một con server nhỏ. Khác với việc bạn nhờ AI lúc đang ngồi trước máy: cron là việc tự động lặp lại, không cần bạn hiện diện.</p>
+<p>Ba việc cron làm tốt nhất. Một: nhắc nhở — lịch họp, deadline, sinh nhật. Hai: thu thập thông tin — tin tức mỗi sáng, giá vàng, tỷ giá, điểm theo dõi đối thủ. Ba: báo cáo — cuối ngày, cuối tuần, cuối tháng.</p>
+<p><strong>Đoạn 2 — Tạo job đầu tiên (1:30 - 3:30)</strong></p>
+<p>[QUAY MÀN HÌNH: terminal — gõ lệnh thật, để viewer thấy từng dòng]</p>
+<p>[VOICEOVER]
+Có hai cách. Cách dễ: trong lúc chat với Hermes, bạn chỉ cần nói "mỗi sáng 7 giờ, tổng hợp tin công nghệ và nhắn cho tôi". Nó sẽ dùng công cụ lập lịch của chính nó để tạo job.</p>
+<p>Cách kiểm soát hơn là dùng dòng lệnh. Tôi tạo job như sau:</p>
+<p>[QUAY MÀN HÌNH: gõ chậm, rõ từng ký tự]</p>
+<pre><code>hermes cron create &quot;0 7 * * *&quot; \
+  --name &quot;Tin tức buổi sáng&quot; \
+  --skill &quot;arxiv&quot; \
+  --deliver telegram
+</code></pre>
+<p>[VOICEOVER]
+Giải thích từng phần. Phần đầu là lịch — "0 7 * * *" nghĩa là bảy giờ sáng mỗi ngày, định dạng chuẩn năm trường: phút, giờ, ngày, tháng, thứ. Nếu bạn không nhớ cú pháp, cứ viết "every day 7am" — Hermes hiểu cả hai. Tiếp theo là tên job. Rồi skill đính kèm — ví dụ skill đọc arXiv, hoặc skill lịch. Và quan trọng: "deliver telegram" — kết quả sẽ được gửi vào Telegram của bạn.</p>
+<p>[QUAY MÀN HÌNH: <code>hermes cron list</code> — cho thấy job vừa tạo]</p>
+<p>[VOICEOVER]
+Gõ "hermes cron list" để xem tất cả job. Muốn thử ngay không đợi tới bảy giờ? "hermes cron run", đặt tên job — nó chạy ngay trong tích tắc. Muốn tạm dừng? "hermes cron pause". Muốn xem lịch sử chạy thành công hay thất bại? "hermes cron runs". Tất cả đều là lệnh đơn giản, không phải học gì mới.</p>
+<p><strong>Đoạn 3 — Ba kiểu job nâng cao (3:30 - 5:20)</strong></p>
+<p>[VOICEOVER]
+Ba kỹ thuật làm cron đáng giá gấp đôi.</p>
+<p>Thứ nhất: job theo dõi. Bạn cho nó một script kiểm tra — ví dụ kiểm tra đĩa sắp đầy, hoặc một trang web. Nếu kết quả không đổi, nó không làm gì cả, im lặng. Chỉ khi có thay đổi, nó mới chạy phân tích và nhắn cho bạn. Kiểu job này không tốn token, chỉ báo khi thực sự có biến. Tôi dùng kiểu này theo dõi giá API và trang đối thủ.</p>
+<p>[QUAY MÀN HÌNH: minh họa job thứ hai — gõ lệnh tạo job nhắc lịch; B-ROLL: tin nhắn nhắc việc trên Telegram]</p>
+<p>Thứ hai: nhắc việc thông minh. Job nhắc lịch họp đừng chỉ nhắn "bạn có họp". Bảo Hermes đính kèm luôn tài liệu liên quan, tóm tắt ba dòng về nội dung cuộc họp. Nhắc nhở như vậy mới đáng giá.</p>
+<p>Thứ ba: chuỗi job. Job A chạy sáng sớm thu thập dữ liệu, output của A đưa vào job B chạy sau đó để viết báo cáo, rồi job C gửi đi. Bạn lắp ráp như dây chuyền, mỗi khâu tự chạy.</p>
+<p>Một điều kiện tiên quyết: để cron chạy đúng giờ và gửi tin nhắn, Hermes gateway phải chạy nền. Trên máy Mac bạn gõ "hermes gateway install" một lần là nó tự chạy cùng máy từ đó về sau. Nếu bạn chạy Hermes trên server riêng thì càng dễ — nó chạy suốt đêm không cần bạn mở máy.</p>
+<p><strong>Đoạn 4 — Rào an toàn (5:20 - 6:20)</strong></p>
+<p>[VOICEOVER]
+Một lưu ý bảo mật tôi muốn nhắc. Mỗi lần cron chạy là một phiên làm việc tự động — nó có quyền dùng công cụ. Nên đừng để job tự động gửi email ra ngoài mà bạn không kiểm soát. Nguyên tắc của tôi: job thu thập và soạn nháp, nhưng việc "gửi đi" thì tôi xem trước. Và cron có giới hạn an toàn riêng — mỗi lần chạy bị giới hạn thời gian, có cơ chế chống hai tiến trình chạy trùng một job. Nghĩa là nó được thiết kế để chạy nền an toàn, nhưng người cầm tay lái vẫn là bạn.</p>
+<p>Hẹn giờ xong rồi — video tiếp theo là phần tôi thích nhất: dùng Hermes cho cả gia đình, không chỉ cho công việc.</p>
+<h3 id="cta-30-giay-cuoi_2">[CTA — 30 giây cuối]</h3>
+<p>[VOICEOVER]
+Bài tập: tạo một job nhắc việc tối nay. Một việc duy nhất, một job duy nhất. "hermes cron create 'every day 21h' --name 'Nhắc uống thuốc'" — kiểu vậy. Xem nó chạy một lần, bạn sẽ hiểu ngay sức mạnh của việc tự động hóa. Đăng ký kênh, để lại comment nếu bạn làm được — tôi sẽ trả lời. Video sau: Hermes trong gia đình. Cảm ơn đã xem.</p>
+<hr />
+<h2 id="video-9-dung-ai-khong-chi-e-lam-viec-hermes-trong-gia-inh">VIDEO 9 — "Dùng AI không chỉ để làm việc: Hermes trong gia đình"</h2>
+<h3 id="hook-15-giay_3">[HOOK — 15 giây]</h3>
+<p>[QUAY MÀN HÌNH: không gian nhà bình dị — bàn ăn tối, lịch treo tường, điện thoại đặt cạnh]</p>
+<p>[VOICEOVER]
+Tối thứ Năm, tôi hỏi Hermes: "Tuần này nhà mình có gì?". Nó trả lời trong năm giây: thứ Bảy đưa con đi khám răng ba giờ chiều, Chủ nhật sinh nhật bà ngoại, còn tủ lạnh có trứng, cà chua và rau muống — nên thứ Sáu nấu canh trứng cà chua. Tôi không hỏi ba công cụ khác nhau. Tôi không tra lịch giấy. Video này là về việc dùng trợ lý AI trong đời sống gia đình — không phải để tăng năng suất làm việc, mà để bớt một chuyện phải nhớ mỗi ngày.</p>
+<h3 id="noi-dung-chinh_3">[NỘI DUNG CHÍNH]</h3>
+<p><strong>Đoạn 1 — Não của bố mẹ đầy rồi (0:15 - 1:30)</strong></p>
+<p>[VOICEOVER]
+Phụ huynh chúng ta giữ trong đầu bao nhiêu thứ: giờ đón con, lịch khám bệnh, ai sinh nhật tuần này, hôm nay con có bài kiểm tra gì, cuối tuần có ai đến chơi. Não người không sinh ra để làm trung tâm điều phối. Mỗi khi bạn quên một việc nhà, không phải vì bạn vô trách nhiệm — vì bạn đang giữ quá nhiều thứ trong đầu cùng lúc.</p>
+<p>Hermes trong gia đình không phải một cái app mới bạn phải nhớ mở. Nó là một người bạn có thể nhắn tin, hỏi "nhà mình tuần này có gì" và nhận câu trả lời có ngữ cảnh — vì nó đã biết lịch nhà bạn, biết con bạn học lớp mấy, biết gia đình bạn ăn gì.</p>
+<p><strong>Đoạn 2 — Bốn cách dùng thật (1:30 - 4:30)</strong></p>
+<p>[QUAY MÀN HÌNH: gõ yêu cầu tiếng Việt tự nhiên trong Hermes]</p>
+<p>[VOICEOVER]
+Cách thứ nhất: lịch gia đình tập trung. Bạn nói một lần — "thứ Bảy tuần này đưa Minh đi khám răng lúc ba giờ chiều" — và nhớ lại bằng cách hỏi "nhà mình tuần này có gì". Kết hợp với cron như video trước, nó tự nhắn nhắc mỗi tối: mai có gì, con cần chuẩn bị gì.</p>
+<p>[B-ROLL: minh họa tin nhắn nhắc lịch tối trên điện thoại]</p>
+<p>[VOICEOVER]
+Cách thứ hai: thực đơn theo tủ lạnh thật. Bạn chụp ảnh tủ lạnh, gửi cho Hermes — nếu bạn kết nối qua Telegram, gửi ảnh trực tiếp trong tin nhắn. Nó nhìn ảnh, biết có gì, và gợi ý món. Quan trọng hơn: nhờ Memory, nó nhớ con bạn bị dị ứng tôm, nhớ nhà bạn ăn ít mặn — nên gợi ý luôn phù hợp. Một lần dạy, mãi về sau nó nhớ.</p>
+<p>[QUAY MÀN HÌNH: demo — gửi ảnh thực phẩm (hoặc ảnh minh họa), nhận gợi ý món ăn]</p>
+<p>[VOICEOVER]
+Cách thứ ba: hỗ trợ con học. Đây là cách tôi thấy giá trị nhất. Khi con bạn không hiểu một bài toán, bạn không cần ngồi giải thích trong khi bạn cũng mệt. Bạn bảo Hermes: "Giải thích cho bé lớp năm hiểu phân số một cách vui, kèm ba bài tập tự luyện". Nó giải thích bằng ngôn ngữ trẻ con, tạo bài tập in được. Và nếu bé cần ôn lại tuần sau, nhờ Memory nó biết bé đang yếu phần nào. Không phải thay thế bạn — là một gia sư kiên nhẫn, sẵn có lúc mười một giờ đêm khi bạn hết sức.</p>
+<p>[QUAY MÀN HÌNH: demo tạo bài tập; B-ROLL: ảnh bài tập in ra]</p>
+<p>[VOICEOVER]
+Cách thứ tư: việc lặt vặt của nhà. Đặt lịch hẹn sửa máy lạnh qua email — bạn nhắc một câu, nó soạn và gửi email nháp cho bạn duyệt. Nhắc lịch tiêm chủng. Tự tra cứu giờ mở cửa phòng khám. Tổng hợp thông tin chuyến đi cuối tuần.</p>
+<p><strong>Đoạn 3 — Ranh giới cần biết (4:30 - 5:40)</strong></p>
+<p>[VOICEOVER]
+Ba điều tôi khuyên thật. Một: quyền riêng tư. Thông tin gia đình là thông tin nhạy cảm nhất. Nếu bạn chạy Hermes trên máy mình hoặc server riêng, dữ liệu nằm ở nhà bạn. Nếu chạy qua dịch vụ, hãy đọc kỹ chính sách trước khi cho nó biết quá nhiều. Hai: con cái. Hermes rất kiên nhẫn nhưng nó vẫn là AI — nó có thể sai. Hãy để con dùng như công cụ tham khảo, có bạn bên cạnh, đừng để nó thành người trả lời duy nhất. Ba: đừng để nó thay thế khoảnh khắc. AI gợi ý món ăn được, nhưng bữa cơm gia đình thì vẫn là của gia đình.</p>
+<p>[GHI CHÚ GIỌNG: chậm, chân thành. Đây là đoạn tạo niềm tin, không phải đoạn bán hàng.]</p>
+<p><strong>Đoạn 4 — Bắt đầu từ một việc (5:40 - 6:20)</strong></p>
+<p>[VOICEOVER]
+Đừng làm tất cả cùng lúc. Tối nay, chọn một việc: lịch tuần này của nhà bạn. Nhập vào Hermes, hỏi lại xem nó có nhớ không. Một việc thôi. Tuần sau thêm một việc nữa. Một tháng sau, bạn sẽ thấy mình bớt phải nhớ rất nhiều — và não của bạn nhẹ hơn đáng kể.</p>
+<p>Và nếu bạn muốn đi xa hơn — điều khiển Hermes từ điện thoại, cho mỗi thành viên một trợ lý riêng — video cuối của series tôi chỉ tất cả.</p>
+<h3 id="cta-30-giay-cuoi_3">[CTA — 30 giây cuối]</h3>
+<p>[VOICEOVER]
+Nếu video này hữu ích với bạn, hãy chia sẻ cho một người bố hoặc người mẹ bạn biết — người đang giữ quá nhiều thứ trong đầu. Đăng ký kênh để xem video cuối cùng: kết nối Telegram và xây đội ngũ AI cho cả nhà. Video đó tôi cũng giới thiệu khóa học đầy đủ, nếu bạn muốn học sâu hơn. Cảm ơn bạn đã xem.</p>
+<hr />
+<h2 id="video-10-ieu-khien-tro-ly-ai-tu-ien-thoai-xay-oi-ngu-ai-toan-canh-hermes-video-cuoi-series">VIDEO 10 — "Điều khiển trợ lý AI từ điện thoại + xây đội ngũ AI: toàn cảnh Hermes" [VIDEO CUỐI SERIES]</h2>
+<h3 id="hook-15-giay_4">[HOOK — 15 giây]</h3>
+<p>[QUAY MÀN HÌNH: điện thoại — cuộc hội thoại Telegram với bot; sau đó chuyển nhanh qua nhiều profile trên máy tính]</p>
+<p>[VOICEOVER]
+Đây là điện thoại tôi. Tôi đang nhắn tin cho trợ lý AI — không phải ChatGPT đơn thuần, mà là trợ lý đang chạy trên máy tôi, đọc file của tôi, nhớ quy trình công ty tôi. Tôi nhờ nó tổng hợp báo cáo khi đang trên xe. Về tới nhà, báo cáo đã xong. Và đằng sau nó là một đội ngũ: người lo marketing, người lo bán hàng, người lo nội dung — mỗi người một bộ nhớ riêng. Video cuối của series này, tôi chỉ cho bạn toàn bộ bức tranh.</p>
+<h3 id="noi-dung-chinh_4">[NỘI DUNG CHÍNH]</h3>
+<p><strong>Đoạn 1 — Telegram: trợ lý trong túi bạn (0:15 - 2:30)</strong></p>
+<p>[QUAY MÀN HÌNH: điện thoại — mở Telegram, tìm @BotFather]</p>
+<p>[VOICEOVER]
+Phần một: đưa Hermes vào điện thoại. Bạn mở Telegram, tìm BotFather — bot chính thức để tạo bot. Nhắn "/newbot", đặt tên, BotFather trả về một token — một dãy ký tự bí mật, như chìa khóa cho bot của bạn.</p>
+<p>[QUAY MÀN HÌNH: máy tính — chạy <code>hermes gateway setup</code>, chọn Telegram, dán token]</p>
+<p>[VOICEOVER]
+Về máy tính, gõ "hermes gateway setup". Đây là trình hướng dẫn tương tác — bạn chọn Telegram, dán token vào. Token được lưu an toàn trong file môi trường của Hermes, không nằm trong file cấu hình. Xong, gõ "hermes gateway start" — gateway, cổng kết nối, bật lên. Quay lại Telegram, nhắn cho bot một câu — và nó trả lời.</p>
+<p>[QUAY MÀN HÌNH: tin nhắn thật gửi đi và nhận phản hồi; demo yêu cầu một việc có dùng công cụ]</p>
+<p>[VOICEOVER]
+Và điểm quan trọng: đây không phải chatbot trả lời văn bản. Trên Telegram, Hermes dùng gần như toàn bộ công cụ — đọc file trên máy bạn, chạy lệnh, duyệt web, tạo ảnh. Bạn nhờ nó kiểm tra một trang web khi đang đi đường — nó vào, đọc, tóm tắt, nhắn lại. Bạn nhờ nó gộp báo cáo — nó làm, rồi báo khi xong.</p>
+<p>Một việc bắt buộc: bảo mật. Để gateway chạy nền cùng máy, gõ "hermes gateway install" một lần. Nhưng trước đó, hãy đặt danh sách ai được nhắn cho bot — chỉ những ID Telegram bạn tin. Nếu không, bất kỳ ai tìm thấy bot của bạn đều có thể ra lệnh cho một agent có quyền truy cập máy tính bạn. Nhắc lại: chỉ cho người bạn tin vào danh sách cho phép.</p>
+<p>[QUAY MÀN HÌNH: chỉ vào phần cấu hình allow_from trong docs hoặc wizard]</p>
+<p><strong>Đoạn 2 — Profile: một trợ lý cho mỗi việc (2:30 - 4:30)</strong></p>
+<p>[QUAY MÀN HÌNH: terminal — <code>hermes profile list</code>, rồi <code>hermes profile create mkt-content</code>, rồi <code>hermes -p mkt-content chat</code>]</p>
+<p>[VOICEOVER]
+Phần hai: xây đội ngũ. Trong Hermes, profile là một trợ lý độc lập — cấu hình riêng, nhớ riêng, kỹ năng riêng, chuyên môn riêng. Bạn tạo profile bằng một dòng lệnh — "hermes profile create", đặt tên. Rồi mở bằng "hermes -p", gạch ngang p, rồi tên profile.</p>
+<p>Tôi có profile lo marketing — nó nhớ thương hiệu của tôi, giọng văn của tôi, quy trình viết nội dung. Profile lo bán hàng biết quy trình tư vấn. Profile lo kỹ thuật biết dự án của tôi. Chúng không lẫn lộn thông tin — nhớ của profile này không chảy sang profile kia. Như thuê ba nhân viên, mỗi người một hồ sơ riêng.</p>
+<p>[QUAY MÀN HÌNH: desktop app — tab Bots, roster các bot với tên và vai trò]</p>
+<p>[VOICEOVER]
+Nếu bạn dùng Hermes Desktop, có cách trực quan hơn: chế độ Bot. Mỗi profile trở thành một bot có tên, có vai trò, có ảnh đại diện. Bạn tạo trong vài giây. Chúng chạy việc định kỳ, trò chuyện cùng nhau trong nhóm qua tag — ví dụ bạn tag người marketing và người bán hàng cùng một câu hỏi, cả hai cùng trả lời. Và mọi thứ bạn làm trên Desktop đều thấy được từ dòng lệnh — không phải hai hệ thống khác nhau.</p>
+<p>[B-ROLL: minh họa nhóm chat có nhiều bot tag nhau]</p>
+<p><strong>Đoạn 3 — Đội ngũ làm việc cùng nhau (4:30 - 5:50)</strong></p>
+<p>[VOICEOVER]
+Giờ ghép các mảnh lại. Profile marketing mỗi sáng bảy giờ tự viết ba bài đăng mạng xã hội, gửi vào Telegram bạn duyệt. Profile bán hàng tự nhắc cuộc gọi tư vấn. Profile kỹ thuật tự theo dõi log. Bạn đi làm, mở điện thoại, thấy ba tin nhắn — ba việc đã xong hoặc cần bạn quyết. Bạn không ngồi chờ AI. AI chờ bạn — đúng giờ, đúng việc.</p>
+<p>Và khi việc lớn, chúng làm song song. Hermes sinh nhân viên phụ — chạy nhiều việc cùng lúc trong các phiên cách ly. Ví dụ bạn cần nghiên cứu mười đối thủ: một nhánh lo công nghệ, một nhánh lo giá, một nhánh lo truyền thông — chạy đồng thời, kết quả gộp lại. Một mình bạn làm mất cả tuần.</p>
+<p>[QUAY MÀN HÌNH: minh họa delegate — nhiều nhánh chạy song song]</p>
+<p><strong>Đoạn 4 — Toàn cảnh series (5:50 - 6:40)</strong></p>
+<p>[VOICEOVER]
+Nhìn lại cả hành trình. Video một: Hermes là gì. Video hai: cài đặt. Video ba: đăng ký Nous Portal — một tài khoản, dùng mọi công cụ: tìm kiếm, ảnh, giọng nói, duyệt web. Video bốn: lệnh cơ bản. Video năm: Memory — nó nhớ bạn. Sáu: xử lý file văn phòng. Bảy: Skills — dạy nó quy trình. Tám: Cron — tự chạy theo lịch. Chín: dùng cho gia đình. Mười: Telegram và đội ngũ. Mười mảnh ghép thành một hệ thống: một trợ lý nhớ bạn, làm việc của bạn, chạy nền, và nhân lên thành cả một đội.</p>
+<p>Nếu bạn đã xem hết và muốn đi sâu — không chỉ xem mà làm được ngay — tôi có một khóa học đầy đủ, hai trăm ba mươi chín nghìn, hướng dẫn từng bước từ cài đặt tới xây đội ngũ AI hoàn chỉnh. Link ở phần mô tả.</p>
+<h3 id="cta-30-giay-cuoi-cta-manh">[CTA — 30 giây cuối — CTA MẠNH]</h3>
+<p>[QUAY MÀN HÌNH: màn hình tổng kết — logo kênh, link đăng ký Portal, link khóa học; để trên màn hình đủ lâu để chụp]</p>
+<p>[VOICEOVER]
+Hai việc cho bạn ngay bây giờ. Thứ nhất, nếu chưa có tài khoản: mở link trong phần mô tả — vanhi.id.vn/nous — đăng ký Nous Portal, hai phút, dùng được mọi công cụ Hermes. Thứ hai, nếu bạn muốn học bài bản hơn video miễn phí: khóa học "Nhân Sự Toàn Năng Hermes" tại speedreading.vn/ahermes — hai trăm ba mươi chín nghìn đồng, một lần, dùng mãi. Trong khóa học bạn sẽ xây được đội ngũ AI của chính mình, không chỉ xem tôi làm.</p>
+<p>Đây là video cuối của series. Cảm ơn bạn đã đi cùng tôi mười video. Nhấn đăng ký kênh — series mới đã được lên kế hoạch, và bạn sẽ là người đầu tiên biết. Hẹn gặp lại.</p>
+<hr />
+<h2 id="ghi-chu-san-xuat-chung">GHI CHÚ SẢN XUẤT CHUNG</h2>
+<ol>
+<li><strong>Tính xác thực</strong>: mọi lệnh trong script đã kiểm chứng với CLI thật — <code>hermes cron create/list/run/pause/runs</code>, <code>hermes gateway setup/start/install</code>, <code>hermes profile create/list</code>, <code>hermes -p &lt;name&gt; chat</code>, <code>/learn</code>, <code>/tên-skill</code>, <code>hermes skills search/install</code>. Không đưa vào script tính năng không có.</li>
+<li><strong>Không phóng đại</strong>: hook V6 "200 trang/30 giây" — quay thật, để đồng hồ góc màn hình; trong thân bài có đoạn nói rõ AI có thể sai số liệu, cần kiểm tra lại. Giữ niềm tin lâu dài hơn giữ hook sốc.</li>
+<li><strong>B-roll cần chuẩn bị</strong>: màn hình terminal sạch (font lớn, nền tối); folder mẫu PDF/Excel/Word; ảnh tủ lạnh cho V9; điện thoại quay màn hình Telegram; desktop app tab Bots cho V10.</li>
+<li><strong>Thumbnail đề xuất</strong>: V6 — icon file PDF + đồng hồ; V7 — icon não + vòng lặp "học"; V8 — đồng hồ báo thức 7:00 + icon Telegram; V9 — icon gia đình + lịch; V10 — icon điện thoại + nhiều avatar bot.</li>
+<li><strong>Bán hàng</strong>: V6-V9 CTA nhẹ (subscribe, xem video trước/sau); chỉ V10 có CTA khóa học 239k + link Portal, đúng vai trò video khép series.</li>
+</ol></div>
+</section>
+<section class="panel" id="sec-social">
+<div class="panel-inner"><h1 id="ke-hoach-phan-phoi-video-ngan-series-10-video-hermes-agent">Kế Hoạch Phân Phối + Video Ngắn — Series 10 Video Hermes Agent</h1>
+<p><strong>Kênh:</strong> YouTube faceless tiếng Việt — ngách AI cho dân văn phòng, chủ SME &amp; gia đình
+<strong>Ngày lập:</strong> 12/10/2026
+<strong>Người thực hiện:</strong> Chuyên viên Mạng Xã Hội (mkt-social)
+<strong>Bám theo:</strong> <code>YouTube_Hermes_SEO_10Video.md</code> (bộ tiêu đề + mô tả + chương đã có sẵn)
+<strong>Link giới thiệu chính:</strong> https://vanhi.id.vn/nous (đăng ký Nhóm Portal, giảm 15 đô)
+<strong>Link khóa học:</strong> https://speedreading.vn/ahermes (239.000 đồng)</p>
+<hr />
+<h2 id="nguyen-tac-lon-oc-truoc-khi-lam">NGUYÊN TẮC LỚN (đọc trước khi làm)</h2>
+<ol>
+<li><strong>Đăng giá trị trước, link sau.</strong> 3 video đầu tiên của series không chèn link đăng ký
+   Portal vào bài seeding nhóm Facebook. Video 4 trở đi mới đẩy mạnh kêu gọi đăng ký.</li>
+<li><strong>Nhóm Facebook: 2 bài giá trị → 1 bài có link.</strong> Không bao giờ để link xuất hiện ở
+   2 bài liên tiếp trong cùng nhóm. Bài có link luôn kèm 1 đoạn hướng dẫn thật để
+   người đọc thấy giá trị trước khi bấm.</li>
+<li><strong>Mỗi video dài phải có ít nhất 2 video ngắn</strong> cắt ra. Video ngắn là kênh rẻ nhất
+   để kéo người lạ vào series — mất 10 phút cắt, không phải quay lại.</li>
+<li><strong>Tương tác là vàng:</strong> sau mỗi video ngắn đăng, phải trả lời bình luận trong 2 giờ
+   đầu — YouTube ưu tiên video có bình luận sớm.</li>
+<li><strong>Không hứa kết quả thần kỳ.</strong> Nói rõ phần nào miễn phí, phần nào tốn phí khi dùng
+   model lớn. Kênh mới sống bằng lòng tin, không sống bằng lời quảng cáo.</li>
+</ol>
+<hr />
+<h1 id="phan-1-ke-hoach-video-ngan-30-y-tuong-cho-10-video">PHẦN 1 — KẾ HOẠCH VIDEO NGẮN (30 Ý TƯỞNG CHO 10 VIDEO)</h1>
+<h2 id="cach-cat-video-ngan-lam-1-lan-ap-dung-cho-ca-series">Cách cắt video ngắn (làm 1 lần, áp dụng cho cả series)</h2>
+<ul>
+<li><strong>Độ dài:</strong> 15–45 giây. Quá 45 giây tỷ lệ xem hết tụt mạnh.</li>
+<li><strong>Khổ dọc 9:16</strong>, chữ phụ to (đọc được trên điện thoại khi tắt tiếng).</li>
+<li><strong>Mở đầu thu hút trong 3 giây đầu tiên</strong> — phải là câu hỏi hoặc câu phản trực giác,
+  KHÔNG phải giới thiệu tên kênh. Người xem không quan tâm bạn là ai.</li>
+<li><strong>Cắt ở đâu:</strong> lấy thẳng đoạn đỉnh của video dài (chỗ demo thật, chỗ số liệu,
+  chỗ lỗi hay gặp). Không cắt phần giới thiệu, không cắt phần chào tạm biệt.</li>
+<li><strong>Kết:</strong> 1 câu kêu gọi duy nhất — "xem video đầy đủ trên kênh" hoặc
+  "link đăng ký ở bình luận ghim". Chỉ MỘT kêu gọi, không hai.</li>
+<li><strong>Link đặt ở bình luận ghim</strong>, không đặt trong hình ảnh video ngắn
+  (tránh bị hạn chế hiển thị).</li>
+</ul>
+<hr />
+<h2 id="video-1-hermes-agent-la-gi-gioi-thieu">Video 1 — Hermes Agent là gì? Giới thiệu</h2>
+<table>
+<thead>
+<tr>
+<th>Mã</th>
+<th>Đoạn cắt trong script</th>
+<th>Thời lượng</th>
+<th>Câu mở đầu thu hút</th>
+<th>Kêu gọi cuối</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>S1.1</td>
+<td>0:00–1:30 — đoạn so sánh Trợ lý Thông minh với chatbot thường</td>
+<td>25 giây</td>
+<td>"Bạn vẫn phải nhắc lại từ đầu mỗi lần mở chatbot?"</td>
+<td>Xem video đầy đủ</td>
+</tr>
+<tr>
+<td>S1.2</td>
+<td>9:00–11:30 — đoạn chạy thử: hỏi đáp + xử lý file</td>
+<td>35 giây</td>
+<td>"Trợ lý AI miễn phí này đọc file Excel trong 5 giây"</td>
+<td>Link ở bình luận ghim</td>
+</tr>
+<tr>
+<td>S1.3</td>
+<td>3:15–5:00 — liệt kê 4 tính năng nổi bật</td>
+<td>20 giây</td>
+<td>"Trợ lý AI nhớ bạn, tự chạy nền, gửi kết quả về Telegram — mà không mất tiền"</td>
+<td>Xem video đầy đủ</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Gợi ý hình ảnh cắt:</strong> màn hình máy tính chia 2 nửa — nửa trên chatbot thường (chữ
+xám, nhạt), nửa dưới Hermes (chữ sáng, có giao diện). Chữ to ở giữa: "KHÁC GÌ?"</p>
+<hr />
+<h2 id="video-2-cai-hermes-agent-tren-mac-windows">Video 2 — Cài Hermes Agent trên Mac &amp; Windows</h2>
+<table>
+<thead>
+<tr>
+<th>Mã</th>
+<th>Đoạn cắt trong script</th>
+<th>Thời lượng</th>
+<th>Câu mở đầu thu hút</th>
+<th>Kêu gọi cuối</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>S2.1</td>
+<td>1:00–4:30 — Cách 1: tải bản cài bấm 1 nút</td>
+<td>30 giây</td>
+<td>"Cài trợ lý AI lên Mac trong 5 phút — không cần thuê máy chủ, không cần biết code"</td>
+<td>Xem video đầy đủ</td>
+</tr>
+<tr>
+<td>S2.2</td>
+<td>9:30–12:00 — sửa 3 lỗi hay gặp</td>
+<td>40 giây</td>
+<td>"Cài Hermes báo lỗi đỏ? 9 trên 10 lần chỉ vì 3 lỗi này"</td>
+<td>Xem video đầy đủ</td>
+</tr>
+<tr>
+<td>S2.3</td>
+<td>8:00–9:30 — kiểm tra cài thành công</td>
+<td>25 giây</td>
+<td>"Ngại gõ lệnh? Có bản bấm một nút là xong"</td>
+<td>Xem video đầy đủ</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Gợi ý hình ảnh cắt:</strong> đồng hồ đếm ngược ở góc trên, tay chuột bấm nút tải.
+Chữ đỏ nhấn 3 dòng lỗi: "lỗi đường dẫn — lỗi môi trường — lỗi mạng".</p>
+<hr />
+<h2 id="video-3-ang-ky-nhom-portal-lay-model-mien-phi">Video 3 — Đăng ký Nhóm Portal + lấy model miễn phí</h2>
+<table>
+<thead>
+<tr>
+<th>Mã</th>
+<th>Đoạn cắt trong script</th>
+<th>Thời lượng</th>
+<th>Câu mở đầu thu hút</th>
+<th>Kêu gọi cuối</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>S3.1</td>
+<td>3:00–5:00 — hướng dẫn đăng ký từng bước</td>
+<td>35 giây</td>
+<td>"Đăng ký xong là có ngay 15 đô credit — chạy cả tháng không tốn đồng nào"</td>
+<td>Link ở bình luận ghim</td>
+</tr>
+<tr>
+<td>S3.2</td>
+<td>7:30–9:30 — kết nối bằng 1 dòng lệnh</td>
+<td>30 giây</td>
+<td>"Một dòng lệnh là trợ lý AI có não"</td>
+<td>Xem video đầy đủ</td>
+</tr>
+<tr>
+<td>S3.3</td>
+<td>11:00–12:30 — mẹo tiết kiệm credit</td>
+<td>25 giây</td>
+<td>"Đừng dùng model đắt cho việc rẻ — 3 mẹo tiết kiệm credit"</td>
+<td>Xem video đầy đủ</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Gợi ý hình ảnh cắt:</strong> đoạn S3.1 phải hiện rõ màn hình đăng ký và số tiền credit
+hiện lên. Đây là video ngắn có khả năng đăng ký cao nhất series — đăng lại nhiều lần.</p>
+<hr />
+<h2 id="video-4-10-cau-lenh-co-ban-au-tien">Video 4 — 10 câu lệnh cơ bản đầu tiên</h2>
+<table>
+<thead>
+<tr>
+<th>Mã</th>
+<th>Đoạn cắt trong script</th>
+<th>Thời lượng</th>
+<th>Câu mở đầu thu hút</th>
+<th>Kêu gọi cuối</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>S4.1</td>
+<td>Lấy mục #2, #4, #9 — viết email, lập kế hoạch, tạo file</td>
+<td>40 giây</td>
+<td>"3 câu lệnh dân văn phòng nên dán sẵn vào giấy nhớ"</td>
+<td>Xem video đầy đủ</td>
+</tr>
+<tr>
+<td>S4.2</td>
+<td>3:15–4:30 — mục #3: tóm tắt nội dung web</td>
+<td>35 giây</td>
+<td>"Bài báo 10 trang — đọc hết trong 10 giây"</td>
+<td>Xem video đầy đủ</td>
+</tr>
+<tr>
+<td>S4.3</td>
+<td>10:30–11:45 — mục #10: hỏi lại lịch sử + mẹo viết câu lệnh hay</td>
+<td>30 giây</td>
+<td>"Hôm qua trợ lý AI bảo cái gì nhỉ?"</td>
+<td>Xem video đầy đủ</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Gợi ý hình ảnh cắt:</strong> chia màn hình 3 khung cho S4.1, mỗi khung 1 câu lệnh và
+kết quả hiện ra ngay sau đó.</p>
+<hr />
+<h2 id="video-5-xu-ly-file-van-phong-excel-pdf-word">Video 5 — Xử lý file văn phòng (Excel / PDF / Word)</h2>
+<table>
+<thead>
+<tr>
+<th>Mã</th>
+<th>Đoạn cắt trong script</th>
+<th>Thời lượng</th>
+<th>Câu mở đầu thu hút</th>
+<th>Kêu gọi cuối</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>S5.1</td>
+<td>0:00–2:00 — demo từ file thô thành báo cáo</td>
+<td>45 giây</td>
+<td>"20 dòng Excel lộn xộn thành báo cáo gọn gàng — 2 phút"</td>
+<td>Xem video đầy đủ</td>
+</tr>
+<tr>
+<td>S5.2</td>
+<td>16:00–hết — mẹo đọc file tiếng Việt không lỗi</td>
+<td>30 giây</td>
+<td>"AI đọc file tiếng Việt hay ra chữ loằng ngoằng? Sửa bằng 1 câu"</td>
+<td>Xem video đầy đủ</td>
+</tr>
+<tr>
+<td>S5.3</td>
+<td>13:00–16:00 — quy trình: ra lệnh → AI làm → bạn duyệt</td>
+<td>25 giây</td>
+<td>"Gửi bảng lương lên mạng à? Không — phần mềm này chạy ngay trên máy bạn"</td>
+<td>Xem video đầy đủ</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Gợi ý hình ảnh cắt:</strong> S5.1 chia đôi màn hình — trái là file Excel lộn xộn,
+phải là báo cáo có dấu tích xanh. Đây là video ngắn dễ lan truyền nhất trong ngách
+dân văn phòng — đăng lại vào thứ Ba và thứ Năm hàng tuần.</p>
+<hr />
+<h2 id="video-6-day-hermes-quy-trinh-rieng-voi-skills">Video 6 — Dạy Hermes quy trình riêng với Skills</h2>
+<table>
+<thead>
+<tr>
+<th>Mã</th>
+<th>Đoạn cắt trong script</th>
+<th>Thời lượng</th>
+<th>Câu mở đầu thu hút</th>
+<th>Kêu gọi cuối</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>S6.1</td>
+<td>2:00–8:00 — ví dụ quy trình báo cáo tuần + dùng lại</td>
+<td>35 giây</td>
+<td>"Bạn có câu nào lặp lại mỗi tuần không? Dạy 1 lần, dùng mãi"</td>
+<td>Xem video đầy đủ</td>
+</tr>
+<tr>
+<td>S6.2</td>
+<td>0:00–2:00 — phân biệt Skill với Bộ nhớ</td>
+<td>25 giây</td>
+<td>"Hai từ hay bị nhầm trong cài đặt trợ lý AI"</td>
+<td>Xem video đầy đủ</td>
+</tr>
+<tr>
+<td>S6.3</td>
+<td>5:00–8:00 — nhờ Hermes tự viết skill</td>
+<td>30 giây</td>
+<td>"Không biết viết? Bảo trợ lý AI tự viết lấy"</td>
+<td>Xem video đầy đủ</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="video-7-bo-nho-hermes-nho-ban-qua-moi-lan-dung">Video 7 — Bộ nhớ: Hermes nhớ bạn qua mọi lần dùng</h2>
+<table>
+<thead>
+<tr>
+<th>Mã</th>
+<th>Đoạn cắt trong script</th>
+<th>Thời lượng</th>
+<th>Câu mở đầu thu hút</th>
+<th>Kêu gọi cuối</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>S7.1</td>
+<td>0:00–2:00 — demo nhớ thông tin qua nhiều phiên</td>
+<td>35 giây</td>
+<td>"Trợ lý AI này nhớ bạn từ tuần trước — không cần giới thiệu lại"</td>
+<td>Xem video đầy đủ</td>
+</tr>
+<tr>
+<td>S7.2</td>
+<td>4:00–6:00 — cách cho Hermes nhớ đúng thứ cần</td>
+<td>30 giây</td>
+<td>"Đừng để AI nhớ linh tinh — nói 1 câu là nó nhớ đúng"</td>
+<td>Xem video đầy đủ</td>
+</tr>
+<tr>
+<td>S7.3</td>
+<td>6:00–10:00 — xem, chỉnh sửa, xoá + kiểm soát riêng tư</td>
+<td>25 giây</td>
+<td>"AI đang nhớ những gì về bạn? Xem và xoá được"</td>
+<td>Xem video đầy đủ</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="video-8-chay-nen-tu-ong-bao-cao-moi-sang-nhac-viec-hang-ngay">Video 8 — Chạy nền tự động: báo cáo mỗi sáng, nhắc việc hàng ngày</h2>
+<table>
+<thead>
+<tr>
+<th>Mã</th>
+<th>Đoạn cắt trong script</th>
+<th>Thời lượng</th>
+<th>Câu mở đầu thu hút</th>
+<th>Kêu gọi cuối</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>S8.1</td>
+<td>1:30–5:00 — ví dụ 1: báo cáo tự động sáng thứ Hai</td>
+<td>40 giây</td>
+<td>"Sáng thứ Hai mở máy đã có bản tin tuần — bạn ngủ, AI làm"</td>
+<td>Xem video đầy đủ</td>
+</tr>
+<tr>
+<td>S8.2</td>
+<td>8:00–11:00 — ví dụ 3: theo dõi giá đối thủ định kỳ</td>
+<td>30 giây</td>
+<td>"Muốn biết đối thủ đổi giá lúc nào?"</td>
+<td>Xem video đầy đủ</td>
+</tr>
+<tr>
+<td>S8.3</td>
+<td>13:00–hết — chi phí khi để chạy nền</td>
+<td>25 giây</td>
+<td>"Để AI chạy cả ngày có tốn kém không?"</td>
+<td>Xem video đầy đủ</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="video-9-hermes-trong-gia-inh">Video 9 — Hermes trong gia đình</h2>
+<table>
+<thead>
+<tr>
+<th>Mã</th>
+<th>Đoạn cắt trong script</th>
+<th>Thời lượng</th>
+<th>Câu mở đầu thu hút</th>
+<th>Kêu gọi cuối</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>S9.1</td>
+<td>5:00–8:00 — gợi ý thực đơn theo nguyên liệu</td>
+<td>30 giây</td>
+<td>"Tủ lạnh còn 3 thứ — tối nay ăn gì?"</td>
+<td>Xem video đầy đủ</td>
+</tr>
+<tr>
+<td>S9.2</td>
+<td>2:00–5:00 — nhắc lịch học, lịch tiêm, sinh nhật</td>
+<td>30 giây</td>
+<td>"Quên ngày sinh nhật bố mẹ? Để AI nhớ giúp"</td>
+<td>Xem video đầy đủ</td>
+</tr>
+<tr>
+<td>S9.3</td>
+<td>8:00–11:00 — hỗ trợ con học bài</td>
+<td>25 giây</td>
+<td>"Con hỏi bài mà bạn không biết trả lời?"</td>
+<td>Xem video đầy đủ</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="video-10-ket-noi-telegram-oi-ngu-ai">Video 10 — Kết nối Telegram + đội ngũ AI</h2>
+<table>
+<thead>
+<tr>
+<th>Mã</th>
+<th>Đoạn cắt trong script</th>
+<th>Thời lượng</th>
+<th>Câu mở đầu thu hút</th>
+<th>Kêu gọi cuối</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>S10.1</td>
+<td>0:00–4:00 — tạo bot và kết nối</td>
+<td>30 giây</td>
+<td>"Nhắn tin Telegram là ra lệnh được cho AI"</td>
+<td>Xem video đầy đủ</td>
+</tr>
+<tr>
+<td>S10.2</td>
+<td>4:00–8:30 — ra lệnh từ điện thoại, nhận kết quả về Telegram</td>
+<td>30 giây</td>
+<td>"Đang ngoài đường, bảo AI làm báo cáo"</td>
+<td>Xem video đầy đủ</td>
+</tr>
+<tr>
+<td>S10.3</td>
+<td>8:30–12:00 — nhiều trợ lý chạy song song</td>
+<td>35 giây</td>
+<td>"Một trợ lý chưa đủ? Làm cả một đội"</td>
+<td>Xem video đầy đủ</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Tổng: 30 video ngắn.</strong> Trong đó 4 video ngắn đáng đăng lại nhiều nhất (đăng lại
+mỗi tuần trong 4 tuần đầu): <strong>S1.1, S3.1, S5.1, S8.1</strong>.</p>
+<hr />
+<h1 id="phan-2-lich-ang-a-nen-tang-2-tuan-au">PHẦN 2 — LỊCH ĐĂNG ĐA NỀN TẢNG 2 TUẦN ĐẦU</h1>
+<h2 id="khung-gio-chuan-ap-dung-suot-series">Khung giờ chuẩn (áp dụng suốt series)</h2>
+<table>
+<thead>
+<tr>
+<th>Nền tảng</th>
+<th>Giờ đăng video dài</th>
+<th>Giờ đăng video ngắn</th>
+<th>Giờ đăng bài seeding</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>YouTube</td>
+<td>12:00</td>
+<td>11:30</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Nhóm Facebook</td>
+<td>—</td>
+<td>—</td>
+<td>12:30 hoặc 20:00</td>
+</tr>
+<tr>
+<td>Kênh Telegram</td>
+<td>12:15</td>
+<td>12:00</td>
+<td>8:00 (bản tin sáng)</td>
+</tr>
+<tr>
+<td>Mạng X / Twitter</td>
+<td>13:00</td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Quy tắc 30 phút:</strong> video ngắn đăng trước video dài 30 phút để dẫn người xem sang.
+Nếu đăng cùng ngày mà không đăng trước được thì đăng video ngắn sau 2 giờ.</p>
+<h2 id="tuan-1-1310-19102026">Tuần 1 (13/10 – 19/10/2026)</h2>
+<table>
+<thead>
+<tr>
+<th>Ngày</th>
+<th>Giờ</th>
+<th>Nền tảng</th>
+<th>Nội dung</th>
+<th>Có link giới thiệu?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>T3 13/10</td>
+<td>11:30</td>
+<td>YouTube (ngắn)</td>
+<td>S1.1 — so sánh chatbot</td>
+<td>Không</td>
+</tr>
+<tr>
+<td>T3 13/10</td>
+<td>12:00</td>
+<td>YouTube (dài)</td>
+<td>Video 1 — Giới thiệu series</td>
+<td>Link ở mô tả, 2 dòng đầu</td>
+</tr>
+<tr>
+<td>T3 13/10</td>
+<td>12:15</td>
+<td>Telegram</td>
+<td>Thông báo video 1 + lộ trình 10 video</td>
+<td>Có (nhẹ, 1 lần)</td>
+</tr>
+<tr>
+<td>T3 13/10</td>
+<td>12:30</td>
+<td>Nhóm Facebook</td>
+<td>Bài Mẫu A — chia sẻ lộ trình, không link</td>
+<td>Không</td>
+</tr>
+<tr>
+<td>T3 13/10</td>
+<td>13:00</td>
+<td>Mạng X</td>
+<td>Chủ đề 1: 7 điều cần biết về trợ lý AI</td>
+<td>Có link giới thiệu</td>
+</tr>
+<tr>
+<td>T4 14/10</td>
+<td>11:30</td>
+<td>YouTube (ngắn)</td>
+<td>S1.2 — demo xử lý file</td>
+<td>Có (bình luận ghim)</td>
+</tr>
+<tr>
+<td>T4 14/10</td>
+<td>19:00</td>
+<td>YouTube (ngắn)</td>
+<td>S1.3 — 4 tính năng nổi bật</td>
+<td>Không</td>
+</tr>
+<tr>
+<td>T5 15/10</td>
+<td>11:30</td>
+<td>YouTube (ngắn)</td>
+<td>S2.1 — cài trong 5 phút</td>
+<td>Không</td>
+</tr>
+<tr>
+<td>T5 15/10</td>
+<td>12:00</td>
+<td>YouTube (dài)</td>
+<td>Video 2 — Cài đặt từ đầu đến cuối</td>
+<td>Link ở mô tả</td>
+</tr>
+<tr>
+<td>T5 15/10</td>
+<td>12:30</td>
+<td>Nhóm Facebook</td>
+<td>Bài Mẫu B — cài trên máy Mac không cần code, kèm link video</td>
+<td>Có link video, KHÔNG có link Portal</td>
+</tr>
+<tr>
+<td>T6 16/10</td>
+<td>11:30</td>
+<td>YouTube (ngắn)</td>
+<td>S2.2 — 3 lỗi hay gặp</td>
+<td>Không</td>
+</tr>
+<tr>
+<td>T7 17/10</td>
+<td>10:00</td>
+<td>YouTube (ngắn)</td>
+<td>S2.3 — bản bấm 1 nút</td>
+<td>Không</td>
+</tr>
+<tr>
+<td>T7 17/10</td>
+<td>11:30</td>
+<td>YouTube (ngắn)</td>
+<td>S3.1 — lấy model miễn phí</td>
+<td>Có (bình luận ghim)</td>
+</tr>
+<tr>
+<td>T7 17/10</td>
+<td>12:00</td>
+<td>YouTube (dài)</td>
+<td>Video 3 — Đăng ký Nhóm Portal</td>
+<td>Link ở mô tả + thẻ giữa video</td>
+</tr>
+<tr>
+<td>T7 17/10</td>
+<td>12:30</td>
+<td>Nhóm Facebook</td>
+<td>Bài Mẫu C — LẦN ĐẦU đẩy kêu gọi đăng ký Portal</td>
+<td>Có link Portal</td>
+</tr>
+<tr>
+<td>CN 18/10</td>
+<td>10:00</td>
+<td>YouTube (ngắn)</td>
+<td>S3.2 — 1 dòng lệnh kết nối</td>
+<td>Không</td>
+</tr>
+<tr>
+<td>CN 18/10</td>
+<td>20:00</td>
+<td>Nhóm Facebook</td>
+<td>Bài hỏi đáp: "Anh/chị đang kẹt chỗ nào?"</td>
+<td>Không</td>
+</tr>
+<tr>
+<td>T2 19/10</td>
+<td>11:30</td>
+<td>YouTube (ngắn)</td>
+<td>S3.3 — mẹo tiết kiệm credit</td>
+<td>Không</td>
+</tr>
+</tbody>
+</table>
+<h2 id="tuan-2-2010-26102026">Tuần 2 (20/10 – 26/10/2026)</h2>
+<table>
+<thead>
+<tr>
+<th>Ngày</th>
+<th>Giờ</th>
+<th>Nền tảng</th>
+<th>Nội dung</th>
+<th>Có link giới thiệu?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>T3 20/10</td>
+<td>11:30</td>
+<td>YouTube (ngắn)</td>
+<td>S4.1 — 3 câu lệnh dân văn phòng</td>
+<td>Không</td>
+</tr>
+<tr>
+<td>T3 20/10</td>
+<td>12:00</td>
+<td>YouTube (dài)</td>
+<td>Video 4 — 10 câu lệnh cơ bản</td>
+<td>Link ở mô tả</td>
+</tr>
+<tr>
+<td>T3 20/10</td>
+<td>12:30</td>
+<td>Nhóm Facebook</td>
+<td>Bài Mẫu D — 3 câu lệnh dùng ngay, không link</td>
+<td>Không</td>
+</tr>
+<tr>
+<td>T4 21/10</td>
+<td>11:30</td>
+<td>YouTube (ngắn)</td>
+<td>S4.2 — tóm tắt web 10 giây</td>
+<td>Không</td>
+</tr>
+<tr>
+<td>T5 22/10</td>
+<td>11:30</td>
+<td>YouTube (ngắn)</td>
+<td>S4.3 — hỏi lại lịch sử</td>
+<td>Không</td>
+</tr>
+<tr>
+<td>T5 22/10</td>
+<td>12:00</td>
+<td>YouTube (dài)</td>
+<td>Video 5 — Xử lý file văn phòng</td>
+<td>Link ở mô tả</td>
+</tr>
+<tr>
+<td>T5 22/10</td>
+<td>12:30</td>
+<td>Nhóm Facebook</td>
+<td>Bài Mẫu E — tiết kiệm 5 giờ/tuần, kèm link Portal nhẹ</td>
+<td>Có link Portal</td>
+</tr>
+<tr>
+<td>T5 22/10</td>
+<td>19:00</td>
+<td>YouTube (ngắn)</td>
+<td>S5.1 — từ Excel lộn xộn thành báo cáo</td>
+<td>Có (bình luận ghim)</td>
+</tr>
+<tr>
+<td>T6 23/10</td>
+<td>11:30</td>
+<td>YouTube (ngắn)</td>
+<td>S5.2 — sửa lỗi chữ tiếng Việt</td>
+<td>Không</td>
+</tr>
+<tr>
+<td>T7 24/10</td>
+<td>10:00</td>
+<td>YouTube (ngắn)</td>
+<td>S5.3 — chạy trên máy, không lo rò rỉ</td>
+<td>Không</td>
+</tr>
+<tr>
+<td>T7 24/10</td>
+<td>11:30</td>
+<td>YouTube (ngắn)</td>
+<td>S6.1 — dạy 1 lần dùng mãi</td>
+<td>Không</td>
+</tr>
+<tr>
+<td>T7 24/10</td>
+<td>12:00</td>
+<td>YouTube (dài)</td>
+<td>Video 6 — Dạy quy trình với Skills</td>
+<td>Link ở mô tả</td>
+</tr>
+<tr>
+<td>T7 24/10</td>
+<td>12:30</td>
+<td>Nhóm Facebook</td>
+<td>Bài Mẫu C (viết lại theo góc mới) — kêu gọi đăng ký</td>
+<td>Có link Portal</td>
+</tr>
+<tr>
+<td>CN 25/10</td>
+<td>10:00</td>
+<td>YouTube (ngắn)</td>
+<td>S6.2 — phân biệt 2 khái niệm</td>
+<td>Không</td>
+</tr>
+<tr>
+<td>CN 25/10</td>
+<td>20:00</td>
+<td>Nhóm Facebook</td>
+<td>Bài hỏi đáp: "Anh/chị muốn học tiếp phần nào?"</td>
+<td>Không</td>
+</tr>
+<tr>
+<td>T2 26/10</td>
+<td>11:30</td>
+<td>YouTube (ngắn)</td>
+<td>S6.3 — nhờ AI tự viết</td>
+<td>Không</td>
+</tr>
+</tbody>
+</table>
+<h3 id="quy-tac-chen-link-theo-tung-nhom-facebook">Quy tắc chèn link theo từng nhóm Facebook</h3>
+<table>
+<thead>
+<tr>
+<th>Giai đoạn</th>
+<th>Bài nhóm</th>
+<th>Nội dung link</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Video 1–2</td>
+<td>2 bài</td>
+<td>Chỉ link video YouTube. Không link Portal.</td>
+</tr>
+<tr>
+<td>Video 3</td>
+<td>1 bài</td>
+<td>Link Portal lần đầu + link video. Bám sát bài Mẫu C.</td>
+</tr>
+<tr>
+<td>Video 4–5</td>
+<td>2 bài</td>
+<td>1 bài không link, 1 bài có link Portal nhẹ ở cuối.</td>
+</tr>
+<tr>
+<td>Video 6 trở đi</td>
+<td>2 bài</td>
+<td>Luôn có 1 bài kêu gọi đăng ký Portal, 1 bài giá trị thuần.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="nhom-facebook-nao-nen-ang-chon-4-nhom-la-u">Nhóm Facebook nào nên đăng (chọn 4 nhóm là đủ)</h3>
+<ol>
+<li>Nhóm về tự động hóa &amp; trí tuệ nhân tạo tại Việt Nam</li>
+<li>Nhóm dân văn phòng, hành chính, kế toán (nhóm nào cũng có người gõ Excel)</li>
+<li>Nhóm khởi nghiệp nhỏ / kinh doanh online</li>
+<li>Nhóm làm cha mẹ, quản lý việc nhà (dành cho video 9)</li>
+</ol>
+<p><strong>Quy tắc khi vào nhóm:</strong> đọc nội quy nhóm trước, xem 5 bài gần nhất để hiểu
+"giọng" của nhóm. Bài đầu tiên trong mỗi nhóm phải là bình luận hữu ích dưới
+bài của người khác, chứ không phải bài đăng của mình — nhóm nào cũng ghét
+thành viên mới đăng bài bán hàng ngay.</p>
+<hr />
+<h1 id="phan-3-5-mau-bai-ang-3-mau-binh-luan-tra-loi">PHẦN 3 — 5 MẪU BÀI ĐĂNG + 3 MẪU BÌNH LUẬN TRẢ LỜI</h1>
+<h2 id="mau-a-gioi-thieu-lo-trinh-dung-cho-video-1-khong-link">Mẫu A — Giới thiệu lộ trình (dùng cho video 1, không link)</h2>
+<blockquote>
+<p>Em đang làm một loạt 10 video hướng dẫn dùng trợ lý AI cho người đi làm và
+chủ cửa hàng nhỏ. Không phải video bán khóa học — là video chỉ từng bước,
+ai cũng làm theo được trên máy của mình.</p>
+<p>Nội dung loạt video:
+1. Trợ lý AI là gì, khác gì chatbot thường
+2. Cài lên máy Mac / Windows trong 5 phút
+3. Lấy model miễn phí, không cần thẻ tín dụng
+4. 10 câu lệnh dùng ngay trong ngày đầu
+5. Gộp file Excel, đọc PDF, soạn báo cáo Word
+6. Dạy trợ lý AI quy trình riêng của mình
+7. Làm cho nó nhớ mình qua mọi lần dùng
+8. Để nó tự chạy mỗi sáng, tự nhắc việc
+9. Dùng cho cả nhà: nhắc lịch, thực đơn, học tập
+10. Điều khiển từ điện thoại qua Telegram</p>
+<p>Mỗi tuần 3 video. Anh/chị muốn xem phần nào nhất thì comment số bên dưới,
+em ưu tiên làm trước ạ.</p>
+</blockquote>
+<p><strong>Thẻ gắn:</strong> #TroLyAI #TuDongHoaCongViec #AIChoNguoiDiLam #DoanhNghiepNho</p>
+<hr />
+<h2 id="mau-b-bai-gia-tri-ky-thuat-dung-cho-video-2-chi-link-video">Mẫu B — Bài giá trị kỹ thuật (dùng cho video 2, chỉ link video)</h2>
+<blockquote>
+<p>Một câu em nghe nhiều nhất: "biết là cần dùng AI, nhưng thuê người cài đặt
+mất vài triệu, mà mình không biết chỉnh sau này".</p>
+<p>Em vừa làm 1 video chỉ cách cài trợ lý AI Hermes lên máy Mac / Windows,
+mất khoảng 5 phút, KHÔNG cần biết code, KHÔNG cần thuê máy chủ, KHÔNG cần
+thẻ tín dụng.</p>
+<p>Video chỉ rõ 3 lỗi hay gặp nhất khi cài — em dám cá 8 người trong 10 người
+cài lần đầu đều dính ít nhất 1 lỗi trong 3 lỗi đó.</p>
+<p>Xem ở đây: [link video YouTube]</p>
+<p>Ai cài xong rồi thì comment báo em một tiếng để em biết video có dễ hiểu
+không nhé.</p>
+</blockquote>
+<hr />
+<h2 id="mau-c-keu-goi-ang-ky-dung-tu-video-3-co-link-portal">Mẫu C — Kêu gọi đăng ký (dùng từ video 3, có link Portal)</h2>
+<blockquote>
+<p>Phần khó nhất khi dùng trợ lý AI không phải cài đặt — mà là tìm "bộ não"
+cho nó chạy. Đa số người dừng lại ở đây vì tưởng phải trả tiền.</p>
+<p>Thực ra có cách lấy model miễn phí: đăng ký tài khoản Nhóm Portal của
+Nhóm Nghiên cứu, kích hoạt gói miễn phí, nối vào trợ lý AI bằng 1 dòng
+lệnh. Xong — có ngay trợ lý AI chạy được trên máy mình.</p>
+<p>Em có link giới thiệu, đăng ký qua link này được giảm 15 đô credit:
+https://vanhi.id.vn/nous</p>
+<p>Em có video chỉ từng bước, ai cũng làm theo được:
+[link video YouTube]</p>
+<p>Lưu ý thật lòng: gói miễn phí đủ dùng cho việc văn phòng hằng ngày. Nếu sau
+này anh/chị cần model mạnh hơn thì mới tốn phí — em sẽ nói rõ ở phần nào
+tốn phí, không giấu.</p>
+</blockquote>
+<hr />
+<h2 id="mau-d-bai-tien-ich-thuan-dung-cho-video-4-khong-link">Mẫu D — Bài tiện ích thuần (dùng cho video 4, không link)</h2>
+<blockquote>
+<p>3 câu lệnh em dùng mỗi ngày, ai làm văn phòng cũng dán vào giấy nhớ được:</p>
+<ol>
+<li>"Viết email trả lời khách hàng xin hoãn giao hàng. Giọng lịch sự,
+   đề xuất 2 mốc thời gian, dưới 150 từ."</li>
+<li>"Lập kế hoạch tuần này cho tôi dựa trên các việc sau: [dán danh sách].
+   Ưu tiên việc có hạn trước."</li>
+<li>"Đọc file này và tạo bản tóm tắt 1 trang, giữ nguyên số liệu quan trọng."</li>
+</ol>
+<p>Không cần nhớ cú pháp khó. Cứ nói như nói với nhân viên mới.</p>
+<p>Video đầy đủ 10 câu lệnh: [link video YouTube]</p>
+<p>Anh/chị có câu lệnh hay nào khác thì chia sẻ bên dưới nhé.</p>
+</blockquote>
+<hr />
+<h2 id="mau-e-bai-tiet-kiem-thoi-gian-dung-cho-video-5-link-portal-nhe">Mẫu E — Bài tiết kiệm thời gian (dùng cho video 5, link Portal nhẹ)</h2>
+<blockquote>
+<p>Em tính thử: gộp 3 file Excel, đọc 1 file PDF dài, rồi soạn báo cáo Word —
+tay làm hết bao nhiêu? Ở chỗ em cũ mất hơn 2 tiếng.</p>
+<p>Giờ em chỉ cần nói 1 câu, trợ lý AI làm trong khoảng 2 phút. Và quan trọng:
+nó chạy ngay trên máy em — file bảng lương, file khách hàng không phải
+gửi lên đâu cả.</p>
+<p>Video em quay lại đầy đủ quy trình ở đây: [link video YouTube]</p>
+<p>Phần "bộ não" cho trợ lý AI chạy thì lấy miễn phí qua đây (giảm 15 đô):
+https://vanhi.id.vn/nous</p>
+<p>Anh/chị đang mất nhiều thời gian nhất ở khâu nào trong dây chuyền này?</p>
+</blockquote>
+<hr />
+<h2 id="mau-binh-luan-1-cai-nay-co-mien-phi-khong">Mẫu bình luận 1 — "Cái này có miễn phí không?"</h2>
+<blockquote>
+<p>Có ạ. Anh/chị cài phần mềm miễn phí hoàn toàn, rồi đăng ký tài khoản
+Nhóm Portal lấy model miễn phí — nối lại với nhau là chạy được ngay,
+không cần thẻ tín dụng. Em dùng link này thì được giảm 15 đô credit:
+https://vanhi.id.vn/nous</p>
+<p>Nói rõ để anh/chị yên tâm: gói miễn phí đủ dùng cho việc văn phòng hằng
+ngày (viết email, đọc file, tóm tắt, lập kế hoạch). Chỉ khi anh/chị cần
+model lớn hơn cho việc nặng thì mới cân nhắc trả phí — chỗ nào tốn phí
+em đều nói rõ trong video, không giấu.</p>
+</blockquote>
+<h2 id="mau-binh-luan-2-toi-dung-chatgpt-roi-cai-nay-khac-gi">Mẫu bình luận 2 — "Tôi dùng ChatGPT rồi, cái này khác gì?"</h2>
+<blockquote>
+<p>Khác chỗ này ạ: chatbot thường thì mỗi lần mở là phải giới thiệu lại từ
+đầu — tôi là ai, tôi làm gì, tôi thích viết kiểu gì. Trợ lý AI dạng này
+thì nhớ được, nhớ cả cách anh/chị muốn việc được làm.</p>
+<p>Thứ hai là nó chạy được việc thật: đọc file Excel trên máy anh/chị, gộp
+dữ liệu, soạn báo cáo, rồi còn tự chạy theo giờ hẹn nữa — chatbot thường
+không với được vào file trên máy.</p>
+<p>Thứ ba là chạy ngay trên máy mình, file nhạy cảm không phải gửi đi đâu.</p>
+<p>Em có video so sánh trực tiếp, anh/chị xem 25 giây đầu là hiểu ngay:
+[link video]</p>
+</blockquote>
+<h2 id="mau-binh-luan-3-may-toi-cu-yeu-co-chay-uoc-khong">Mẫu bình luận 3 — "Máy tôi cũ / yếu có chạy được không?"</h2>
+<blockquote>
+<p>Được ạ, miễn là máy có hệ điều hành mới (bản cập nhật gần nhất) và ổ cứng
+còn khoảng 5 gigabyte trống. Em thử trên máy cũ vẫn chạy tốt cho việc
+văn phòng.</p>
+<p>Chỗ cần lưu ý: việc nặng (xử lý file Excel vài chục megabyte) thì máy yếu
+sẽ chậm hơn, nhưng vẫn xong. Nếu máy yếu quá thì anh/chị xem video số 2
+của em — có phần chỉ cách kiểm tra máy có đủ điều kiện không trước khi cài:
+[link video]</p>
+<p>Anh/chị cho em biết máy gì em xem giúp có chạy ngon không.</p>
+</blockquote>
+<hr />
+<h1 id="phan-4-chien-dich-binh-luan-au-tien-lay-10-nguoi-ang-ky-au">PHẦN 4 — CHIẾN DỊCH "BÌNH LUẬN ĐẦU TIÊN" — LẤY 10 NGƯỜI ĐĂNG KÝ ĐẦU</h1>
+<h2 id="muc-tieu">Mục tiêu</h2>
+<p>10 người đăng ký kênh thật sự (không mua, không đổi) trong 72 giờ sau khi
+video 1 đăng. Mục đích không phải con số — mà là cho YouTube thấy video có
+người tương tác, và cho chính mình có bình luận để trả lời.</p>
+<h2 id="buoc-1-chon-ung-10-nguoi-lam-truoc-khi-video-1-ang">Bước 1 — Chọn đúng 10 người (làm trước khi video 1 đăng)</h2>
+<p>Chọn theo thứ tự ưu tiên:</p>
+<table>
+<thead>
+<tr>
+<th>Nhóm</th>
+<th>Số người</th>
+<th>Vì sao họ sẽ giúp</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Người từng hỏi em về AI / tự động hóa</td>
+<td>3</td>
+<td>Đã có nhu cầu, hỏi là sẽ xem</td>
+</tr>
+<tr>
+<td>Đồng nghiệp / bạn làm cùng ngành</td>
+<td>3</td>
+<td>Quan tâm ngành, dễ thông cảm</td>
+</tr>
+<tr>
+<td>Bạn bè thân, người nhà</td>
+<td>2</td>
+<td>Giúp không cần lý do</td>
+</tr>
+<tr>
+<td>Người quen bán hàng online</td>
+<td>2</td>
+<td>Dễ thấy giá trị, hay chia sẻ lại</td>
+</tr>
+</tbody>
+</table>
+<h2 id="buoc-2-nhan-tin-1-1-khong-nhan-trong-nhom">Bước 2 — Nhắn tin 1-1 (không nhắn trong nhóm)</h2>
+<p>Gửi riêng từng người, không gửi hàng loạt. Mỗi người thêm 1 chi tiết riêng
+để họ biết đây là tin nhắn viết cho mình.</p>
+<blockquote>
+<p>"[Tên] ơi, hôm trước anh/chị có hỏi em về chuyện dùng AI cho việc [nhắc
+lại việc cụ thể của họ]. Em vừa làm xong 1 video chỉ đúng việc đó.</p>
+<p>Em mới mở kênh, đang cần 10 người đầu xem và cho ý kiến thật. Anh/chị
+xem giúp em video này [link video 1], rồi comment 1 câu là anh/chị thấy
+chỗ nào còn khó hiểu được không? Em sửa cho video sau hay hơn.</p>
+<p>Không cần làm gì thêm đâu ạ. Em cảm ơn."</p>
+</blockquote>
+<h2 id="buoc-3-yeu-cau-cu-the-ung-chung-chung">Bước 3 — Yêu cầu cụ thể, đừng chung chung</h2>
+<p>Nói đúng 3 việc, không hơn:</p>
+<ol>
+<li>Xem hết video 1 (dài 10–12 phút, xem được trong giờ nghỉ)</li>
+<li>Comment 1 câu — câu hỏi gợi sẵn có trong video: "mảnh ghép nào bạn muốn
+   học nhất?"</li>
+<li>Bấm đăng ký + bật chuông</li>
+</ol>
+<p><strong>Không yêu cầu:</strong> chia sẻ lên trang cá nhân, like, tag bạn bè. Yêu cầu nhiều
+thứ thì người ta bỏ hết.</p>
+<h2 id="buoc-4-tra-on-ngay-trong-24-gio">Bước 4 — Trả ơn ngay trong 24 giờ</h2>
+<table>
+<thead>
+<tr>
+<th>Hành động</th>
+<th>Thời điểm</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Trả lời bình luận của từng người, gọi đúng tên</td>
+<td>Trong 2 giờ đầu</td>
+</tr>
+<tr>
+<td>Ghim 1 bình luận cảm ơn, liệt kê tên 10 người</td>
+<td>Ngay sau khi đủ 10</td>
+</tr>
+<tr>
+<td>Tặng file tổng hợp quy trình (tải miễn phí) cho cả 10 người</td>
+<td>Ngày hôm sau</td>
+</tr>
+<tr>
+<td>Quay 1 video ngắn 30 giây cảm ơn, gắn thẻ từng người</td>
+<td>Trong 3 ngày</td>
+</tr>
+<tr>
+<td>Mời vào nhóm riêng tư của kênh</td>
+<td>Sau khi đủ 10 người</td>
+</tr>
+</tbody>
+</table>
+<h2 id="buoc-5-bang-theo-doi-lam-trong-giay-tinh-hoac-ung-dung-ghi-chu">Bước 5 — Bảng theo dõi (làm trong giấy tính hoặc ứng dụng ghi chú)</h2>
+<table>
+<thead>
+<tr>
+<th>Họ tên</th>
+<th>Đã nhắn tin</th>
+<th>Đã xem video</th>
+<th>Đã comment</th>
+<th>Đã đăng ký</th>
+<th>Đã bật chuông</th>
+<th>Đã tặng file</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>(điền 10 dòng)</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>Nếu sau 48 giờ mà chưa đủ 5 người comment → nhắn nhắc nhẹ 1 lần duy nhất,
+không nhắc lần thứ hai. Nhắc lần hai là làm phiền, mất luôn thiện chí.</p>
+<h2 id="neu-chi-co-34-nguoi-phan-hoi">Nếu chỉ có 3–4 người phản hồi</h2>
+<p>Vẫn dùng được. Ghim bình luận cảm ơn, đăng 1 video ngắn cảm ơn, rồi mời
+3–4 người đó vào nhóm riêng tư — nhóm nhỏ 4 người dễ trò chuyện hơn nhóm
+200 người. Mở rộng bằng cách nhắn thêm 10 người nữa vào tuần sau.</p>
+<hr />
+<h1 id="phan-5-thong-ke-theo-doi-hang-tuan">PHẦN 5 — THỐNG KÊ THEO DÕI HÀNG TUẦN</h1>
+<p>Ghi lại vào thứ Hai mỗi tuần, so sánh với tuần trước:</p>
+<table>
+<thead>
+<tr>
+<th>Chỉ số</th>
+<th>Tuần 1</th>
+<th>Tuần 2</th>
+<th>Ghi chú</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Lượt xem video dài (tổng 3 video)</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Tỷ lệ bấm vào hình đại diện</td>
+<td></td>
+<td></td>
+<td>Dưới 4% thì đổi hình trước, đừng đổi tiêu đề</td>
+</tr>
+<tr>
+<td>Thời gian xem trung bình</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Lượt xem video ngắn (tổng)</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Số người đăng ký mới</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Số bình luận + đã trả lời hết chưa</td>
+<td></td>
+<td></td>
+<td>Bình luận chưa trả lời = việc chưa xong</td>
+</tr>
+<tr>
+<td>Lượt bấm link giới thiệu</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Lượt đăng ký qua link giới thiệu</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Bài nhóm Facebook nào nhiều tương tác nhất</td>
+<td></td>
+<td></td>
+<td>Gấp đôi nỗ lực cho nhóm đó</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Quy tắc ra quyết định:</strong> nếu một video ngắn nào đó vượt gấp 3 lần mức
+trung bình, cắt thêm 1 video ngắn cùng chủ đề trong tuần sau. Nếu một bài
+nhóm Facebook không có bình luận nào sau 24 giờ, đổi cách viết (đổi sang
+câu hỏi trực tiếp) chứ đừng đăng lại bài cũ.</p></div>
+</section>
+<section class="panel" id="sec-leadmag">
+<div class="panel-inner"><h1 id="kenh-youtube-hermes-agent-lead-magnet-landing-page-5-email-nurture">KÊNH YOUTUBE HERMES AGENT — LEAD MAGNET + LANDING PAGE + 5 EMAIL NURTURE</h1>
+<p>Tài liệu vận hành cho đội Marketing &amp; Sales · Chuẩn bị cho series 10 video hướng dẫn Hermes Agent (tiếng Việt)
+Hệ thống thực thi: WordPress + FluentCRM Pro trên <code>crm.speedreading.vn</code>
+Ngày lập: 12/10/2026 · Phiên bản 1.0</p>
+<hr />
+<h2 id="muc-luc">MỤC LỤC</h2>
+<ol>
+<li>Bối cảnh &amp; mục tiêu kênh</li>
+<li>Đề xuất 3 lead magnet + chọn 1 làm chính</li>
+<li>Nội dung đầy đủ lead magnet (bàn giao cho design)</li>
+<li>Text landing page thu email</li>
+<li>5 email tự động (welcome series)</li>
+<li>Cấu hình kỹ thuật FluentCRM</li>
+<li>Checklist vận hành &amp; chỉ số đo lường</li>
+</ol>
+<hr />
+<h2 id="1-boi-canh-muc-tieu-kenh">1. BỐI CẢNH &amp; MỤC TIÊU KÊNH</h2>
+<p><strong>Hành trình người xem YouTube:</strong></p>
+<pre><code>Xem video Hermes (cơ bản → nâng cao)
+   → Tải tài liệu miễn phí (Lead Magnet) → thu email
+   → Nhận 5 email tự động trong 10 ngày
+   → (A) Đăng ký Nous Portal qua link giới thiệu vanhi.id.vn/nous
+   → (B) Mua khóa &quot;Nhân Sự Toàn Năng Hermes&quot; speedreading.vn/ahermes — 239.000đ
+</code></pre>
+<p><strong>Đối tượng mục tiêu:</strong> người Việt 28–50 tuổi, dùng ChatGPT nhưng chưa bao giờ cài "agent" thật; sợ công nghệ, không biết code, bận và muốn có ai đó "gánh giúp việc".</p>
+<p><strong>Nguyên tắc nội dung:</strong> mọi tài liệu đều phải dùng được ngay (copy–paste là chạy). Không lý thuyết, không demo cho đẹp.</p>
+<p><strong>Hai mục tiêu doanh thu, phân vai rõ:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Ưu tiêu</th>
+<th>Đích đến</th>
+<th>Vai trò trong funnel</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Thứ cấp</td>
+<td><code>https://vanhi.id.vn/nous</code> — đăng ký Nous Portal</td>
+<td>Chi phí gần 0 cho người dùng, tạo niềm tin + hoa hồng giới thiệu cho kênh. Email E3 là email bán hàng chính cho mục tiêu này.</td>
+</tr>
+<tr>
+<td>Chính</td>
+<td><code>https://speedreading.vn/ahermes</code> — khóa 239.000đ</td>
+<td>Doanh thu thật. Email E5 là email bán hàng chính cho mục tiêu này.</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Ghi chú trung thực khi viết:</strong> E3 chỉ nên hứa đúng những gì link giới thiệu mang lại. Theo công bố của Nous Research, người dùng mới đăng ký qua link giới thiệu nhận ưu đãi <strong>15 USD cho tháng đầu trên gói Plus</strong>, và người giới thiệu nhận credit API. Chương trình có thể thay đổi — <strong>kiểm tra lại <code>portal.nousresearch.com/referrals</code> ngay trước khi gửi E3</strong>, và không dùng đồng hồ đếm ngược hay số chỗ giả.</p>
+</blockquote>
+<hr />
+<h2 id="2-e-xuat-3-lead-magnet-chon-1-lam-chinh">2. ĐỀ XUẤT 3 LEAD MAGNET + CHỌN 1 LÀM CHÍNH</h2>
+<h3 id="y-tuong-a-bang-tra-30-viec-giao-uoc-cho-hermes-pdf-2-trang">Ý tưởng A — "Bảng tra 30 việc giao được cho Hermes" (PDF 2 trang)</h3>
+<p>30 việc thực tế, chia 6 nhóm đời sống + công việc, <strong>kèm sẵn câu lệnh tiếng Việt copy–paste là chạy</strong>.</p>
+<h3 id="y-tuong-b-checklist-cai-hermes-khong-loi-trong-20-phut">Ý tưởng B — "Checklist cài Hermes không lỗi trong 20 phút"</h3>
+<p>Checklist theo từng hệ điều hành (macOS / Windows / Ubuntu / VPS) + 12 lỗi hay gặp và cách sửa.</p>
+<h3 id="y-tuong-c-checklist-20-cach-dung-hermes-tiet-kiem-10-giotuan">Ý tưởng C — "Checklist 20 cách dùng Hermes tiết kiệm 10 giờ/tuần"</h3>
+<p>Liệt kê 20 tình huống tiết kiệm thời gian, có bảng tự chấm điểm trước/sau.</p>
+<hr />
+<h3 id="lua-chon-y-tuong-a-bang-tra-30-viec-giao-uoc-cho-hermes">✅ LỰA CHỌN: Ý TƯỞNG A — "Bảng tra 30 việc giao được cho Hermes"</h3>
+<p><strong>Tên gọi chính thức (dùng nhất quán ở mọi nơi):</strong></p>
+<blockquote>
+<p><strong>HERMES CHEAT SHEET — 30 Việc Giao Được Cho Trợ Lý AI (Copy &amp; Paste Là Chạy)</strong></p>
+</blockquote>
+<p><strong>5 lý do chọn A thay vì B hoặc C:</strong></p>
+<ol>
+<li><strong>Giải đúng nút thắt của người mới.</strong> Người xem video 1–3 không thiếu "động lực", họ thiếu <strong>câu để gõ</strong>. Họ mở Hermes lên rồi không biết bảo nó làm gì. Bảng tra cho sẵn 30 câu — khoảng cách giữa "xem video" và "có kết quả đầu tiên" gần như bằng 0.</li>
+<li><strong>Không phụ thuộc hệ điều hành.</strong> Ý tưởng B phải tách nhánh macOS/Windows/Ubuntu/VPS: 4 phiên bản nội dung, người đọc phải tự nhận ra mình thuộc nhánh nào — tỷ lệ bỏ dở cao. Ý tưởng A dùng chung cho tất cả.</li>
+<li><strong>Chứng minh được giá trị trước khi họ cài xong.</strong> Người chưa cài Hermes vẫn thấy "à, hóa ra nó làm được những việc này" → thôi thúc cài ngay.</li>
+<li><strong>Là cái kích hoện tự nhiên cho khóa học.</strong> Bảng tra cho 30 việc nhưng <strong>không</strong> dạy cách dạy Hermes nhớ, cách chia việc lớn, cách đặt quy tắc an toàn. Đó chính là 37 bài + 3 bộ công cụ cài sẵn của khóa. Lead magnet tạo khát, khóa học giải khát — không bị chồng chéo giá trị.</li>
+<li><strong>Dễ sản xuất, dễ tái sử dụng.</strong> 2 trang, thiết kế 1 lần; sau này tái chế thành: mô tả video, cài đặt YouTube community post, quà tặng trong khóa học, nội dung Zalo.</li>
+</ol>
+<p><strong>Hai ý tưởng còn lại xử lý thế nào:</strong></p>
+<ul>
+<li><strong>B (Checklist cài đặt)</strong> → không bỏ, chuyển thành <strong>Bonus #2</strong> gửi trong email E2 (video V1+V2 là bài cài đặt). Người vừa xem video vừa có checklist để đối chiếu → tỷ lệ cài thành công cao hơn.</li>
+<li><strong>C (Checklist tiết kiệm 10 giờ/tuần)</strong> → không dùng làm lead magnet (con số "10 giờ" khó chứng minh, dễ bị coi là thổi phồng), nhưng chuyển thành <strong>Bonus #3 trong email E4</strong> dưới dạng bảng tự chấm "Trước / Sau khi có trợ lý".</li>
+</ul>
+<hr />
+<h2 id="3-noi-dung-ay-u-lead-magnet-ban-giao-cho-design">3. NỘI DUNG ĐẦY ĐỦ LEAD MAGNET (BÀN GIAO CHO DESIGN)</h2>
+<p><strong>Thông số sản phẩm:</strong>
+- Định dạng: PDF, khổ A4 dọc, <strong>2 trang</strong>
+- File: <code>Hermes-Cheat-Sheet-30-Viec.pdf</code>
+- Ngôn ngữ: tiếng Việt, giọng "người thật chỉ người thật", không văn mẫu
+- Bảng màu: nền kem/trắng, chữ đen, 1 màu nhấn (đỏ gạch hoặc xanh đậm) cho nút và số thứ tự
+- Font: có dấu tiếng Việt rõ, cỡ chữ body tối thiểu 9pt (người đọc chủ yếu 35+)
+- Cuối trang 2: logo + "Kênh Hỉ — AI Agent Thực Chiến" + 1 dòng giới thiệu khóa học</p>
+<hr />
+<h3 id="trang-1">TRANG 1</h3>
+<p><strong>[HEADER]</strong></p>
+<blockquote>
+<h1 id="hermes-cheat-sheet">HERMES CHEAT SHEET</h1>
+<h2 id="30-viec-giao-uoc-cho-tro-ly-ai">30 việc giao được cho trợ lý AI</h2>
+<p><strong>Copy &amp; paste là chạy — không cần biết lập trình</strong></p>
+</blockquote>
+<p><em>Mỗi dòng dưới đây là một việc thật. Chọn 1 việc bạn đang mệt, mở Hermes, dán câu trong khung vào, bấm Enter. Việc bạn chỉ còn: xem và duyệt.</em></p>
+<hr />
+<p><strong>[NHÓM 1] BẮT ĐẦU — LÀM QUEN VỚI TRỢ LÝ</strong> (5 việc)</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Việc</th>
+<th>Câu dán vào Hermes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Kiểm tra trợ lý đã sẵn sàng chưa</td>
+<td><code>Bạn là ai, bạn làm được những việc gì, và bạn KHÔNG được tự ý làm gì khi chưa hỏi tôi?</code></td>
+</tr>
+<tr>
+<td>2</td>
+<td>Nhờ nó giới thiệu đúng cách dùng</td>
+<td><code>Giải thích cho người mới như tôi: tôi nên bảo bạn làm việc theo kiểu nào là hiệu quả nhất? Đưa 5 ví dụ cụ thể.</code></td>
+</tr>
+<tr>
+<td>3</td>
+<td>Giao việc nhỏ đầu tiên để thấy khác biệt</td>
+<td><code>Lập danh sách 5 việc tôi nên giao cho bạn ngay hôm nay để tiết kiệm thời gian nhiều nhất. Nói rõ mỗi việc bạn cần tôi cung cấp gì.</code></td>
+</tr>
+<tr>
+<td>4</td>
+<td>Dạy nó nhớ thông tin của bạn</td>
+<td><code>Ghi nhớ các thông tin này về tôi và dùng lại trong mọi lần sau: [tên, nghề nghiệp, giờ làm việc, 3 người tôi hay liên hệ, 2 việc tôi đang ưu tiên]. Xác nhận lại để tôi kiểm tra.</code></td>
+</tr>
+<tr>
+<td>5</td>
+<td>Đặt ranh giới an toàn ngay từ đầu</td>
+<td><code>Quy tắc bắt buộc với bạn: được phép soạn bản nháp, KHÔNG được tự gửi, tự đăng hay tự chi tiền khi chưa có tôi đồng ý. Nếu thiếu thông tin thì hỏi tôi, đừng tự đoán.</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<p><strong>[NHÓM 2] TRỢ LÝ CÁ NHÂN — ĐỂ ĐỦNG ĐẦU HƠN MỖI SÁNG</strong> (5 việc)</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Việc</th>
+<th>Câu dán vào Hermes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>6</td>
+<td>Lên kế hoạch tuần trong 5 phút</td>
+<td><code>Đây là toàn bộ việc tôi đang mang trong đầu: [dán danh sách lộn xộn vào đây]. Sắp xếp giúp tôi thành kế hoạch 7 ngày: mỗi ngày tối đa 3 việc quan trọng, ghi rõ buổi sáng/chiều nào làm việc gì, và nói rõ việc nào tôi nên BỎ hoặc hoãn.</code></td>
+</tr>
+<tr>
+<td>7</td>
+<td>Biết hôm nay thật sự phải làm gì</td>
+<td><code>Tôi có [X] việc. Chọn giúp tôi 3 việc quan trọng nhất hôm nay và giải thích vì sao 3 việc còn lại không cần làm hôm nay.</code></td>
+</tr>
+<tr>
+<td>8</td>
+<td>Chấm dứt việc quên việc vặt</td>
+<td><code>Tôi hay quên mấy việc lặt vặt này: [dán danh sách]. Hãy nhớ chúng và cuối mỗi ngày nhắc tôi 1 lần, kiêm luôn hỏi việc nào đã xong.</code></td>
+</tr>
+<tr>
+<td>9</td>
+<td>Rà soát tuần đã qua để tuần sau nhẹ hơn</td>
+<td><code>Đây là những việc tôi định làm tuần này và kết quả thực tế: [dán vào]. Chỉ ra: việc nào bị lùi quá 2 lần, việc nào tôi đang làm không hiệu quả, và tuần sau nên cắt việc gì.</code></td>
+</tr>
+<tr>
+<td>10</td>
+<td>Soạn kế hoạch cho việc lớn sắp tới</td>
+<td><code>Tôi sắp phải làm việc lớn này: [mô tả]. Chia giúp tôi thành các bước nhỏ, mỗi bước tối đa 45 phút, kèm thứ tự làm và chỗ nào dễ vấp.</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<p><strong>[NHÓM 3] TRỢ LÝ GIA ĐÌNH</strong> (5 việc)</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Việc</th>
+<th>Câu dán vào Hermes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>11</td>
+<td>Nhớ lịch của cả nhà</td>
+<td><code>Nhớ giúp tôi lịch cố định của gia đình: [lịch học con, giờ đón, ngày họp phụ huynh, ngày đi tiêm...]. Mỗi sáng nhắc tôi việc của ngày hôm đó.</code></td>
+</tr>
+<tr>
+<td>12</td>
+<td>Chuẩn bị câu hỏi cho buổi họp phụ huynh</td>
+<td><code>Tôi sắp đi họp phụ huynh cho con lớp [X], con đang yếu/yếu môn [Y]. Soạn giúp 5 câu hỏi nên hỏi cô và 3 điều tôi nên theo dõi ở nhà.</code></td>
+</tr>
+<tr>
+<td>13</td>
+<td>Lên thực đơn theo tủ lạnh</td>
+<td><code>Trong tủ lạnh nhà tôi có: [liệt kê]. Lên thực đơn 5 bữa tối trong tuần, ưu tiên nấu nhanh dưới 30 phút, kèm danh sách đi chợ gộp lại để mua 1 lần.</code></td>
+</tr>
+<tr>
+<td>14</td>
+<td>Soạn lời nhắn nhẹ nhàng mà không bị hiểu lầm</td>
+<td><code>Tôi cần nhắn với [ai] về việc [việc gì] nhưng sợ bị hiểu lầm là trách cứ. Soạn 2 bản: 1 bản nhẹ nhàng, 1 bản rõ ràng hơn. Tôi sẽ chọn và tự gửi.</code></td>
+</tr>
+<tr>
+<td>15</td>
+<td>Nhớ ngày quan trọng của người thân</td>
+<td><code>Nhớ các ngày quan trọng này: [ngày kỷ niệm, sinh nhật, ngày bố mẹ...]. Trước mỗi ngày 3 ngày, gợi ý tôi 3 cách chúc/ tặng ý nghĩa, không sáo rỗng.</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<p><strong>[NHÓM 4] TRỢ LÝ CÔNG VIỆC — ÍT MỆT HƠN MỖI NGÀY</strong> (5 việc)</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Việc</th>
+<th>Câu dán vào Hermes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>16</td>
+<td>Soạn nháp email phản hồi</td>
+<td><code>Trả lời email này giúp tôi: [dán email nhận được]. Giọng: lịch sự, dứt khoát, không dài. Ra bản nháp để tôi duyệt trước khi gửi — bạn KHÔNG được tự gửi.</code></td>
+</tr>
+<tr>
+<td>17</td>
+<td>Tóm tắt tài liệu dài</td>
+<td><code>Tóm tắt tài liệu này trong 10 dòng cho người bận: [dán nội dung hoặc link]. Sau đó liệt kê 3 điểm tôi cần hỏi lại người gửi và 1 điểm rủi ro.</code></td>
+</tr>
+<tr>
+<td>18</td>
+<td>Chuẩn bị nội dung cuộc họp</td>
+<td><code>Cuộc họp [tên] sắp tới, mục tiêu là [mục tiêu]. Soạn giúp: thứ tự chương trình 60 phút, 3 câu hỏi cần hỏi, và 1 bản tóm tắt gửi sau họp.</code></td>
+</tr>
+<tr>
+<td>19</td>
+<td>Viết báo cáo tuần/tháng</td>
+<td><code>Đây là số liệu và việc đã làm tuần này: [dán vào]. Viết báo cáo gửi cấp trên: tối đa 1 trang, mở đầu bằng kết quả, nêu rõ vấn đề và đề xuất, không đổ lỗi.</code></td>
+</tr>
+<tr>
+<td>20</td>
+<td>Nghiên cứu nhanh trước khi quyết định</td>
+<td><code>Tôi đang cân nhắc [quyết định]. Nghiên cứu giúp: 3 lựa chọn chính, ưu/nhược điểm từng cái, chi phí ẩn, và khuyến nghị của bạn. Cuối cùng liệt kê những chỗ số liệu tôi cần tự kiểm tra.</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="trang-2">TRANG 2</h3>
+<hr />
+<p><strong>[NHÓM 5] TRỢ LÝ TIỀN BẠC</strong> (5 việc)</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Việc</th>
+<th>Câu dán vào Hermes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>21</td>
+<td>Rà soát thu chi tháng</td>
+<td><code>Đây là thu chi tháng này của tôi: [dán số liệu]. Tìm các khoản bất thường, nhóm chi tiêu lớn nhất, và nói rõ tôi đang tiêu gấp bao nhiêu lần thu nhập ở nhóm nào.</code></td>
+</tr>
+<tr>
+<td>22</td>
+<td>Cảnh báo ngân sách trước khi vỡ trận</td>
+<td><code>Ngân sách tháng này của tôi: [số tiền theo nhóm]. Cuối tuần nhắc tôi còn bao nhiêu; nếu một nhóm vượt 80% trước ngày 20 thì cảnh báo ngay.</code></td>
+</tr>
+<tr>
+<td>23</td>
+<td>Soạn giá bán hàng cho khách</td>
+<td><code>Tôi bán [sản phẩm/dịch vụ] giá [X], khách đang chê đắt. Soạn 3 cách trả lời: 1 cách nói về giá trị, 1 cách giảm phạm vi cho phù hợp ngân sách, 1 cách từ chối khéo mà vì giữ quan hệ.</code></td>
+</tr>
+<tr>
+<td>24</td>
+<td>Lên kế hoạch mua sắm lớn</td>
+<td><code>Tôi định mua [món gì] trong [thời gian]. Lên kế hoạch tiết kiệm: cần bao nhiêu/tháng, cắt khoản nào, và 3 điều cần kiểm tra trước khi xuống tiền.</code></td>
+</tr>
+<tr>
+<td>25</td>
+<td>Soạn nội dung bán hàng ngắn</td>
+<td><code>Viết giúp tôi bài đăng bán [sản phẩm] cho người [đối tượng]: tối đa 150 chữ, mở đầu bằng 1 câu đúng nỗi đau của họ, kết bằng 1 câu kêu gọi hành động rõ ràng, không dùng từ quảng cáo sáo rỗng.</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<p><strong>[NHÓM 6] NÂNG CAO — ĐỂ TRỢ LÝ THÔNG MINH HƠN THEO THỜI GIAN</strong> (5 việc)</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Việc</th>
+<th>Câu dán vào Hermes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>26</td>
+<td>Dạy nó cách làm việc theo kiểu của bạn</td>
+<td><code>Cách tôi thích nhận kết quả là: [ví dụ: luôn chia mục, luôn ghi rõ số liệu, không dùng từ ngữ quá học thuộc]. Từ giờ mọi lần làm việc cho tôi bạn áp dụng cách này và tự kiểm tra trước khi trả kết quả.</code></td>
+</tr>
+<tr>
+<td>27</td>
+<td>Chia việc lớn thành việc nhỏ</td>
+<td><code>Việc lớn này: [mô tả]. Chia thành 5-7 phần nhỏ, mỗi phần tôi làm được trong 1 buổi tối. Nói rõ phần nào nên giao bạn và phần nào phải tự tôi làm.</code></td>
+</tr>
+<tr>
+<td>28</td>
+<td>Nhờ nó tự kiểm tra trước khi giao</td>
+<td><code>Trước khi đưa tôi kết quả cuối, bạn hãy tự rà lại: tên, ngày tháng, số liệu, và chỗ nào còn thiếu thông tin. Liệt kê rõ chỗ nào đã chắc và chỗ nào tôi cần kiểm tra.</code></td>
+</tr>
+<tr>
+<td>29</td>
+<td>Tạo quy tắc riêng cho đội trợ lý</td>
+<td><code>Soạn giúp tôi 10 quy tắc vận hành cho trợ lý AI của tôi, gồm: việc được tự làm, việc phải hỏi, việc cấm tuyệt đối, cách báo cáo, và cách xin lỗi khi làm sai.</code></td>
+</tr>
+<tr>
+<td>30</td>
+<td>Xem lại tháng vừa qua</td>
+<td><code>Đây là toàn bộ việc chúng ta đã làm trong tháng: [tóm tắt]. Chỉ ra 3 việc tôi nên giao bạn thường xuyên hơn, 2 việc tôi đang làm sai cách, và 1 việc nên ngừng giao bạn.</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<p><strong>[HỘP 1] BA QUY TẮC AN TOÀN — ĐỌC TRƯỚC KHI DÙNG</strong> <em>(nền đỏ nhạt, viền đậm)</em></p>
+<ol>
+<li><strong>Trợ lý soạn, bạn duyệt.</strong> Mọi email, bài đăng, khoản tiền đều phải có bạn bấm "đồng ý" trước. Không có ngoại lệ.</li>
+<li><strong>Không đưa thông tin nhạy cảm không cần thiết.</strong> Mật khẩu, mã OTP, số thẻ, CMND — không đưa cho bất kỳ AI nào, kể cả trợ lý của chính bạn.</li>
+<li><strong>Nếu kết quả sai, sửa bằng cách cho thêm thông tin — không phải gõ lại từ đầu.</strong> Dán lại kết quả sai và nói: "chỗ này sai, thông tin đúng là X, làm lại phần đó."</li>
+</ol>
+<hr />
+<p><strong>[HỘP 2] 3 LỖI NGƯỜI MỚI HAY GẶP</strong> <em>(nền xám nhạt)</em></p>
+<table>
+<thead>
+<tr>
+<th>Lỗi</th>
+<th>Sửa thế nào</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Bảo Hermes "làm giúp tôi cái báo cáo" rồi nhận kết quả chung chung</td>
+<td>Dán vào đó <strong>dữ liệu thật</strong> của bạn. Trợ lý không đoán được số liệu của bạn.</td>
+</tr>
+<tr>
+<td>Lần nào cũng phải giải thích lại từ đầu việc mình đang làm</td>
+<td>Dùng việc số 4 và số 26 trong bảng: dạy nó nhớ 1 lần, dùng mãi mãi.</td>
+</tr>
+<tr>
+<td>Ngại giao việc vì sợ AI "làm bậy"</td>
+<td>Dùng việc số 5: đặt quy tắc cấm ngay từ câu đầu tiên. Sau đó chỉ giao việc trong phạm vi đã cho phép.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<p><strong>[FOOTER TRANG 2]</strong></p>
+<blockquote>
+<p><strong>Bạn vừa xem 30 việc. Nhưng để trợ lý làm ĐÚNG Ý BẠN — chứ không phải làm cho có — bạn cần biết 3 điều bảng này không dạy:</strong>
+dạy trợ lý nhớ việc của bạn · biến cách làm tốt thành mẫu dùng lại · đặt quy tắc an toàn để nó không bao giờ tự ý hành động.</p>
+<p>Đó là nội dung của 37 bài khóa <strong>"Nhân Sự Toàn Năng Hermes"</strong> — dạy từ con số 0, không cần biết lập trình, kèm 3 bộ công cụ cài sẵn.
+→ <strong>speedreading.vn/ahermes</strong> (phiên bản mở bán sớm 239.000đ)</p>
+<p>Muốn học thêm miễn phí trước? Kênh <strong>Hỉ — AI Agent Thực Chiến</strong> trên YouTube.</p>
+</blockquote>
+<hr />
+<h2 id="4-text-landing-page-thu-email">4. TEXT LANDING PAGE THU EMAIL</h2>
+<p><strong>URL đề xuất:</strong> <code>speedreading.vn/hermes-cheatsheet</code> (trang con trên speedreading.vn — dùng chung domain với khóa học nên uy tín và tracking sạch hơn).
+<strong>Cấu trúc:</strong> 1 trang, 1 mục tiêu duy nhất — để lại email. Không menu, không link đi chỗ khác (trừ chính sách bảo mật ở footer).</p>
+<hr />
+<p><strong>[HEADLINE]</strong></p>
+<blockquote>
+<h1 id="ban-a-mo-hermes-xong-roi-khong-biet-bao-no-lam-gi">Bạn đã mở Hermes xong — rồi không biết bảo nó làm gì?</h1>
+<p><strong>30 câu lệnh có sẵn, copy–paste là chạy</strong></p>
+</blockquote>
+<hr />
+<p><strong>[SUBHEAD]</strong></p>
+<blockquote>
+<p>Bảng tra miễn phí 2 trang: 30 việc thật người dùng Hermes giao cho trợ lý AI mỗi ngày — lập kế hoạch tuần, soạn email, tóm tắt tài liệu, nhớ lịch gia đình, rà thu chi. Kèm sẵn câu tiếng Việt để dán vào. Không cần biết lập trình. Không cần trả tiền.</p>
+</blockquote>
+<hr />
+<p><strong>[FORM]</strong></p>
+<blockquote>
+<p><strong>Nhận bảng tra ngay (PDF 2 trang)</strong></p>
+<p>Email của bạn: <code>[__________________]</code></p>
+<p><strong>[ GỬI BẢNG TRA CHO TÔI → ]</strong></p>
+<p><em>Gửi vào email trong 1 phút. Không spam — hủy nhận tin bằng 1 cú click ở cuối mỗi email.</em></p>
+</blockquote>
+<hr />
+<p><strong>[5 BULLET LỢI ÍCH]</strong></p>
+<blockquote>
+<p>Sau khi tải, bạn sẽ:</p>
+<ol>
+<li><strong>Có việc để giao ngay tối nay</strong> — 30 việc thực tế, chia sẵn theo đúng 5 mảng: bản thân, gia đình, quan hệ, tiền bạc, công việc.</li>
+<li><strong>Không phải nghĩ câu hỏi</strong> — mỗi việc có sẵn câu tiếng Việt để dán vào, chỉ cần thay thông tin của bạn.</li>
+<li><strong>Biết cách giao việc mà không sợ AI "làm bậy"</strong> — kèm 3 quy tắc an toàn đặt ngay từ câu đầu tiên.</li>
+<li><strong>Biết vì sao kết quả hay bị chung chung</strong> — 3 lỗi người mới hay mắc và cách sửa trong 1 dòng.</li>
+<li><strong>Thấy rõ bước tiếp theo</strong> — từ "giao việc lẻ" đến "dạy trợ lý hiểu cách làm việc của bạn".</li>
+</ol>
+</blockquote>
+<hr />
+<p><strong>[CTA CUỐI TRANG — dưới bullet]</strong></p>
+<blockquote>
+<h2 id="ung-e-hermes-nam-im-them-mot-tuan-nua">Đừng để Hermes nằm im thêm một tuần nữa</h2>
+<p>30 câu lệnh. 2 trang. 1 tối nay là bạn đã có kết quả đầu tiên.</p>
+<p>Email: <code>[__________________]</code></p>
+<p><strong>[ TẢI BẢNG TRA MIỄN PHÍ → ]</strong></p>
+</blockquote>
+<hr />
+<p><strong>[ĐOẠN XÃ HỘI CHỨNG THẬN — 2 dòng, đặt giữa bullet và CTA]</strong></p>
+<blockquote>
+<p><em>"Tôi dùng ChatGPT gần 2 năm mà vẫn phải hỏi từng câu. Bảng tra này cho tôi thấy mình đang bỏ quên một nửa việc có thể giao đi được."</em> — người đọc bản thảo</p>
+</blockquote>
+<hr />
+<p><strong>[FOOTER]</strong></p>
+<blockquote>
+<p>© Kênh Hỉ — AI Agent Thực Chiến · [Chính sách bảo mật] · [Liên hệ]
+Trang này không liên kết với chương trình khuyến mãi nào của bên thứ ba.</p>
+</blockquote>
+<hr />
+<p><strong>Ghi chú triển khai trang:</strong>
+- Mobile-first: 70%+ traffic từ YouTube sẽ vào bằng điện thoại. Form phải nằm trong 1 màn hình đầu, không cần cuộn.
+- Chỉ 1 trường (email). Không hỏi tên, không hỏi "bạn quan tâm điều gì" — mỗi trường thêm làm giảm 10–20% tỷ lệ điền.
+- Sau khi submit → chuyển đến trang cảm ơn có link tải trực tiếp + nút "Xem video V1" (tận dụng lúc họ hào hứng nhất).</p>
+<hr />
+<h2 id="5-5-email-tu-ong-welcome-series">5. 5 EMAIL TỰ ĐỘNG (WELCOME SERIES)</h2>
+<p><strong>Thông số chung:</strong></p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tên Sequence (FluentCRM)</td>
+<td><code>Hermes YouTube Nurture</code></td>
+</tr>
+<tr>
+<td>Trigger</td>
+<td>Contact đăng ký qua form lead magnet (List: <code>YT Hermes LeadMagnet</code>)</td>
+</tr>
+<tr>
+<td>Tổng số email</td>
+<td>5</td>
+</tr>
+<tr>
+<td>Thời lượng</td>
+<td>10 ngày (E1 ngay → E5 ngày 10)</td>
+</tr>
+<tr>
+<td>Giờ gửi</td>
+<td>07:30 sáng hoặc 20:00 tối (tránh 12:00–14:00)</td>
+</tr>
+<tr>
+<td>Bỏ qua Chủ nhật</td>
+<td>Có</td>
+</tr>
+<tr>
+<td>Từ tên gửi</td>
+<td><code>Hỉ — AI Agent Thực Chiến</code></td>
+</tr>
+<tr>
+<td>Mỗi email</td>
+<td>1 mục tiêu duy nhất, 1 CTA duy nhất</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Lịch gửi &amp; mục tiêu:</strong></p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Ngày</th>
+<th>Mục tiêu</th>
+<th>Link chính</th>
+<th>Tag gắn khi click</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>E1</td>
+<td>Ngày 0 (ngay)</td>
+<td>Giao tài liệu + giới thiệu Hermes</td>
+<td>Link tải PDF</td>
+<td><code>YT-LM-Downloaded</code></td>
+</tr>
+<tr>
+<td>E2</td>
+<td>Ngày 2</td>
+<td>Video V1 + V2 (cài đặt)</td>
+<td>2 link YouTube</td>
+<td><code>YT-Watched-V1V2</code></td>
+</tr>
+<tr>
+<td>E3</td>
+<td>Ngày 4</td>
+<td><strong>Bán hàng chính:</strong> đăng ký Nous Portal</td>
+<td><code>vanhi.id.vn/nous</code></td>
+<td><code>YT-Portal-Clicked</code></td>
+</tr>
+<tr>
+<td>E4</td>
+<td>Ngày 7</td>
+<td>Ứng dụng thực tế V6–V8 + case study</td>
+<td>3 link YouTube</td>
+<td><code>YT-Watched-V6V8</code></td>
+</tr>
+<tr>
+<td>E5</td>
+<td>Ngày 10</td>
+<td><strong>Bán hàng chính:</strong> khóa học 239k</td>
+<td><code>speedreading.vn/ahermes</code></td>
+<td><code>YT-Course-Clicked</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="e1-giao-tai-lieu-gioi-thieu-hermes">E1 — GIAO TÀI LIỆU + GIỚI THIỆU HERMES</h3>
+<p><em>Gửi: ngay sau khi đăng ký · Reply-to mở, khuyến khích trả lời</em></p>
+<p><strong>Subject line (chính):</strong>
+<code>Bảng tra Hermes của bạn — 30 việc giao được cho trợ lý AI</code></p>
+<p><strong>Subject line A/B (2 biến thể thử):</strong>
+- A: <code>Đây là bảng tra bạn vừa đăng ký 📄</code>
+- B: <code>30 câu lệnh Hermes — dán vào là chạy</code></p>
+<p><strong>Preview text:</strong>
+<code>Kèm 3 quy tắc an toàn nên đặt trước khi giao việc đầu tiên.</code></p>
+<p><strong>Nội dung:</strong></p>
+<p>Chào bạn,</p>
+<p>Bảng tra của bạn nằm ở link này — mở được ngay cả trên điện thoại:</p>
+<p><strong>[ TẢI HERMES CHEAT SHEET (PDF 2 trang) → ]</strong></p>
+<p>Link luôn là bản mới nhất — nếu sau này tôi cập nhật thêm việc, bạn tải lại là có bản mới.</p>
+<p>Trước khi bạn mở ra, tôi nói ngắn gọn Hermes là gì, vì nhiều người tải bảng tra về rồi vẫn chưa hiểu mình đang cầm thứ gì.</p>
+<p>Hermes không phải chatbot hỏi đáp. Chatbot trả lời bạn. Hermes thì <strong>làm</strong>. Bạn bảo nó "lập kế hoạch tuần cho tôi", nó hỏi thêm vài câu rồi trả về bản kế hoạch dùng được ngay. Bạn bảo nó "rà thu chi tháng này", nó đọc số liệu bạn dán vào và chỉ ra khoản nào bất thường.</p>
+<p>Điểm quan trọng nhất: <strong>nó không tự quyết định.</strong> Không tự gửi email, không tự chuyển tiền. Mọi việc hệ trọng đều dừng lại chờ bạn bấm đồng ý — đó là lý do tôi dám khuyên người không rành công nghệ cài nó.</p>
+<p>Tối nay chỉ làm 1 việc: mở bảng tra, tìm việc khiến bạn mệt nhất tuần rồi, dán câu tương ứng vào Hermes, xem nó trả về gì. Một việc thôi.</p>
+<p>Nếu bị kẹt, trả lời thẳng email này — tôi đọc hết.</p>
+<p>Hỉ</p>
+<p><em>P/S: Chưa cài Hermes thì đừng lo. Email sau tôi gửi video cài đặt, chọn đúng hệ điều hành là xong trong 20 phút.</em></p>
+<p><strong>CTA duy nhất:</strong> nút tải PDF.
+<strong>Ghi chú vận hành:</strong> gắn tag <code>YT-LM-Downloaded</code> khi click link tải; nếu 48h không click → gửi lại 1 lần duy nhất với subject khác (<code>Bảng tra của bạn — gửi lại link 1 lần</code>).</p>
+<hr />
+<h3 id="e2-video-v1-v2-cai-at">E2 — VIDEO V1 + V2 (CÀI ĐẶT)</h3>
+<p><em>Gửi: ngày 2 · Kèm Bonus #2 là Checklist cài đặt không lỗi</em></p>
+<p><strong>Subject line (chính):</strong>
+<code>Cài Hermes trong 20 phút (video V1 + V2)</code></p>
+<p><strong>Subject line A/B:</strong>
+- A: <code>Bạn đã cài xong chưa? 2 video này dành cho bạn</code>
+- B: <code>Cài Hermes: chọn đúng 1 trong 2 video này là xong</code></p>
+<p><strong>Preview text:</strong>
+<code>Kèm checklist 12 lỗi hay gặp — đối chiếu từng bước.</code></p>
+<p><strong>Nội dung:</strong></p>
+<p>Chào bạn,</p>
+<p>Email trước tôi có nhắc một câu: đừng cố làm cả 30 việc. Hôm nay cũng vậy — chỉ cần bạn cài xong Hermes là đủ.</p>
+<p>Phần lớn người bỏ cuộc ở bước cài đặt không phải vì khó. Mà vì họ xem video cài macOS rồi lại đang dùng Windows, hoặc cài xong mà không biết đã thành công chưa. Hai video dưới đây tách riêng từng hệ điều hành — bạn chỉ xem đúng 1 video, bỏ qua video còn lại.</p>
+<p><strong>[ VIDEO V1 — Cài Hermes trên macOS → ]</strong>
+<strong>[ VIDEO V2 — Cài Hermes trên Windows → ]</strong></p>
+<p>Tôi gửi kèm checklist để bạn đối chiếu lúc làm, khỏi phải tua lại video:</p>
+<p><strong>[ TẢI CHECKLIST CÀI ĐẶT KHÔNG LỖI (PDF 1 trang) → ]</strong></p>
+<p>Ba điều trong checklist tôi muốn nhắc trước, vì đây là chỗ người ta hay vấp:</p>
+<p>Thứ nhất, đừng cài trên máy có dữ liệu quan trọng chưa sao lưu. Thứ hai, khi Hermes hỏi cho phép truy cập thư mục nào, chỉ cho phép đúng thư mục nó cần — đừng bấm "cho phép tất cả" cho nhanh. Thứ ba, lần đầu mở lên, hãy dán đúng câu số 1 trong bảng tra: hỏi nó "bạn KHÔNG được tự ý làm gì khi chưa hỏi tôi".</p>
+<p>Cài xong rồi thì ngừng ở đó. Đừng cố làm gì thêm tối nay.</p>
+<p>Hỉ</p>
+<p><em>P/S: Nếu cài bị lỗi, chụp màn hình lỗi và trả lời email này. Tôi xem giúp được.</em></p>
+<p><strong>CTA chính:</strong> video V1/V2 (2 nút, cùng 1 mục tiêu).
+<strong>Ghi chú vận hành:</strong> nếu click video → gắn tag <code>YT-Watched-V1V2</code>; nếu 3 ngày không click → nhắc lại 1 lần bằng subject <code>Link V1 + V2 cho bạn (gửi lại)</code>.</p>
+<hr />
+<h3 id="e3-video-v3-ang-ky-nous-portal-email-ban-hang-chinh-so-1">E3 — VIDEO V3: ĐĂNG KÝ NOUS PORTAL <em>(EMAIL BÁN HÀNG CHÍNH SỐ 1)</em></h3>
+<p><em>Gửi: ngày 4 · Mục tiêu: click đăng ký Portal qua link giới thiệu</em></p>
+<p><strong>Subject line (chính):</strong>
+<code>Nếu bạn định dùng Hermes nghiêm túc, hãy đọc email này</code></p>
+<p><strong>Subject line A/B:</strong>
+- A: <code>Trước khi bạn trả tiền cho Hermes — 1 điều nên biết</code>
+- B: <code>Cách để bạn dùng Hermes mà tháng đầu giảm 15 USD</code></p>
+<p><strong>Preview text:</strong>
+<code>Đăng ký qua link của tôi, bạn được ưu đãi tháng đầu. Tôi không giấu gì cả.</code></p>
+<p><strong>Nội dung:</strong></p>
+<p>Chào bạn,</p>
+<p>Email này là email bán hàng. Tôi nói rõ ngay từ đầu để bạn khỏi đoán.</p>
+<p>Tôi có link giới thiệu của Nous Research. Đăng ký Portal qua link đó, bạn được giảm 15 USD cho tháng đầu, còn tôi nhận thêm chút credit API. Tôi không vòng vo: tôi được lợi, bạn cũng được lợi — cả hai đều rõ ràng.</p>
+<p>Đây là link: <strong>[ ĐĂNG KÝ NOUS PORTAL — GIẢM 15 USD THÁNG ĐẦU → ]</strong>
+(vanhi.id.vn/nous)</p>
+<p>Trước khi bấm, tôi nói rõ khi nào nên đăng ký và khi nào không, để bạn khỏi xuống tiền oan.</p>
+<p><strong>Bạn KHÔNG cần đăng ký nếu:</strong> bạn mới cài Hermes và chỉ muốn dùng thử với model miễn phí. Hermes chạy tốt với model miễn phí cho hầu hết việc hằng ngày. Cứ dùng miễn phí cho đến khi thật sự cần model mạnh hơn — đó là cách đúng.</p>
+<p><strong>Bạn NÊN đăng ký khi:</strong> đã thử giao vài việc và thấy Hermes làm tốt, nhưng hay bị giới hạn số lần dùng, hoặc bạn cần nó chạy cả ngày. Lúc đó 15 USD giảm cho tháng đầu là khoản đáng lấy.</p>
+<p>Video V3 nói rõ chuyện này: model miễn phí làm được gì, khi nào nên lên gói trả phí, cách chọn cho đỡ tốn tiền:</p>
+<p><strong>[ XEM VIDEO V3 → ]</strong></p>
+<p>Nếu xem xong thấy "chưa cần" thì thôi — đừng đăng ký. Tôi gửi email này một lần.</p>
+<p>Hỉ</p>
+<p><em>P/S: Mức ưu đãi do Nous Research đặt ra, không phải do tôi.</em></p>
+<p><strong>CTA duy nhất:</strong> link đăng ký Portal.
+<strong>Ghi chú vận hành:</strong> đây là email quan trọng nhất về mặt niềm tin — không dùng từ "cuối cùng", "chỉ còn X chỗ", không đếm ngược. Nhấn tag <code>YT-Portal-Clicked</code> khi click. Không gửi lại E3 dù không click (đã hứa "gửi 1 lần").</p>
+<hr />
+<h3 id="e4-video-ung-dung-v6v8-case-study">E4 — VIDEO ỨNG DỤNG (V6–V8) + CASE STUDY</h3>
+<p><em>Gửi: ngày 7 · Mục tiêu: cho họ thấy kết quả thật của người thật</em></p>
+<p><strong>Subject line (chính):</strong>
+<code>Cô Hương tiết kiệm được bao nhiêu giờ mỗi tuần?</code></p>
+<p><strong>Subject line A/B:</strong>
+- A: <code>3 video này cho bạn thấy Hermes làm được việc gì ngoài đẹp</code>
+- B: <code>Nhìn người khác dùng Hermes làm việc thật (V6–V8)</code></p>
+<p><strong>Preview text:</strong>
+<code>Kèm bảng tự chấm "trước / sau khi có trợ lý".</code></p>
+<p><strong>Nội dung:</strong></p>
+<p>Chào bạn,</p>
+<p>Tôi không khoe gì trong email này. Tôi chỉ kể chuyện một người dùng Hermes, tên giả là cô Hương.</p>
+<p>Cô chạy cửa hàng nhỏ, một mình lo từ nhập hàng đến trả lời khách. Trước đây tối nào cô cũng ngồi làm báo cáo thu chi, trả lời khách và lên kế hoạch nhập hàng. Ba việc đó chiếm khoảng 8 giờ mỗi tuần.</p>
+<p>Sau khi cài Hermes, cô làm đúng 3 việc: cuối ngày dán số liệu thu chi vào, bảo nó "rà giúp tôi khoản nào bất thường"; dán đoạn chat với khách vào, bảo nó "soạn bản nháp trả lời, tôi duyệt trước khi gửi"; cuối tuần bảo nó đề xuất tuần sau nhập gì.</p>
+<p>Cô nói một câu tôi nhớ mãi: "Tôi không tiết kiệm được 10 giờ. Tôi tiết kiệm được khoảng 5 giờ. Nhưng 5 giờ đó là 5 giờ tối tôi ở nhà với con."</p>
+<p>Tôi trích lại câu đó vì không muốn bạn kỳ vọng phép màu. Hermes tiết kiệm thời gian thật, nhưng cần bạn dạy nó cách làm việc của bạn. Cô Hương mất khoảng 2 tuần đầu để dạy nó nhớ thói quen của mình.</p>
+<p>Ba video dưới đây quay lại đúng cách cô làm:</p>
+<p><strong>[ VIDEO V6 — Trợ lý cho công việc: email, báo cáo, tài liệu → ]</strong>
+<strong>[ VIDEO V7 — Trợ lý cho tiền bạc: rà thu chi, cảnh báo ngân sách → ]</strong>
+<strong>[ VIDEO V8 — Trợ lý cho gia đình: nhớ lịch, việc nhà, ngày quan trọng → ]</strong></p>
+<p>Và đây là bảng tự chấm trước/sau tôi nhờ cô Hương điền:</p>
+<p><strong>[ TẢI BẢNG TỰ CHẤM TRƯỚC/SAU (PDF 1 trang) → ]</strong></p>
+<p>Nếu chỉ xem 1 video, chọn video gần với việc bạn đang mệt nhất.</p>
+<p>Hỉ</p>
+<p><em>P/S: Muốn kể lại câu chuyện của mình? Trả lời email này.</em></p>
+<p><strong>CTA chính:</strong> 3 link video V6/V7/V8 + 1 link PDF bonus.
+<strong>Ghi chú vận hành:</strong> nhấn tag <code>YT-Watched-V6V8</code> khi click bất kỳ video nào. Email này dài nhất series — giữ nguyên, vì đó là email tạo niềm tin trước email bán khóa học.</p>
+<hr />
+<h3 id="e5-gioi-thieu-khoa-hoc-email-ban-hang-chinh-so-2">E5 — GIỚI THIỆU KHÓA HỌC <em>(EMAIL BÁN HÀNG CHÍNH SỐ 2)</em></h3>
+<p><em>Gửi: ngày 10 · Mục tiêu: click vào trang đăng ký khóa học</em></p>
+<p><strong>Subject line (chính):</strong>
+<code>Bảng tra cho bạn 30 việc. Khóa học dạy bạn 1 điều khác.</code></p>
+<p><strong>Subject line A/B:</strong>
+- A: <code>Đây là lý do tôi làm khóa học Nhân Sự Toàn Năng Hermes</code>
+- B: <code>239.000đ — hoàn tiền trong 7 ngày nếu không hợp</code></p>
+<p><strong>Preview text:</strong>
+<code>37 bài + 3 bộ công cụ cài sẵn. Không cần biết lập trình.</code></p>
+<p><strong>Nội dung:</strong></p>
+<p>Chào bạn,</p>
+<p>Bốn email vừa qua tôi cho bạn 30 việc giao được, 2 video cài đặt, 3 video ứng dụng và câu chuyện cô Hương.</p>
+<p>Vậy tại sao lại có khóa học? Vì có một thứ bảng tra không dạy được.</p>
+<p>Bảng tra cho bạn <strong>câu hỏi</strong>. Nó không dạy bạn cách dạy Hermes nhớ việc, không dạy bạn biến cách làm tốt thành mẫu dùng lại, không dạy bạn đặt quy tắc an toàn để trợ lý không tự ý hành động. Ba thứ đó mới phân biệt "người dùng thử cho vui" với "người có một đội trợ lý thật".</p>
+<p>Khóa <strong>Nhân Sự Toàn Năng Hermes</strong> dạy đúng ba thứ đó: 37 bài, mỗi bài đều làm thật nên xong bài là có kết quả dùng tiếp; 3 bộ công cụ cài sẵn để bạn khỏi mò từ đầu; 37+ mẫu lệnh dùng được ngay. Dùng model miễn phí được phần lớn việc, không cần biết lập trình.</p>
+<p>Điểm cốt lõi: bạn làm đầu não, Hermes làm phần việc.</p>
+<p>Giá hiện tại là <strong>239.000đ</strong> cho phiên bản mở bán sớm, sau này dự kiến 499.000đ, có hoàn tiền trong 7 ngày nếu bạn thấy không hợp. Tôi muốn bạn đăng ký vì đúng nhu cầu, nên không đặt đồng hồ đếm ngược.</p>
+<p><strong>[ XEM KHÓA HỌC &amp; ĐĂNG KÝ → ]</strong> (speedreading.vn/ahermes)</p>
+<p>Chưa chắc thì đừng đăng ký hôm nay. Xem trang khóa học và lộ trình 37 bài, xem có đúng chỗ bạn đang thiếu.</p>
+<p>Hỉ</p>
+<p><em>P/S: Còn câu hỏi? Nhắn Zalo 0899320202.</em></p>
+<p><strong>CTA duy nhất:</strong> link trang khóa học.
+<strong>Ghi chú vận hành:</strong> nhấn tag <code>YT-Course-Clicked</code> khi click. Sau E5, chuyển contact sang automation "Broadcast" (nhận tin định kỳ) thay vì dừng hẳn — dừng hẳn là đánh rơi toàn bộ người chưa mua. <strong>Không gửi E6 ép mua.</strong></p>
+<hr />
+<h2 id="6-cau-hinh-ky-thuat-fluentcrm">6. CẤU HÌNH KỸ THUẬT FLUENTCRM</h2>
+<p><strong>Quy ước đặt tên (đồng bộ với hệ thống đang chạy):</strong></p>
+<table>
+<thead>
+<tr>
+<th>Đối tượng</th>
+<th>Tên</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>List</td>
+<td><code>YT Hermes LeadMagnet</code> (danh sách mới, tách biệt với List 7 của khóa học)</td>
+</tr>
+<tr>
+<td>Tag nguồn</td>
+<td><code>YT-Hermes-Cheatsheet</code></td>
+</tr>
+<tr>
+<td>Tag hành vi</td>
+<td><code>YT-LM-Downloaded</code>, <code>YT-Watched-V1V2</code>, <code>YT-Portal-Clicked</code>, <code>YT-Watched-V6V8</code>, <code>YT-Course-Clicked</code></td>
+</tr>
+<tr>
+<td>Tag trạng thái</td>
+<td><code>YT-Nurture-Done</code>, <code>YT-Enrolled-Course</code>, <code>YT-Portal-User</code></td>
+</tr>
+<tr>
+<td>Automation (funnel)</td>
+<td><code>Hermes YouTube Nurture</code></td>
+</tr>
+<tr>
+<td>Email Sequence</td>
+<td><code>Hermes YouTube Nurture</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Lý do tách list riêng (không dồn vào List 7):</strong> List 7 đang phục vụ người đã đăng ký khóa học. Trộn lead YouTube vào sẽ làm bẩn báo cáo và khiến người đã mua khóa vẫn nhận email mời mua khóa. Tách list → giữ sạch, báo cáo rõ, và có thể tắt automation khóa học cho nhóm này.</p>
+<p><strong>Các bước thiết lập:</strong></p>
+<ol>
+<li><strong>Form thu email</strong> — dùng <strong>Fluent Forms</strong> (miễn phí, cùng nhà phát triển, tích hợp sẵn FluentCRM) hoặc form của theme. Cấu hình:
+   - Chỉ 1 trường: Email (bắt buộc)
+   - Feed → FluentCRM: khi submit → tạo/update contact, apply <strong>List <code>YT Hermes LeadMagnet</code></strong> + <strong>Tag <code>YT-Hermes-Cheatsheet</code></strong>
+   - Bật <strong>Double Opt-in</strong>: đúng chuẩn, giữ list sạch và bảo vệ domain khỏi bị đánh dấu spam
+   - Redirect sau submit → trang cảm ơn có link tải PDF + nút "Xem video V1"
+   - Nhãn nút phải khớp landing page: "GỬI BẢNG TRA CHO TÔI"</li>
+<li><strong>Tạo Automation <code>Hermes YouTube Nurture</code></strong>
+   - Trigger: <code>Contact added to list</code> → List <code>YT Hermes LeadMagnet</code>
+   - Bắt đầu bằng <strong>delay 5 phút</strong> (chờ double opt-in hoàn tất) → action <code>Send custom email</code> E1
+   - Sau E1: <code>Delay 2 days</code> → E2 → <code>Delay 2 days</code> → E3 → <code>Delay 3 days</code> → E4 → <code>Delay 3 days</code> → E5
+   - Cuối: apply Tag <code>YT-Nurture-Done</code>
+   - Mỗi bước email: dán sẵn subject, preview text, body HTML, link CTA</li>
+<li><strong>Đo hành vi (quan trọng cho E3/E5)</strong>
+   - Bật tracking click. Mỗi link CTA dùng UTM riêng: <code>?utm_source=fluentcrm&amp;utm_medium=email&amp;utm_campaign=yt-nurture&amp;utm_term=e3-portal</code> … để biết chính xác email nào sinh chuyển đổi.
+   - Thêm condition: nếu contact click link khóa học trong E5 → apply Tag <code>YT-Enrolled-Course</code> và dừng gửi email còn lại của series cho người đó.</li>
+<li><strong>Bảo vệ deliverability</strong>
+   - Đảm bảo SPF/DKIM/DMARC đã xác thực cho domain gửi (speedreading.vn hoặc vanhi.id.vn) trước khi gửi batch đầu tiên
+   - Gửi thử nội bộ 3–5 địa chỉ, kiểm tra render trên Gmail/iPhone trước khi bật automation
+   - Email E1 chứa link tải file PDF — đừng đính kèm file (làm tăng tỷ lệ vào spam). Chỉ đặt link.</li>
+<li><strong>Tài liệu (lead magnet) đặt ở đâu</strong>
+   - Upload PDF vào WordPress Media hoặc Google Drive → dùng link ổn định, <strong>không</strong> link tạm. Nếu PDF thay đổi, thay file tại cùng đường dẫn để link cũ trong email vẫn đúng.
+   - Khóa folder bằng cách không public index (không bắt buộc, nhưng tránh bị index công khai gây nhiễu SEO).</li>
+</ol>
+<hr />
+<h2 id="7-checklist-van-hanh-chi-so-o-luong">7. CHECKLIST VẬN HÀNH &amp; CHỈ SỐ ĐO LƯỜNG</h2>
+<p><strong>Checklist trước khi bật automation:</strong></p>
+<ul>
+<li>[ ] PDF lead magnet đã thiết kế xong (2 trang) và upload được link ổn định</li>
+<li>[ ] Landing page đã lên <code>speedreading.vn/hermes-cheatsheet</code>, test submit trên mobile</li>
+<li>[ ] Double opt-in bật, email xác nhận hiển thị đúng tiếng Việt</li>
+<li>[ ] SPF/DKIM/DMARC xác thực xong cho domain gửi</li>
+<li>[ ] 5 email đã soạn trong Sequence, gửi thử nội bộ, kiểm tra render</li>
+<li>[ ] UTM đã gắn đủ 5 link CTA</li>
+<li>[ ] Mô tả video V3 đã chèn link <code>vanhi.id.vn/nous</code>; <strong>đã kiểm tra lại mức ưu đãi 15 USD còn hiệu lực</strong></li>
+<li>[ ] Tag <code>YT-Enrolled-Course</code> được apply đúng khi có người mua khóa (để không nhận email mời mua)</li>
+</ul>
+<p><strong>Chỉ số cần theo dõi (báo cáo sau 30 ngày):</strong></p>
+<table>
+<thead>
+<tr>
+<th>Chỉ số</th>
+<th>Mốc tham chiếu</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tỷ lệ điền form / lượt xem landing</td>
+<td>&gt; 25% là tốt cho lead magnet miễn phí</td>
+</tr>
+<tr>
+<td>Tỷ lệ mở E1</td>
+<td>&gt; 55% (list mới, đúng kỳ vọng)</td>
+</tr>
+<tr>
+<td>Tỷ lệ mở E3, E5</td>
+<td>&gt; 30% — nếu thấp hơn, đổi subject trước khi đổi nội dung</td>
+</tr>
+<tr>
+<td>Tỷ lệ click E3 → Portal</td>
+<td>2–5%</td>
+</tr>
+<tr>
+<td>Tỷ lệ click E5 → trang khóa</td>
+<td>3–6%</td>
+</tr>
+<tr>
+<td>Tỷ lệ hủy đăng ký cả series</td>
+<td>&lt; 0,5% / email — nếu cao hơn, dừng và rà lại tần suất</td>
+</tr>
+<tr>
+<td>Bounce rate</td>
+<td>&lt; 2% — cao hơn nghĩa là form đang hút email rác</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Quy tắc báo cáo:</strong> sau mỗi lô 500 contact mới, rà số liệu và đề xuất 1 thay đổi duy nhất (subject hoặc timing hoặc độ dài email) — không đổi 3 thứ cùng lúc, sẽ không biết cái nào tạo ra khác biệt.</p>
+<hr />
+<p><em>Hết. Tài liệu này chỉ gồm nội dung và text — toàn bộ có thể đưa thẳng cho design (lead magnet + landing page) và build trên FluentCRM mà không cần bàn giao thêm.</em></p></div>
+</section>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  var links = Array.prototype.slice.call(document.querySelectorAll('.nav-link'));
+  var panels = Array.prototype.slice.call(document.querySelectorAll('.panel'));
+  var crumb = document.getElementById('current-tab');
+  var sidebar = document.getElementById('sidebar');
+
+  function activate(tabId) {
+    panels.forEach(function (p) {
+      p.classList.toggle('active', p.id === 'sec-' + tabId);
+    });
+    links.forEach(function (l) {
+      var on = l.getAttribute('data-tab') === tabId;
+      l.classList.toggle('active', on);
+      if (on) crumb.textContent = l.querySelector('.nav-label').textContent;
+    });
+    if (window.innerWidth <= 900) sidebar.classList.remove('open');
+    document.querySelector('.main').scrollIntoView({ behavior: 'auto', block: 'start' });
+    try { localStorage.setItem('hermes-dash-tab', tabId); } catch (e) {}
+  }
+
+  links.forEach(function (l) {
+    l.addEventListener('click', function (e) {
+      e.preventDefault();
+      activate(l.getAttribute('data-tab'));
+    });
+  });
+
+  // Khôi phục tab đã xem gần nhất; mặc định tab đầu
+  var saved = null;
+  try { saved = localStorage.getItem('hermes-dash-tab'); } catch (e) {}
+  var first = links[0] && links[0].getAttribute('data-tab');
+  if (saved && document.getElementById('sec-' + saved)) activate(saved);
+  else if (first) activate(first);
+})();
+</script>
+</body>
+</html>
