@@ -4,7 +4,7 @@ description: "Bạn đang tốn hàng chục giờ mỗi tuần cho những vi�
 date: 2026-11-03
 ---
 
-![3 công việc nên tự động hóa ngay](https://github.com/vanthuonghi/hinh-bang-code/raw/main/gallery/3-cong-viec-nen-tu-dong-hoa-ngay-20261102080402.png)
+<img src="https://github.com/vanthuonghi/hinh-bang-code/raw/main/gallery/3-cong-viec-nen-tu-dong-hoa-ngay-20261102080402.png" width="600" style="max-width:100%;border-radius:12px;margin:20px 0" alt="3 công việc nên tự động hóa ngay">
 
 ## Mở đầu
 
