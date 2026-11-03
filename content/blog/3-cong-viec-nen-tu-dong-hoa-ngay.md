@@ -66,5 +66,3 @@ Bạn chỉ cần:
 ---
 
 *Bài viết thuộc series "AI Agent cho doanh nghiệp nhỏ" trên vanhi.id.vn*
-
-<!-- trigger rebuild -->
