@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Văn Hỉ — Trung tâm AI Agent &amp; Tự động hóa on Văn Hỉ — AI Agent, Tự động hóa &amp; Năng suất cho SME Việt Nam</title><link>https://vanhi.id.vn/</link><description>Recent content in Văn Hỉ — Trung tâm AI Agent &amp; Tự động hóa on Văn Hỉ — AI Agent, Tự động hóa &amp; Năng suất cho SME Việt Nam</description><generator>Hugo</generator><language>vi-vn</language><lastBuildDate>Tue, 03 Nov 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://vanhi.id.vn/index.xml" rel="self" type="application/rss+xml"/><item><title>📄 Checklist: 10 Bước Xây Dựng Đội AI Agent Đầu Tiên</title><link>https://vanhi.id.vn/qua-tang/checklist-ai-agent/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://vanhi.id.vn/qua-tang/checklist-ai-agent/</guid><description>&lt;h2 id="10-bước-xây-dựng-đội-ai-agent">10 bước xây dựng đội AI Agent&lt;/h2>
+&lt;ol>
+&lt;li>&lt;strong>Xác định công việc muốn giao cho AI&lt;/strong> — viết content, research, email,&amp;hellip;&lt;/li>
+&lt;li>&lt;strong>Cài đặt Hermes Agent&lt;/strong> trên máy tính&lt;/li>
+&lt;li>&lt;strong>Chọn model AI&lt;/strong> phù hợp&lt;/li>
+&lt;li>&lt;strong>Tạo profile đầu tiên&lt;/strong> — bắt đầu với 1 Agent&lt;/li>
+&lt;li>&lt;strong>Viết SOUL.md&lt;/strong> — định nghĩa tính cách, nhiệm vụ&lt;/li>
+&lt;li>&lt;strong>Thêm skills&lt;/strong> cho Agent&lt;/li>
+&lt;li>&lt;strong>Tạo kanban board&lt;/strong> để quản lý công việc&lt;/li>
+&lt;li>&lt;strong>Thiết lập cronjob&lt;/strong> cho tác vụ định kỳ&lt;/li>
+&lt;li>&lt;strong>Mở rộng đội hình&lt;/strong> — thêm Agent chuyên trách&lt;/li>
+&lt;li>&lt;strong>Đo lường &amp;amp; tối ưu&lt;/strong> hiệu suất&lt;/li>
+&lt;/ol>
+&lt;blockquote>
+&lt;p>📥 &lt;strong>Tải về&lt;/strong>: File PDF chi tiết (sắp ra mắt)&lt;/p></description></item><item><title>📺 YouTube — Văn Hỉ Official</title><link>https://vanhi.id.vn/lien-he/youtube/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://vanhi.id.vn/lien-he/youtube/</guid><description>&lt;p>Đăng ký kênh YouTube &lt;strong>Văn Hỉ Official&lt;/strong>:&lt;br>
+&lt;a href="https://youtube.com/@vanhi2024">https://youtube.com/@vanhi2024&lt;/a>&lt;/p>
+&lt;p>Nội dung: AI Agent, Hermes Agent, tự động hóa, năng suất làm việc.&lt;/p></description></item><item><title>🤖 Hermes Agent</title><link>https://vanhi.id.vn/cong-cu-ai/hermes-agent/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://vanhi.id.vn/cong-cu-ai/hermes-agent/</guid><description>&lt;p>&lt;a href="https://hermes-agent.nousresearch.com">Hermes Agent&lt;/a> là AI Agent của Nous Research, hoàn toàn miễn phí, mã nguồn mở.&lt;/p>
+&lt;p>&lt;strong>Tính năng chính:&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>Lập trình, code, debug&lt;/li>
+&lt;li>Nghiên cứu web&lt;/li>
+&lt;li>Tạo nội dung&lt;/li>
+&lt;li>Thao tác trình duyệt&lt;/li>
+&lt;li>Đa Agent (nhiều Agent làm việc cùng nhau)&lt;/li>
+&lt;li>Kết nối Telegram, email&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>Cài đặt:&lt;/strong> macOS, Windows, Linux&lt;/p></description></item><item><title>🤖 Hermes AI Agent — Nhân Sự Toàn Năng</title><link>https://vanhi.id.vn/giai-phap/hermes-agent/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://vanhi.id.vn/giai-phap/hermes-agent/</guid><description>&lt;h2 id="hermes-agent-là-gì">Hermes Agent là gì?&lt;/h2>
+&lt;p>Hermes Agent là một AI Agent mã nguồn mở của Nous Research, có thể chạy trên máy tính cá nhân (Windows, macOS, Linux). Không giống chatbot thông thường, Hermes có thể:&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>Lập trình &amp;amp; code&lt;/strong>: Viết, sửa, review code&lt;/li>
+&lt;li>&lt;strong>Nghiên cứu&lt;/strong>: Tìm kiếm web, đọc tài liệu, tổng hợp thông tin&lt;/li>
+&lt;li>&lt;strong>Tạo nội dung&lt;/strong>: Viết blog, post mạng xã hội, script video&lt;/li>
+&lt;li>&lt;strong>Tự động hóa trình duyệt&lt;/strong>: Thao tác web thay bạn&lt;/li>
+&lt;li>&lt;strong>Quản lý email &amp;amp; lịch&lt;/strong>: Gửi email, quản lý calendar&lt;/li>
+&lt;li>&lt;strong>Đa Agent&lt;/strong>: Tạo nhiều AI Agent chuyên trách cho từng công việc&lt;/li>
+&lt;/ul>
+&lt;h2 id="đội-hình-hermes-của-tôi">Đội hình Hermes của tôi&lt;/h2>
+&lt;p>Tôi đang vận hành đội 10 profile Hermes cho Marketing &amp;amp; Sales:&lt;/p></description></item><item><title>⚡ Hệ thống Blog AI Tự động</title><link>https://vanhi.id.vn/giai-phap/blog-tu-dong/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://vanhi.id.vn/giai-phap/blog-tu-dong/</guid><description>&lt;h2 id="content-tự-động-mỗi-ngày">Content tự động mỗi ngày&lt;/h2>
+&lt;p>Hệ thống blog của tôi sử dụng Hermes Agent để:&lt;/p>
+&lt;ol>
+&lt;li>&lt;strong>Nghiên cứu&lt;/strong> chủ đề mỗi ngày&lt;/li>
+&lt;li>&lt;strong>Viết bài STT&lt;/strong> (chuyên sâu) dài 1000-2000 từ&lt;/li>
+&lt;li>&lt;strong>Tạo hình ảnh&lt;/strong> cover cho bài viết&lt;/li>
+&lt;li>&lt;strong>Đăng tự động&lt;/strong> lên website Hugo&lt;/li>
+&lt;li>&lt;strong>Chia sẻ&lt;/strong> lên Telegram, mạng xã hội&lt;/li>
+&lt;/ol>
+&lt;p>Kết quả: Hơn &lt;strong>6.800 bài viết&lt;/strong> đã được tạo và đăng tự động trên blog &lt;a href="https://ai.vanhi.id.vn">ai.vanhi.id.vn&lt;/a>.&lt;/p></description></item><item><title>💬 Zalo</title><link>https://vanhi.id.vn/lien-he/zalo/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://vanhi.id.vn/lien-he/zalo/</guid><description>&lt;p>💬 &lt;strong>Zalo:&lt;/strong> &lt;a href="https://zalo.me/0899320202">0899320202&lt;/a>&lt;/p>
+&lt;p>Kết nối Zalo để được hỗ trợ nhanh nhất.&lt;/p></description></item><item><title>📋 Template Workflow Hermes Agent</title><link>https://vanhi.id.vn/qua-tang/template-workflow/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://vanhi.id.vn/qua-tang/template-workflow/</guid><description>&lt;h2 id="template-có-sẵn">Template có sẵn&lt;/h2>
+&lt;ul>
+&lt;li>&lt;strong>Content Writer&lt;/strong>: Tự động nghiên cứu → viết → đăng blog&lt;/li>
+&lt;li>&lt;strong>Email Marketing&lt;/strong>: Soạn → gửi → theo dõi email campaign&lt;/li>
+&lt;li>&lt;strong>Social Media&lt;/strong>: Lên lịch → viết → đăng bài MXH&lt;/li>
+&lt;li>&lt;strong>Research Agent&lt;/strong>: Tìm kiếm → tổng hợp → báo cáo&lt;/li>
+&lt;/ul>
+&lt;blockquote>
+&lt;p>📥 Các template này sẽ được cập nhật trong thời gian tới.&lt;/p>
+&lt;/blockquote></description></item><item><title>📧 FluentCRM Pro</title><link>https://vanhi.id.vn/cong-cu-ai/fluentcrm/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://vanhi.id.vn/cong-cu-ai/fluentcrm/</guid><description>&lt;p>FluentCRM Pro là giải pháp email marketing và CRM mạnh mẽ trên WordPress.&lt;/p>
+&lt;p>&lt;strong>Tích hợp với Hermes Agent&lt;/strong> để:&lt;/p>
+&lt;ul>
+&lt;li>Tự động gửi email theo lịch&lt;/li>
+&lt;li>Phân loại leads&lt;/li>
+&lt;li>Sequence email bán hàng&lt;/li>
+&lt;li>Theo dõi tỷ lệ mở, click&lt;/li>
+&lt;/ul></description></item><item><title>🏆 Rewardful — Affiliate Platform</title><link>https://vanhi.id.vn/cong-cu-ai/rewardful/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://vanhi.id.vn/cong-cu-ai/rewardful/</guid><description>&lt;p>Rewardful là nền tảng affiliate marketing. Tôi sử dụng Rewardful cho chương trình &lt;strong>FlyHermes&lt;/strong>:&lt;/p>
+&lt;ul>
+&lt;li>20% lifetime recurring commission&lt;/li>
+&lt;li>60-day cookie&lt;/li>
+&lt;li>Thanh toán qua PayPal/Wise&lt;/li>
+&lt;li>Dễ dàng quản lý affiliates&lt;/li>
+&lt;/ul></description></item><item><title>📧 Email</title><link>https://vanhi.id.vn/lien-he/email/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://vanhi.id.vn/lien-he/email/</guid><description>&lt;p>📧 &lt;strong>Email:&lt;/strong> &lt;a href="mailto:vanthuonghi@gmail.com">vanthuonghi@gmail.com&lt;/a>&lt;/p>
+&lt;p>Tôi trả lời email trong vòng 24-48 giờ.&lt;/p></description></item><item><title>📧 Email Marketing Automation</title><link>https://vanhi.id.vn/giai-phap/email-marketing/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://vanhi.id.vn/giai-phap/email-marketing/</guid><description>&lt;h2 id="hệ-thống-email-thông-minh">Hệ thống Email thông minh&lt;/h2>
+&lt;p>Tôi sử dụng WordPress + FluentCRM Pro kết hợp với Hermes Agent để:&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>Thu thập leads&lt;/strong> từ website qua form&lt;/li>
+&lt;li>&lt;strong>Phân loại&lt;/strong> khách hàng tự động&lt;/li>
+&lt;li>&lt;strong>Gửi email automation&lt;/strong> sequences&lt;/li>
+&lt;li>&lt;strong>Theo dõi&lt;/strong> mở email, click link&lt;/li>
+&lt;li>&lt;strong>A/B test&lt;/strong> tiêu đề email&lt;/li>
+&lt;/ul>
+&lt;p>Liên hệ nếu bạn muốn tôi thiết lập hệ thống tương tự cho doanh nghiệp của bạn.&lt;/p></description></item><item><title>✈️ Telegram</title><link>https://vanhi.id.vn/lien-he/telegram/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://vanhi.id.vn/lien-he/telegram/</guid><description>&lt;p>✈️ &lt;strong>Telegram:&lt;/strong> &lt;a href="https://t.me/VanThuongHi">@VanThuongHi&lt;/a>&lt;/p>
+&lt;p>Kênh cập nhật nhanh nhất.&lt;/p></description></item><item><title>🗣️ VieNeuTTS — TTS Tiếng Việt Miễn Phí</title><link>https://vanhi.id.vn/cong-cu-ai/vieneutts/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://vanhi.id.vn/cong-cu-ai/vieneutts/</guid><description>&lt;p>VieNeuTTS là công cụ TTS tiếng Việt miễn phí, chạy hoàn toàn trên máy tính.&lt;/p>
+&lt;ul>
+&lt;li>20 giọng Bắc/Trung/Nam&lt;/li>
+&lt;li>Clone giọng nói&lt;/li>
+&lt;li>Chất lượng cao&lt;/li>
+&lt;li>Miễn phí 100%&lt;/li>
+&lt;/ul></description></item><item><title>3 Công Việc Doanh Nghiệp Nhỏ Nên Tự Động Hóa Ngay</title><link>https://vanhi.id.vn/blog/3-cong-viec-nen-tu-dong-hoa-ngay/</link><pubDate>Tue, 03 Nov 2026 00:00:00 +0000</pubDate><guid>https://vanhi.id.vn/blog/3-cong-viec-nen-tu-dong-hoa-ngay/</guid><description>&lt;p>&lt;img src="https://github.com/vanthuonghi/hinh-bang-code/raw/main/gallery/3-cong-viec-nen-tu-dong-hoa-ngay-20261102080402.png" alt="3 công việc nên tự động hóa ngay">&lt;/p>
+&lt;h2 id="mở-đầu">Mở đầu&lt;/h2>
+&lt;p>Bạn có biết: &lt;strong>80% thời gian làm việc của chủ doanh nghiệp nhỏ&lt;/strong> bị tiêu tốn vào những việc lặp đi lặp lại mà máy móc có thể làm tốt hơn?&lt;/p>
+&lt;p>Tôi đã từng như vậy. Ngồi hàng giờ để đăng bài lên từng nền tảng, trả lời tin nhắn giống nhau, gửi email follow-up bằng tay. Cho đến khi tôi phát hiện ra AI Agent.&lt;/p></description></item><item><title>Những Điều Cần Biết Trước Khi Xây Dựng Đội AI Agent Đầu Tiên</title><link>https://vanhi.id.vn/blog/nhung-dieu-can-biet-truoc-khi-xay-dung-doi-ai-agent/</link><pubDate>Tue, 15 Sep 2026 00:00:00 +0000</pubDate><guid>https://vanhi.id.vn/blog/nhung-dieu-can-biet-truoc-khi-xay-dung-doi-ai-agent/</guid><description>&lt;h2 id="mở-đầu">Mở đầu&lt;/h2>
+&lt;p>Tôi đã vận hành đội &lt;strong>10 profile Hermes Agent&lt;/strong> cho Marketing &amp;amp; Sales được hơn 6 tháng. Trong quá trình đó, tôi đã học được rất nhiều bài học — cả thành công lẫn thất bại.&lt;/p>
+&lt;p>Bài viết này chia sẻ những &lt;strong>điều cốt lõi&lt;/strong> bạn cần biết trước khi bắt đầu.&lt;/p>
+&lt;h2 id="1-không-cần-biết-code">1. Không cần biết code&lt;/h2>
+&lt;p>Đây là hiểu lầm lớn nhất. Hermes Agent có thể lập trình, nhưng &lt;strong>bạn không cần phải biết code&lt;/strong> để sử dụng nó.&lt;/p></description></item><item><title>AI Đã Tiến Hóa Đến Đâu? 3 Thế Hệ AI Bạn Cần Biết</title><link>https://vanhi.id.vn/youtube/3-the-he-ai/</link><pubDate>Wed, 01 Apr 2026 00:00:00 +0000</pubDate><guid>https://vanhi.id.vn/youtube/3-the-he-ai/</guid><description>&lt;p>📺 &lt;strong>Xem video:&lt;/strong> &lt;a href="https://youtu.be/6yS9bllc0c4">https://youtu.be/6yS9bllc0c4&lt;/a>&lt;/p>
+&lt;p>3 thế hệ AI:&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>Thế hệ 1&lt;/strong>: AI tạo sinh — tạo nội dung cho bạn&lt;/li>
+&lt;li>&lt;strong>Thế hệ 2&lt;/strong>: Trợ lý AI — hiểu, phân tích, nghĩ cùng bạn&lt;/li>
+&lt;li>&lt;strong>Thế hệ 3&lt;/strong>: AI Agent — nhận mục tiêu và thực hiện công việc cho bạn&lt;/li>
+&lt;/ul></description></item><item><title>ChatGPT vs Hermes: AI Agent Khác Chatbot Thế Nào?</title><link>https://vanhi.id.vn/youtube/chatgpt-vs-hermes/</link><pubDate>Sun, 22 Mar 2026 00:00:00 +0000</pubDate><guid>https://vanhi.id.vn/youtube/chatgpt-vs-hermes/</guid><description>&lt;p>Bạn có thể giao cho Hermes một &lt;strong>mục tiêu&lt;/strong>, sau đó nó có thể tự nghiên cứu, tự viết, tự kiểm tra, tự lưu, tự đăng bài — khác hoàn toàn với chatbot chỉ trả lời câu hỏi.&lt;/p>
+&lt;p>📺 &lt;strong>Xem video:&lt;/strong> &lt;a href="https://youtu.be/xo9wOjnywjw">https://youtu.be/xo9wOjnywjw&lt;/a>&lt;/p></description></item><item><title>Hermes Agent Là Gì? AI Agent Miễn Phí Chạy Ngay Trên Máy Tính</title><link>https://vanhi.id.vn/youtube/hermes-agent-la-gi/</link><pubDate>Sun, 15 Mar 2026 00:00:00 +0000</pubDate><guid>https://vanhi.id.vn/youtube/hermes-agent-la-gi/</guid><description>&lt;p>Hermes Agent là một AI Agent mã nguồn mở của Nous Research, có thể chạy trên máy tính Windows, macOS hoặc Linux.&lt;/p>
+&lt;p>📺 &lt;strong>Xem video:&lt;/strong> &lt;a href="https://youtu.be/tR_30HgF-_k">https://youtu.be/tR_30HgF-_k&lt;/a>&lt;/p>
+&lt;p>&lt;strong>Nội dung video:&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>Hermes Agent là gì?&lt;/li>
+&lt;li>Khác biệt với ChatGPT thông thường&lt;/li>
+&lt;li>10+ việc Hermes có thể làm&lt;/li>
+&lt;li>Cách cài đặt và bắt đầu&lt;/li>
+&lt;/ul></description></item></channel></rss>
