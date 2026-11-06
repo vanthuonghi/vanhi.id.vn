@@ -5,6 +5,24 @@
 {{ $videos := where .Site.RegularPages "Section" "youtube" }}
 {{ $latestVideos := first 2 $videos.ByDate.Reverse }}
 
+<!-- ===== TOP ANNOUNCEMENT BAR ===== -->
+<div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 18px;margin-bottom:24px;font-size:14px;line-height:1.6">
+  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+    <span style="color:var(--accent);font-weight:600">📚</span>
+    <span>Bạn muốn đăng ký học Speed Reading hãy liên hệ Zalo:</span>
+    <a href="https://zalo.me/0899320202" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:4px;background:#1a3d8f;color:#fff;padding:4px 12px;border-radius:6px;font-weight:600;font-size:13px;text-decoration:none">
+      💬 Zalo 0899.320.202
+    </a>
+  </div>
+  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:8px">
+    <span style="color:var(--accent);font-weight:600">🤖</span>
+    <span>Bạn muốn ngồi trực tiếp xây dựng hệ thống nhân sự AI Agent liên hệ Zalo:</span>
+    <a href="https://zalo.me/0899320202" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:4px;background:#1a3d8f;color:#fff;padding:4px 12px;border-radius:6px;font-weight:600;font-size:13px;text-decoration:none">
+      💬 Zalo 0899.320.202
+    </a>
+  </div>
+</div>
+
 <!-- ===== HERO ===== -->
 <section class="hero">
   <div style="display:inline-flex;align-items:center;gap:6px;background:rgba(255,180,84,.1);border:1px solid rgba(255,180,84,.2);padding:6px 16px;border-radius:20px;font-size:13px;color:var(--accent);margin-bottom:20px">
