@@ -18,7 +18,8 @@ async function loadLinks() {
   const now = Date.now();
   if (cache.links && now - cache.at < CACHE_TTL_MS) return cache.links;
   try {
-    const res = await fetch(LINKS_URL, { cf: { cacheEverything: true, cacheTtl: 60 } });
+    const bucket = Math.floor(now / CACHE_TTL_MS);
+    const res = await fetch(LINKS_URL + '?v=' + bucket, { cf: { cacheEverything: true, cacheTtl: 60 } });
     if (!res.ok) throw new Error('links.json HTTP ' + res.status);
     const data = await res.json();
     const links = (data && (data.links || data)) || {};

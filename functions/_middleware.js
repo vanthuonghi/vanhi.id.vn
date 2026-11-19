@@ -1,6 +1,7 @@
 // URL Shortener Middleware — redirect short links stored in links.json (GitHub).
 // Data source: https://raw.githubusercontent.com/vanthuonghi/vanhi.id.vn/main/links.json
 // Không cần KV binding: dữ liệu nằm trong repo, cache 60 giây ở edge.
+// Thêm tham số theo phút để không dính cache 5 phút của raw.githubusercontent.
 
 const LINKS_URL = 'https://raw.githubusercontent.com/vanthuonghi/vanhi.id.vn/main/links.json';
 const CACHE_TTL_MS = 60000;
@@ -23,7 +24,8 @@ async function loadLinks() {
   if (cache.links && now - cache.at < CACHE_TTL_MS) return cache.links;
 
   try {
-    const res = await fetch(LINKS_URL, { cf: { cacheEverything: true, cacheTtl: 60 } });
+    const bucket = Math.floor(now / CACHE_TTL_MS);
+    const res = await fetch(LINKS_URL + '?v=' + bucket, { cf: { cacheEverything: true, cacheTtl: 60 } });
     if (!res.ok) throw new Error('links.json HTTP ' + res.status);
     const data = await res.json();
     const links = (data && (data.links || data)) || {};
