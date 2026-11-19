@@ -1,30 +1,10 @@
 {
   "version": 1,
   "links": {
-    "test3": {
-      "url": "https://openai.com/",
-      "created": "2026-11-19T00:00:00Z",
-      "updated": "2026-11-19T00:00:00Z"
-    },
-    "demo-link": {
-      "url": "https://example.org/",
-      "created": "2026-11-19T00:00:00Z",
-      "updated": "2026-11-19T00:00:00Z"
-    },
     "nous": {
       "url": "https://portal.nousresearch.com/r/vanhi",
       "created": "2026-11-19T01:38:04.849Z",
       "updated": "2026-11-19T01:38:04.849Z"
-    },
-    "cache-probe": {
-      "url": "https://www.cloudflare.com/",
-      "created": "2026-11-19T00:00:00Z",
-      "updated": "2026-11-19T00:00:00Z"
-    },
-    "probe-latency": {
-      "url": "https://example.net/",
-      "created": "2026-11-19T00:00:00Z",
-      "updated": "2026-11-19T00:00:00Z"
     }
   }
 }
