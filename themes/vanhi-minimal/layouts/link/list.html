@@ -43,7 +43,7 @@
     </div>
     <p style="color:var(--muted);margin-bottom:20px">
       Tạo short URL dạng <code style="color:var(--accent)">vanhi.id.vn/slug</code> cho bất kỳ link nào.
-      Mỗi lần lưu là một commit vào <code>links.json</code>; link mới hoạt động sau tối đa ~60 giây.
+      Mỗi lần lưu là một commit vào <code>links.json</code>; link mới hoạt động sau ~15–30 giây.
     </p>
 
     <!-- Add form -->
@@ -284,7 +284,7 @@ async function addLink() {
     }, 'Short link: /' + slug + ' -> ' + url);
     slugInput.value = '';
     urlInput.value = '';
-    setAddStatus('✅ Đã lưu vào links.json — link hoạt động sau tối đa ~60 giây.', false);
+    setAddStatus('✅ Đã lưu vào links.json — link hoạt động sau ~15–30 giây.', false);
     loadLinks();
   } catch (e) {
     if (!handleAuthError(e)) alert('Lỗi: ' + e.message);

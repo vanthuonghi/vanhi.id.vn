@@ -2,7 +2,7 @@
 // trang quản trị /link ghi trực tiếp qua GitHub API.
 
 const LINKS_URL = 'https://raw.githubusercontent.com/vanthuonghi/vanhi.id.vn/main/links.json';
-const CACHE_TTL_MS = 60000;
+const CACHE_TTL_MS = 15000;
 
 let cache = { at: 0, links: null };
 
@@ -11,7 +11,7 @@ const cors = {
   'access-control-allow-methods': 'GET, OPTIONS',
   'access-control-allow-headers': 'Content-Type, Authorization',
   'content-type': 'application/json',
-  'cache-control': 'public, max-age=60',
+  'cache-control': 'public, max-age=15',
 };
 
 async function loadLinks() {
@@ -19,7 +19,7 @@ async function loadLinks() {
   if (cache.links && now - cache.at < CACHE_TTL_MS) return cache.links;
   try {
     const bucket = Math.floor(now / CACHE_TTL_MS);
-    const res = await fetch(LINKS_URL + '?v=' + bucket, { cf: { cacheEverything: true, cacheTtl: 60 } });
+    const res = await fetch(LINKS_URL + '?v=' + bucket);
     if (!res.ok) throw new Error('links.json HTTP ' + res.status);
     const data = await res.json();
     const links = (data && (data.links || data)) || {};
