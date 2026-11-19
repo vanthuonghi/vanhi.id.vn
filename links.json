@@ -1,13 +1,8 @@
 {
   "version": 1,
   "links": {
-    "test": {
-      "url": "https://example.com/",
-      "created": "2026-11-19T00:00:00Z",
-      "updated": "2026-11-19T00:00:00Z"
-    },
-    "test2": {
-      "url": "https://github.com/",
+    "test3": {
+      "url": "https://openai.com/",
       "created": "2026-11-19T00:00:00Z",
       "updated": "2026-11-19T00:00:00Z"
     }
