@@ -1,6 +1,6 @@
 {{ define "main" }}
 <div id="link-app">
-  <!-- Password gate -->
+  <!-- Bước 1: password -->
   <div id="login-screen" style="display:block;text-align:center;padding:60px 0">
     <h1 class="section-title">🔗 URL Shortener</h1>
     <p style="color:var(--muted);margin-bottom:20px">Nhập password để quản lý short URL</p>
@@ -12,14 +12,38 @@
     </div>
   </div>
 
-  <!-- Dashboard (hidden until unlocked) -->
+  <!-- Bước 2: GitHub token (lưu 1 lần trong trình duyệt) -->
+  <div id="token-screen" style="display:none;text-align:center;padding:60px 0">
+    <h1 class="section-title">🔑 Kết nối GitHub</h1>
+    <p style="color:var(--muted);margin-bottom:20px;max-width:520px;margin-left:auto;margin-right:auto">
+      Short link được lưu trong file <code style="color:var(--accent)">links.json</code> của repo
+      <strong>vanthuonghi/vanhi.id.vn</strong>. Dán GitHub token có quyền <em>Contents: Read and write</em>
+      để trang này đọc và ghi. Token chỉ lưu trong trình duyệt của bạn (localStorage), không gửi đi đâu khác.
+    </p>
+    <div style="max-width:420px;margin:0 auto">
+      <input type="password" id="token-input" placeholder="github_pat_... hoặc ghp_..."
+        style="width:100%;padding:12px 14px;border-radius:8px;border:1px solid var(--border);background:#0b0d11;color:var(--fg);font-size:14px;margin-bottom:12px" />
+      <button onclick="saveToken()" class="cta" style="width:100%">Lưu token</button>
+      <p id="token-error" style="color:#ff6b6b;font-size:14px;margin-top:8px;display:none"></p>
+      <p style="color:var(--muted);font-size:13px;margin-top:14px">
+        Tạo token: <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener" style="color:var(--accent)">Fine-grained token</a>
+        → Repository access: chỉ <code>vanhi.id.vn</code> → Permissions: Contents = Read and write.
+      </p>
+    </div>
+  </div>
+
+  <!-- Bảng điều khiển -->
   <div id="dashboard" style="display:none">
     <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:24px">
       <h1 class="section-title" style="margin:0">🔗 URL Shortener</h1>
-      <button onclick="lock()" class="cta-ghost" style="font-size:13px;padding:6px 14px">🔒 Khóa</button>
+      <div style="display:flex;gap:8px">
+        <button onclick="changeToken()" class="cta-ghost" style="font-size:13px;padding:6px 14px">🔑 Đổi token</button>
+        <button onclick="lock()" class="cta-ghost" style="font-size:13px;padding:6px 14px">🔒 Khóa</button>
+      </div>
     </div>
     <p style="color:var(--muted);margin-bottom:20px">
       Tạo short URL dạng <code style="color:var(--accent)">vanhi.id.vn/slug</code> cho bất kỳ link nào.
+      Mỗi lần lưu là một commit vào <code>links.json</code>; link mới hoạt động sau tối đa ~60 giây.
     </p>
 
     <!-- Add form -->
@@ -32,8 +56,9 @@
         <span style="color:var(--muted)">→</span>
         <input type="url" id="url-input" placeholder="https://affiliate.com/ref=abc"
           style="flex:2;min-width:200px;padding:10px 12px;border-radius:6px;border:1px solid var(--border);background:#0b0d11;color:var(--fg);font-size:14px" />
-        <button onclick="addLink()" class="cta" style="padding:10px 18px">Tạo</button>
+        <button onclick="addLink()" id="add-btn" class="cta" style="padding:10px 18px">Tạo</button>
       </div>
+      <p id="add-status" style="font-size:13px;color:var(--muted);margin-top:10px;display:none"></p>
     </div>
 
     <!-- Link list -->
@@ -53,10 +78,21 @@
 </div>
 
 <script>
-const API = '/api/link';
+const REPO = 'vanthuonghi/vanhi.id.vn';
+const LINKS_FILE = 'links.json';
+const BRANCH = 'main';
+const TOKEN_KEY = 'vanhi_gh_token';
 // SHA-256 pre-computed hash of 'Demoncrazy1!'
 const EXPECTED_HASH = 'c2073d0f21ad8f56aa780dca6708396ef2c84546d4ad56e55c0eae8db8cb25a8';
-let token = '';
+
+let ghToken = localStorage.getItem(TOKEN_KEY) || '';
+let currentSha = null;
+
+function showScreen(name) {
+  document.getElementById('login-screen').style.display = name === 'login' ? 'block' : 'none';
+  document.getElementById('token-screen').style.display = name === 'token' ? 'block' : 'none';
+  document.getElementById('dashboard').style.display = name === 'dashboard' ? 'block' : 'none';
+}
 
 async function sha256(str) {
   const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
@@ -69,103 +105,200 @@ async function unlock() {
   const pw = input.value.trim();
   if (!pw) { err.textContent = 'Nhập password'; err.style.display = 'block'; return; }
 
-  // Hash client-side, send hash only to server
   const pwHash = await sha256(pw);
   if (pwHash !== EXPECTED_HASH) {
     err.textContent = '❌ Sai password'; err.style.display = 'block'; return;
   }
+  err.style.display = 'none';
+  if (ghToken) { showScreen('dashboard'); loadLinks(); }
+  else { showScreen('token'); document.getElementById('token-input').focus(); }
+}
 
-  // Verify against server too
-  try {
-    const resp = await fetch(API + '/verify?hash=' + encodeURIComponent(pwHash));
-    const data = await resp.json();
-    if (data.valid) {
-      token = pwHash; // store hash as token
-      document.getElementById('login-screen').style.display = 'none';
-      document.getElementById('dashboard').style.display = 'block';
-      err.style.display = 'none';
-      loadLinks();
-    } else {
-      err.textContent = '❌ Sai password'; err.style.display = 'block';
-    }
-  } catch(e) {
-    err.textContent = '❌ Lỗi kết nối: ' + e.message; err.style.display = 'block';
-  }
+function saveToken() {
+  const err = document.getElementById('token-error');
+  const val = document.getElementById('token-input').value.trim();
+  if (!val) { err.textContent = 'Dán token vào ô trên'; err.style.display = 'block'; return; }
+  ghToken = val;
+  localStorage.setItem(TOKEN_KEY, val);
+  err.style.display = 'none';
+  showScreen('dashboard');
+  loadLinks();
+}
+
+function changeToken() {
+  ghToken = '';
+  localStorage.removeItem(TOKEN_KEY);
+  document.getElementById('token-input').value = '';
+  document.getElementById('dashboard').style.display = 'none';
+  showScreen('token');
 }
 
 function lock() {
-  token = '';
   document.getElementById('dashboard').style.display = 'none';
-  document.getElementById('login-screen').style.display = 'block';
   document.getElementById('password-input').value = '';
+  showScreen('login');
 }
 
-async function apiCall(method, body = null) {
-  const opts = { method, headers: { 'Authorization': `Bearer ${token}` } };
-  if (body) { opts.headers['Content-Type'] = 'application/json'; opts.body = JSON.stringify(body); }
-  const resp = await fetch(API, opts);
-  return await resp.json();
+// ---------- GitHub storage ----------
+class AuthError extends Error {}
+
+function ghHeaders() {
+  return {
+    'Accept': 'application/vnd.github+json',
+    'Authorization': 'Bearer ' + ghToken,
+    'X-GitHub-Api-Version': '2022-11-28',
+  };
 }
 
+function b64decode(b64) {
+  const bin = atob(String(b64 || '').replace(/\s/g, ''));
+  const bytes = Uint8Array.from(bin, c => c.charCodeAt(0));
+  return new TextDecoder().decode(bytes);
+}
+
+function b64encode(str) {
+  const bytes = new TextEncoder().encode(str);
+  let bin = '';
+  bytes.forEach(b => { bin += String.fromCharCode(b); });
+  return btoa(bin);
+}
+
+async function ghLoad() {
+  const res = await fetch('https://api.github.com/repos/' + REPO + '/contents/' + LINKS_FILE + '?ref=' + BRANCH + '&t=' + Date.now(), { headers: ghHeaders() });
+  if (res.status === 401 || res.status === 403) throw new AuthError('Token không hợp lệ hoặc thiếu quyền Contents: Read and write.');
+  if (!res.ok) throw new Error('GitHub trả về ' + res.status);
+  const json = await res.json();
+  currentSha = json.sha;
+  let data = {};
+  try { data = JSON.parse(b64decode(json.content)); } catch (e) { data = {}; }
+  if (!data.links) data.links = {};
+  return data;
+}
+
+async function ghSave(data, message) {
+  const body = {
+    message: message,
+    content: b64encode(JSON.stringify(data, null, 2) + '\n'),
+    branch: BRANCH,
+  };
+  if (currentSha) body.sha = currentSha;
+  const res = await fetch('https://api.github.com/repos/' + REPO + '/contents/' + LINKS_FILE, {
+    method: 'PUT',
+    headers: Object.assign({ 'Content-Type': 'application/json' }, ghHeaders()),
+    body: JSON.stringify(body),
+  });
+  if (res.status === 401 || res.status === 403) throw new AuthError('Token không hợp lệ hoặc thiếu quyền Contents: Read and write.');
+  if (res.status === 409) return false; // conflict — thử lại
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.message || ('GitHub trả về ' + res.status));
+  }
+  return true;
+}
+
+async function mutate(fn, message) {
+  for (let attempt = 0; attempt < 3; attempt++) {
+    const data = await ghLoad();
+    fn(data.links);
+    if (await ghSave(data, message)) return;
+  }
+  throw new Error('File vừa bị sửa ở nơi khác, thử lại giúp mình.');
+}
+
+function handleAuthError(e) {
+  if (e instanceof AuthError) {
+    changeToken();
+    const err = document.getElementById('token-error');
+    err.textContent = '❌ ' + e.message;
+    err.style.display = 'block';
+    return true;
+  }
+  return false;
+}
+
+// ---------- UI ----------
 async function loadLinks() {
   const container = document.getElementById('links-container');
+  container.innerHTML = '<div style="text-align:center;padding:40px;color:var(--muted)">Đang tải...</div>';
   try {
-    const data = await apiCall('GET');
-    if (!data.success) { container.innerHTML = `<p style="color:var(--muted);text-align:center">Lỗi: ${data.error}</p>`; return; }
-    const links = data.links || {};
-    const entries = Object.entries(links);
+    const data = await ghLoad();
+    const entries = Object.entries(data.links || {});
     if (entries.length === 0) {
       container.innerHTML = '<p style="text-align:center;padding:30px;color:var(--muted)">Chưa có short URL nào. Tạo cái đầu tiên bên trên ☝️</p>';
       return;
     }
     let html = '<h3 style="margin-bottom:12px;font-size:17px">📋 Danh sách short URL</h3>';
     entries.reverse().forEach(([slug, info]) => {
-      const shortUrl = `https://vanhi.id.vn/${slug}`;
-      html += `<div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 16px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
-        <div style="flex:1;min-width:150px">
-          <a href="${shortUrl}" target="_blank" style="font-weight:600;font-size:15px">/${slug}</a>
-          <div style="font-size:13px;color:var(--muted);word-break:break-all;margin-top:2px">→ ${info.url}</div>
-        </div>
-        <div style="display:flex;gap:6px;flex-shrink:0">
-          <button onclick="navigator.clipboard.writeText('${shortUrl}').then(()=>this.textContent='✅ Copied!').catch(()=>{});setTimeout(()=>this.innerHTML='📋 Copy',2000)" style="background:transparent;color:var(--accent);border:1px solid var(--accent);padding:5px 12px;border-radius:6px;cursor:pointer;font-size:13px">📋 Copy</button>
-          <button onclick="deleteLink('${slug}')" style="background:transparent;color:#ff6b6b;border:1px solid #ff6b6b;padding:5px 12px;border-radius:6px;cursor:pointer;font-size:13px">🗑️</button>
-        </div>
-      </div>`;
+      const shortUrl = 'https://vanhi.id.vn/' + slug;
+      const url = typeof info === 'string' ? info : (info && info.url) || '';
+      html += '<div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 16px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">' +
+        '<div style="flex:1;min-width:150px">' +
+          '<a href="' + shortUrl + '" target="_blank" rel="noopener" style="font-weight:600;font-size:15px">/' + slug + '</a>' +
+          '<div style="font-size:13px;color:var(--muted);word-break:break-all;margin-top:2px">→ ' + url + '</div>' +
+        '</div>' +
+        '<div style="display:flex;gap:6px;flex-shrink:0">' +
+          '<button onclick="copyLink(this,\'' + shortUrl + '\')" style="background:transparent;color:var(--accent);border:1px solid var(--accent);padding:5px 12px;border-radius:6px;cursor:pointer;font-size:13px">📋 Copy</button>' +
+          '<button onclick="deleteLink(\'' + slug + '\')" style="background:transparent;color:#ff6b6b;border:1px solid #ff6b6b;padding:5px 12px;border-radius:6px;cursor:pointer;font-size:13px">🗑️</button>' +
+        '</div>' +
+      '</div>';
     });
     container.innerHTML = html;
-  } catch(e) {
-    container.innerHTML = `<p style="color:#ff6b6b;text-align:center">Lỗi kết nối: ${e.message}</p>`;
+  } catch (e) {
+    if (handleAuthError(e)) { container.innerHTML = ''; return; }
+    container.innerHTML = '<p style="color:#ff6b6b;text-align:center">Lỗi: ' + e.message + '</p>';
   }
 }
 
+function copyLink(btn, text) {
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = '✅ Copied!';
+    setTimeout(() => { btn.textContent = '📋 Copy'; }, 2000);
+  }).catch(() => {});
+}
+
+function setAddStatus(text, isError) {
+  const el = document.getElementById('add-status');
+  el.textContent = text;
+  el.style.color = isError ? '#ff6b6b' : 'var(--muted)';
+  el.style.display = text ? 'block' : 'none';
+}
+
 async function addLink() {
-  const slug = document.getElementById('slug-input').value.trim();
-  const url = document.getElementById('url-input').value.trim();
+  const slugInput = document.getElementById('slug-input');
+  const urlInput = document.getElementById('url-input');
+  const slug = slugInput.value.trim().replace(/^\/+/, '');
+  const url = urlInput.value.trim();
   if (!slug || !url) { alert('Nhập đủ slug và URL'); return; }
-  const btn = document.querySelector('#link-app .cta');
-  btn.textContent = 'Đang tạo...'; btn.disabled = true;
+  if (!/^[a-zA-Z0-9_-]{1,64}$/.test(slug)) { alert('Slug chỉ dùng chữ, số, gạch ngang, gạch dưới (tối đa 64 ký tự)'); return; }
+  if (!/^https?:\/\//i.test(url)) { alert('URL phải bắt đầu bằng http:// hoặc https://'); return; }
+
+  const btn = document.getElementById('add-btn');
+  btn.textContent = 'Đang lưu...'; btn.disabled = true;
+  setAddStatus('');
   try {
-    const data = await apiCall('POST', { slug, url });
-    if (data.success) {
-      document.getElementById('slug-input').value = '';
-      document.getElementById('url-input').value = '';
-      loadLinks();
-    } else {
-      alert('Lỗi: ' + (data.error || 'Không rõ'));
-    }
-  } catch(e) {
-    alert('Lỗi: ' + e.message);
+    const now = new Date().toISOString();
+    await mutate(links => {
+      const old = links[slug];
+      const created = old && typeof old === 'object' && old.created ? old.created : now;
+      links[slug] = { url: url, created: created, updated: now };
+    }, 'Short link: /' + slug + ' -> ' + url);
+    slugInput.value = '';
+    urlInput.value = '';
+    setAddStatus('✅ Đã lưu vào links.json — link hoạt động sau tối đa ~60 giây.', false);
+    loadLinks();
+  } catch (e) {
+    if (!handleAuthError(e)) alert('Lỗi: ' + e.message);
   }
   btn.textContent = 'Tạo'; btn.disabled = false;
 }
 
 async function deleteLink(slug) {
-  if (!confirm(`Xóa /${slug}?`)) return;
+  if (!confirm('Xóa /' + slug + '?')) return;
   try {
-    const data = await apiCall('DELETE', { slug });
-    if (data.success) loadLinks();
-  } catch(e) {
-    alert('Lỗi: ' + e.message);
+    await mutate(links => { delete links[slug]; }, 'Remove short link: /' + slug);
+    loadLinks();
+  } catch (e) {
+    if (!handleAuthError(e)) alert('Lỗi: ' + e.message);
   }
 }
 </script>
