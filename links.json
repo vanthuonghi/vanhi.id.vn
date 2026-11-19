@@ -20,6 +20,11 @@
       "url": "https://www.cloudflare.com/",
       "created": "2026-11-19T00:00:00Z",
       "updated": "2026-11-19T00:00:00Z"
+    },
+    "probe-latency": {
+      "url": "https://example.net/",
+      "created": "2026-11-19T00:00:00Z",
+      "updated": "2026-11-19T00:00:00Z"
     }
   }
 }
