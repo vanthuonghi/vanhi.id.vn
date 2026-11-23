@@ -28,7 +28,7 @@ AI Agent không nấu ăn thay bạn. Nó lo phần tiếp nhận — thứ đan
 
 4. **Trả lời câu hỏi lặp lại** — giờ mở cửa, giá món, có chỗ đậu xe không, có phục vụ sinh nhật không, hủy bàn thế nào. Những câu này chiếm hơn nửa tin nhắn. Agent trả lời hết, bạn chỉ việc xử lý cái thật sự cần người.
 
-5. **Chăm sóc sau bữa ăn** — ngày hôm sau, Agent nhắn cảm ơn và gợi ý đặt lại vào cuối tuần. Khách nhớ bạn, không cần bạn phải chạy khuyến mãi liên tục để nhắc họ.
+5. **Chăm sóc sau bữa ăn** — ngày hôm sau, Agent nhắn cảm ơn và gợi ý đặt lại vào cuối tuần. Khách nhớ bạn, không cần chạy khuyến mãi liên tục.
 
 ## Setup trong 1 tuần
 
@@ -53,6 +53,6 @@ Không cần thuê lập trình viên. GoHighLevel đã có sẵn phần này �
 
 Agent nên xử lý phần lặp lại: đặt bàn, giờ mở cửa, thực đơn, nhắc lịch. Còn khách khiếu nại món ăn, xin giảm giá, hay muốn đặt sự kiện lớn — vẫn nên chuyển cho con người. Đừng để máy tự quyết những tình huống nhạy cảm khi chưa có hướng dẫn rõ.
 
-Bắt đầu từ **một việc duy nhất: nhận đặt bàn**. Chạy ổn rồi mới thêm gợi ý menu, rồi mới thêm chăm sóc sau bữa ăn. Cài tất cả cùng lúc là cách nhanh nhất để tự làm mình nản.
+Bắt đầu từ **một việc duy nhất: nhận đặt bàn**. Chạy ổn rồi mới thêm gợi ý menu, rồi chăm sóc sau bữa ăn. Cài cùng lúc là cách nhanh nhất để tự làm mình nản.
 
 Nếu quán bạn cũng có những chiều thứ Sáu như vậy, đây là chỗ nên bắt đầu. Muốn Hỉ gửi kịch bản đặt bàn mẫu? Nhắn Hỉ một dòng nhé.
