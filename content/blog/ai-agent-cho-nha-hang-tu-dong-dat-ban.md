@@ -6,7 +6,7 @@ date: 2026-11-03
 
 <img src="https://cdn.jsdelivr.net/gh/vanthuonghi/hinh-bang-code/gallery/ai-agent-cho-nha-hang-dat-ban-tu-dong-20261123120314.png" width="600" style="max-width:100%;border-radius:12px;margin:20px 0" alt="AI Agent cho nhà hàng — Đặt bàn tự động 24/7">
 
-Hỉ có một người bạn mở quán ăn ở quận 1. Chị kể một chiều thứ Sáu: bếp đang căng, năm bàn cùng gọi đặt chỗ lúc 18h, điện thoại thì cứ rung liên tục. Chị vừa cầm bếp vừa trả lời tin nhắn, đến cuối cùng nhầm một bàn 6 người thành bàn 4. Khách đến, không có chỗ, đi thẳng.
+Hỉ có một người bạn mở quán ăn ở quận 1. Chị kể: một chiều thứ Sáu, năm bàn cùng gọi đặt chỗ lúc 18h, điện thoại rung liên tục. Chị vừa cầm bếp vừa trả lời, rồi nhầm một bàn 6 người thành bàn 4. Khách đến, không có chỗ, đi thẳng.
 
 Chị không thiếu khách. Chị thiếu một người đứng tiếp nhận đúng giờ.
 
@@ -24,7 +24,7 @@ AI Agent không nấu ăn thay bạn. Nó lo phần tiếp nhận — thứ đan
 
 2. **Gợi ý menu theo dịp và khẩu vị** — khách đặt bàn sinh nhật, Agent gợi ý món cho mừng; khách nói "ăn chay", Agent đẩy đúng danh sách món chay. Bạn nạp thực đơn một lần, nó nhớ mãi, không cần nhân viên thuộc lòng.
 
-3. **Nhắc lịch, giảm hủy bàn** — trước giờ hẹn 3 tiếng và 1 tiếng, Agent nhắn lại kèm địa chỉ và chỗ đậu xe. Chỉ một câu nhắc đơn giản mà tỷ lệ khách không đến giảm rõ rệt. Đây là chỗ AI trả lại tiền nhanh nhất cho nhà hàng.
+3. **Nhắc lịch, giảm hủy bàn** — trước giờ hẹn 3 tiếng và 1 tiếng, Agent nhắn lại kèm địa chỉ và chỗ đậu xe. Chỉ một câu nhắc mà tỷ lệ khách không đến giảm rõ rệt — AI trả lại tiền nhanh nhất ở đây.
 
 4. **Trả lời câu hỏi lặp lại** — giờ mở cửa, giá món, có chỗ đậu xe không, có phục vụ sinh nhật không, hủy bàn thế nào. Những câu này chiếm hơn nửa tin nhắn. Agent trả lời hết, bạn chỉ việc xử lý cái thật sự cần người.
 
@@ -40,7 +40,7 @@ Hỉ làm cùng người bạn đó thế này:
 - **Ngày 4:** Kết nối lịch bàn, test thử 10 kịch bản thật: đặt bàn, đổi giờ, hủy bàn, hỏi giá.
 - **Ngày 5-7:** Chạy thật, đọc lại 30 cuộc hội thoại đầu, sửa những chỗ Agent trả lời sai.
 
-Không cần thuê lập trình viên. Các nền tảng như GoHighLevel đã có sẵn phần này. Việc của bạn là nạp nội dung và chỉnh kịch bản cho đúng chất quán mình.
+Không cần thuê lập trình viên. GoHighLevel đã có sẵn phần này — việc của bạn là nạp nội dung và chỉnh kịch bản.
 
 ## Kết quả sau 1 tháng
 
@@ -55,4 +55,4 @@ Agent nên xử lý phần lặp lại: đặt bàn, giờ mở cửa, thực đ
 
 Bắt đầu từ **một việc duy nhất: nhận đặt bàn**. Chạy ổn rồi mới thêm gợi ý menu, rồi mới thêm chăm sóc sau bữa ăn. Cài tất cả cùng lúc là cách nhanh nhất để tự làm mình nản.
 
-Nếu quán của bạn cũng đang có những chiều thứ Sáu như vậy, đây là chỗ nên bắt đầu. Muốn Hỉ gửi kịch bản đặt bàn mẫu cho nhà hàng? Nhắn cho Hỉ một dòng nhé.
+Nếu quán bạn cũng có những chiều thứ Sáu như vậy, đây là chỗ nên bắt đầu. Muốn Hỉ gửi kịch bản đặt bàn mẫu? Nhắn Hỉ một dòng nhé.
