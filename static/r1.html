@@ -3,119 +3,184 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Xem lại buổi chia sẻ: Kênh tự chạy — giao AI Agent tự viết, tự đăng, tự nuôi kênh</title>
-<meta name="description" content="Bản ghi buổi chia sẻ tối 24/11: AI Agent tự chọn chủ đề, tự viết, tự làm ảnh, tự hẹn giờ rồi đăng lên YouTube – Facebook – TikTok. Kèm phần kể chỗ từng hỏng và cách sửa.">
+<title>Xem lại: Kênh tự chạy — giao AI Agent tự viết, tự đăng, tự nuôi kênh mỗi ngày</title>
+<meta name="description" content="Bản ghi buổi chia sẻ tối 24/11 cùng Văn Hỉ: AI Agent tự chọn chủ đề, tự viết, tự làm ảnh, tự hẹn giờ rồi đăng lên YouTube – Facebook – TikTok — kể cả chỗ từng hỏng và cách sửa.">
 <meta name="robots" content="noindex,nofollow">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Xem lại buổi chia sẻ: Kênh tự chạy">
+<meta property="og:title" content="Xem lại: Kênh tự chạy — buổi chia sẻ 24/11">
 <meta property="og:description" content="AI Agent tự viết, tự làm ảnh, tự hẹn giờ rồi đăng lên 3 kênh mỗi ngày — kể cả chỗ từng hỏng và cách sửa.">
 <meta property="og:image" content="https://vanhi.id.vn/og-r1.png">
 <meta property="og:url" content="https://vanhi.id.vn/r1">
-<meta name="theme-color" content="#0b0d11">
+<meta name="theme-color" content="#fbf9f7">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,500;0,600;1,500&family=Be+Vietnam+Pro:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root{
-    --nen:#0b0d11; --the:#14181f; --the2:#1a1f28; --chu:#f2f4f8; --nhat:#a8b0bd;
-    --coral:#ff6b6b; --coral-dam:#e14b4b; --vang:#ffb454; --vien:#262b33;
+    --nen:#fbf9f7; --the:#ffffff; --chu:#1a1917; --nhat:#6d6660;
+    --vien:#eae4dd; --coral:#c8433a; --coral-dam:#a8342c; --hong:#fdf1ef;
+    --bong:0 1px 2px rgba(26,25,23,.04), 0 14px 36px rgba(26,25,23,.07);
   }
   *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%}
   body{background:var(--nen);color:var(--chu);
-       font:17px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
-       -webkit-font-smoothing:antialiased;padding-bottom:84px}
-  .goi{max-width:860px;margin:0 auto;padding:0 20px}
-  header{padding:44px 0 8px;text-align:center}
-  .nhan{display:inline-block;font-size:13px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;
-        color:#ffd9d9;background:rgba(255,107,107,.16);border:1px solid rgba(255,107,107,.35);
-        padding:6px 14px;border-radius:999px;margin-bottom:18px}
-  h1{font-size:34px;line-height:1.24;letter-spacing:-.5px}
-  h1 em{font-style:normal;color:var(--coral)}
-  .dan{color:var(--nhat);font-size:19px;margin-top:16px}
-  .nut{display:inline-block;background:var(--coral);color:#1a0505;font-weight:800;font-size:18px;
-       padding:16px 28px;border-radius:14px;text-decoration:none;margin:22px 8px 0;
-       box-shadow:0 6px 24px rgba(255,107,107,.28)}
-  .nut.phu{background:transparent;color:var(--chu);border:2px solid var(--vien);box-shadow:none}
+       font-family:"Be Vietnam Pro",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+       font-size:17px;line-height:1.75;-webkit-font-smoothing:antialiased;padding-bottom:78px}
+  .goi{max-width:760px;margin:0 auto;padding:0 24px}
+
+  .dau{padding:60px 0 34px;text-align:center}
+  .nhan{display:inline-block;font-size:12px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;
+        color:var(--coral);padding-bottom:10px;border-bottom:1px solid var(--vien);margin-bottom:28px}
+  h1{font-family:Lora,Georgia,"Times New Roman",serif;font-weight:600;font-size:41px;line-height:1.26;letter-spacing:-.5px}
+  h1 em{font-style:italic;color:var(--coral)}
+  .dan{color:var(--nhat);font-size:18px;margin-top:20px}
+  .nut{display:inline-block;font-family:inherit;font-weight:600;font-size:16.5px;text-decoration:none;
+       padding:15px 30px;border-radius:999px;border:1px solid transparent;
+       transition:transform .12s,box-shadow .12s,border-color .12s}
+  .nut.chinh{background:var(--coral);color:#fff;box-shadow:0 8px 22px rgba(200,67,58,.22)}
+  .nut.chinh:hover{transform:translateY(-1px);box-shadow:0 12px 26px rgba(200,67,58,.28)}
+  .nut.vien{background:transparent;color:var(--chu);border-color:var(--vien)}
+  .nut.vien:hover{border-color:var(--chu)}
   .nut:active{transform:translateY(1px)}
-  .hop{background:var(--the);border:1px solid var(--vien);border-radius:18px;padding:22px 24px;margin:22px 0}
-  .hop.coral{border-color:rgba(255,107,107,.4);background:linear-gradient(180deg,rgba(255,107,107,.08),transparent 60%),var(--the)}
-  h2{font-size:24px;margin:38px 0 14px;letter-spacing:-.3px}
-  h3{font-size:19px;margin:20px 0 8px}
-  p{margin:10px 0}
-  .khung-video{position:relative;width:100%;padding-top:56.25%;background:#000;border-radius:16px;overflow:hidden;
-               border:1px solid var(--vien)}
-  .khung-video iframe,.khung-video video{position:absolute;inset:0;width:100%;height:100%;border:0}
-  .cho-video{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
-             color:var(--nhat);font-size:16px;text-align:center;padding:20px;gap:8px}
-  .cho-video b{color:var(--chu);font-size:18px}
-  ul{list-style:none;margin:12px 0}
-  li{position:relative;padding-left:30px;margin:10px 0;color:#e7ebf2}
-  li::before{content:"▸";position:absolute;left:6px;color:var(--coral);font-weight:800}
-  li b{color:#fff}
-  .so{display:flex;gap:14px;margin:16px 0}
-  .so .o{flex:1;background:var(--the2);border:1px solid var(--vien);border-radius:14px;padding:14px 16px}
-  .so .o b{display:block;font-size:24px;color:var(--coral)}
-  .so .o span{font-size:14px;color:var(--nhat);line-height:1.4;display:block;margin-top:4px}
-  .gia{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin:12px 0 4px}
+  .dau .nut{margin-top:30px}
+
+  .khung-video{position:relative;width:100%;padding-top:56.25%;background:#14120f;border-radius:14px;
+               overflow:hidden;box-shadow:var(--bong);border:1px solid var(--vien)}
+  .khung-video iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+  .ghi-video{color:var(--nhat);font-size:15.5px;text-align:center;margin-top:16px}
+
+  h2{font-family:Lora,Georgia,serif;font-weight:600;font-size:27px;line-height:1.34;letter-spacing:-.2px;margin:58px 0 10px}
+  .day{width:44px;height:2px;background:var(--coral);border-radius:2px;margin-bottom:24px}
+  h3{font-size:19px;font-weight:600;margin:30px 0 8px}
+  p{margin:14px 0}
+  .dan-rong{color:var(--nhat)}
+  a{color:var(--coral-dam)}
+  strong,b{font-weight:600}
+
+  ul{list-style:none;margin:18px 0}
+  li{position:relative;padding-left:30px;margin:13px 0}
+  li::before{content:"";position:absolute;left:5px;top:12px;width:8px;height:8px;border-radius:50%;
+             background:var(--hong);border:1.5px solid var(--coral)}
+
+  ol.dem{list-style:none;counter-reset:c;margin:22px 0}
+  ol.dem > li{counter-increment:c;padding-left:52px;margin:20px 0}
+  ol.dem > li::before{content:counter(c,decimal-leading-zero);position:absolute;left:0;top:1px;
+    font-family:Lora,Georgia,serif;font-size:14px;color:var(--coral);background:var(--the);
+    border:1px solid var(--vien);border-radius:50%;width:34px;height:34px;display:flex;
+    align-items:center;justify-content:center}
+
+  .the{background:var(--the);border:1px solid var(--vien);border-radius:16px;padding:26px 28px;margin:26px 0;
+       box-shadow:0 1px 2px rgba(26,25,23,.03)}
+  .the.noi{background:linear-gradient(180deg,var(--hong) 0%,var(--the) 46%);border-color:#eedbd8}
+  .luu-y{border-left:3px solid var(--coral);padding-left:22px;margin:28px 0;color:var(--nhat)}
+
+  .so-lieu{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--vien);
+           border:1px solid var(--vien);border-radius:14px;overflow:hidden;margin:26px 0}
+  .so-lieu div{background:var(--the);padding:20px 18px;text-align:center}
+  .so-lieu b{display:block;font-family:Lora,Georgia,serif;font-size:32px;line-height:1.1;color:var(--coral)}
+  .so-lieu span{display:block;font-size:14.5px;color:var(--nhat);line-height:1.45;margin-top:8px}
+
+  .gia{display:flex;align-items:baseline;gap:16px;flex-wrap:wrap;margin:26px 0 0;padding-top:24px;border-top:1px solid var(--vien)}
   .gia .cu{color:var(--nhat);text-decoration:line-through;font-size:20px}
-  .gia .moi{font-size:42px;font-weight:800;color:var(--coral);line-height:1}
-  .gia .dv{color:var(--nhat);font-size:15px;width:100%}
-  .cau{margin:14px 0}
-  .cau b{color:#fff;display:block;margin-bottom:2px}
-  footer{border-top:1px solid var(--vien);margin-top:40px;padding:24px 0 8px;color:var(--nhat);font-size:15px;text-align:center}
-  .dinh{position:fixed;left:0;right:0;bottom:0;background:rgba(11,13,17,.94);backdrop-filter:blur(8px);
-        border-top:1px solid var(--vien);padding:12px 16px;z-index:20;display:flex;gap:10px;
-        align-items:center;justify-content:center}
+  .gia .moi{font-family:Lora,Georgia,serif;font-size:46px;font-weight:600;color:var(--coral);line-height:1}
+  .gia .dv{width:100%;color:var(--nhat);font-size:15px}
+
+  details{border-top:1px solid var(--vien);padding:18px 0}
+  details:last-of-type{border-bottom:1px solid var(--vien)}
+  summary{cursor:pointer;font-weight:600;font-size:17.5px;list-style:none;position:relative;padding-right:32px}
+  summary::-webkit-details-marker{display:none}
+  summary::after{content:"+";position:absolute;right:2px;top:-3px;color:var(--coral);font-size:23px;
+                 font-family:Lora,Georgia,serif}
+  details[open] summary::after{content:"–"}
+  details p{color:var(--nhat);margin:12px 0 4px}
+
+  .dong-ngan{display:flex;align-items:center;gap:14px;margin:54px 0}
+  .dong-ngan::before,.dong-ngan::after{content:"";flex:1;height:1px;background:var(--vien)}
+  .dong-ngan i{width:6px;height:6px;background:var(--vien);transform:rotate(45deg);display:block}
+
+  footer{border-top:1px solid var(--vien);margin-top:56px;padding:26px 0 0;color:var(--nhat);font-size:15px;text-align:center}
+  footer a{color:var(--coral-dam)}
+
+  .dinh{position:fixed;left:0;right:0;bottom:0;background:rgba(251,249,247,.93);backdrop-filter:blur(10px);
+        border-top:1px solid var(--vien);padding:11px 18px;display:flex;gap:12px;align-items:center;
+        justify-content:center;z-index:30}
   .dinh .chu{display:none;font-size:15px;color:var(--nhat)}
-  .dinh .nut{margin:0;padding:13px 22px;font-size:17px}
-  @media (min-width:700px){ .dinh .chu{display:block} }
-  @media (max-width:560px){
-    h1{font-size:27px} .dan{font-size:17px} h2{font-size:21px}
-    .so{flex-direction:column} .gia .moi{font-size:36px}
-    header{padding:30px 0 4px}
+  .dinh .nut{padding:12px 24px}
+
+  @media (min-width:720px){ .dinh .chu{display:block} }
+  @media (max-width:640px){
+    body{font-size:16.5px;padding-bottom:74px}
+    h1{font-size:29px}h2{font-size:23px}
+    .dau{padding:38px 0 26px}
+    .dan{font-size:17px}
+    .so-lieu{grid-template-columns:1fr}
+    .so-lieu div{display:flex;align-items:baseline;gap:14px;text-align:left;padding:16px 18px}
+    .so-lieu b{font-size:26px;min-width:40px}
+    .so-lieu span{margin-top:0}
+    .gia .moi{font-size:38px}
+    .the{padding:20px}
   }
-  @media print{ body{background:#fff;color:#000} .dinh{display:none} }
+  @media print{ body{background:#fff;padding:0} .dinh{display:none} details{display:block} }
 </style>
 </head>
 <body>
 
-<header class="goi">
-  <div class="nhan">Buổi chia sẻ tối 24/11 · bản ghi</div>
-  <h1>Xem lại: <em>Kênh tự chạy</em> — giao AI Agent tự viết, tự đăng, tự nuôi kênh mỗi ngày</h1>
-  <p class="dan">Toàn bộ buổi chia sẻ, kể cả phần tôi mở màn hình thật và chỉ từng chỗ từng hỏng. Video để ở chế độ không công khai — chỉ ai có đường dẫn này xem được.</p>
-  <a class="nut" href="#khoa-hoc">Xem nội dung khoá học ↓</a>
+<header class="goi dau">
+  <div class="nhan">Buổi chia sẻ 24/11 · bản ghi</div>
+  <h1>Xem lại: <em>Kênh tự chạy</em><br>giao AI Agent tự viết, tự đăng,<br>tự nuôi kênh mỗi ngày</h1>
+  <p class="dan">Toàn bộ buổi chia sẻ — kể cả phần tôi mở màn hình thật và chỉ từng chỗ từng hỏng.<br>
+  Video để ở chế độ riêng tư: chỉ ai có đường dẫn này xem được.</p>
+  <a class="nut chinh" href="#khoa-hoc">Xem nội dung khoá học</a>
 </header>
 
 <main class="goi">
 
-  <div class="khung-video" id="khungVideo">
+  <div class="khung-video">
     <iframe src="https://www.youtube.com/embed/dDYqxHlBl9s" title="Bản ghi buổi chia sẻ: Kênh tự chạy — AI Agent tự viết, tự đăng, tự nuôi kênh"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             allowfullscreen loading="lazy"></iframe>
   </div>
-  <p class="dan" style="font-size:15px;margin-top:10px">Video dài khoảng 2 tiếng; nên xem phần đầu trước (nhân viên ảo khác chatbot ở đâu, và vì sao kênh của bạn đang đăng không đều), phần cuối là ưu đãi và hỏi đáp.</p>
+  <p class="ghi-video">Dài 1 giờ 47 phút. Ba đoạn đáng xem nhất: đầu buổi (nhân viên ảo khác chatbot ở đâu) ·
+  giữa buổi (một chủ đề ra ba bài cho ba kênh) · cuối buổi (ba chỗ hệ thống từng hỏng và cách sửa, rồi tới phần hỏi đáp).</p>
+
+  <div class="dong-ngan"><i></i></div>
 
   <h2>Buổi chia sẻ đi qua năm việc</h2>
-  <div class="hop">
-    <ul>
-      <li><b>Nhân viên ảo khác chatbot ở đâu</b> — chatbot đợi bạn gõ câu hỏi, nhân viên ảo nhận việc rồi tự làm tiếp khi bạn đi ngủ.</li>
-      <li><b>Không xây app, chỉ nối mấy thứ có sẵn</b> — bảng tính làm bảng duyệt, kho chứa video và ảnh, nơi nhận lịch đăng, và một cái đồng hồ chạy 8 giờ 30 mỗi sáng.</li>
-      <li><b>Một chủ đề, ba bài, ba kênh</b> — agent viết caption theo giọng của bạn, tạo ảnh, dựng video có chữ sáng theo từng câu nói; YouTube, Facebook, TikTok đều có mặt.</li>
-      <li><b>Bạn chỉ ghi giờ</b> — ghi một mốc giờ vào ô trạng thái, đến giờ bài lên sóng, xong việc hệ thống ghi ngược lại “đã đăng” kèm thời gian.</li>
-      <li><b>Khi có sự cố, hệ thống tự sửa</b> — model miễn phí hết hạn thì tự đổi; “chìa khoá” Google tự kiểm tra và làm mới mỗi ngày; có lỗi thì nhắn về Telegram cho bạn biết.</li>
-    </ul>
-  </div>
+  <div class="day"></div>
+  <ol class="dem">
+    <li><b>Nhân viên ảo khác chatbot ở đâu.</b> Chatbot đợi bạn gõ câu hỏi. Nhân viên ảo nhận việc rồi tự làm tiếp khi bạn đi ngủ.</li>
+    <li><b>Không xây app, chỉ nối mấy thứ có sẵn.</b> Bảng tính làm bảng duyệt, kho chứa video và ảnh, nơi nhận lịch đăng, và một cái đồng hồ chạy 8 giờ 30 mỗi sáng.</li>
+    <li><b>Một chủ đề, ba bài, ba kênh.</b> Agent viết caption theo giọng của bạn, tạo ảnh, dựng video có chữ sáng theo từng câu nói; YouTube, Facebook, TikTok đều có mặt.</li>
+    <li><b>Bạn chỉ ghi giờ.</b> Ghi một mốc giờ vào ô trạng thái, đến giờ bài lên sóng, xong việc hệ thống ghi ngược lại “đã đăng” kèm thời gian.</li>
+    <li><b>Khi có sự cố, hệ thống tự sửa.</b> Model miễn phí hết hạn thì tự đổi; “chìa khoá” Google tự kiểm tra và làm mới mỗi ngày; có lỗi thì nhắn về Telegram cho bạn biết.</li>
+  </ol>
 
-  <h2>Điểm tôi muốn anh chị nhớ nhất</h2>
-  <p>Không phải phần chạy trơn tru, mà là phần <b>kể lại chỗ từng hỏng</b>. Buổi live tôi mở đúng ba lần hệ thống chết: bị chặn giữa lúc đang chạy vì model miễn phí hết hạn, ba lần chạy liên tiếp thất bại vì bộ nhớ đệm của bước nhận dạng giọng nói hỏng, và một kênh báo “đã đăng” nhưng thật ra chưa lên.</p>
-  <p>Người mới thường bỏ qua phần này, rồi gặp đúng ba chỗ đó là bỏ cuộc. Biết trước thì mất năm phút, không biết thì mất cả buổi.</p>
+  <h2>Phần tôi muốn anh chị nhớ nhất</h2>
+  <div class="day"></div>
+  <p class="dan-rong">Không phải phần chạy trơn tru, mà là phần kể lại chỗ từng hỏng. Trong buổi tôi mở đúng ba lần hệ thống chết:</p>
+  <ul>
+    <li><b>Bị chặn giữa lúc đang chạy</b> vì model miễn phí hết hạn — cách tôi phát hiện và đổi sang model khác.</li>
+    <li><b>Ba lần chạy liên tiếp thất bại</b> vì bộ nhớ đệm của bước nhận dạng giọng nói hỏng — dấu hiệu để nhận ra.</li>
+    <li><b>Một kênh báo “đã đăng” nhưng thật ra chưa lên</b> — vì sao tôi phải tự kiểm lại bằng tay.</li>
+  </ul>
+  <div class="luu-y">Người mới thường bỏ qua phần này, rồi gặp đúng ba chỗ đó là bỏ cuộc.
+  Biết trước thì mất năm phút; không biết thì mất cả buổi.</div>
+
+  <div class="dong-ngan"><i></i></div>
 
   <h2 id="khoa-hoc">Nếu anh chị muốn tự dựng hệ thống này</h2>
-  <div class="hop coral">
-    <h3 style="margin-top:0">Khoá “Làm Chủ Hermes Agent — Xây Dựng Đội Ngũ Làm Việc Thay Bạn”</h3>
-    <p>Buổi live hôm nay là <b>một việc</b>: kênh tự đăng. Khoá này là cả hệ thống: dạy agent biết về bạn và công việc của bạn, dạy nó làm đúng quy trình của bạn, đặt lịch để nó tự chạy, rồi tách thành nhiều vai khi cần.</p>
+  <div class="day"></div>
+  <p class="dan-rong">Buổi live hôm nay là <b>một việc</b>: kênh tự đăng. Khoá dưới đây là cả hệ thống — dạy agent biết về bạn và
+  công việc của bạn, dạy nó làm đúng quy trình của bạn, đặt lịch để nó tự chạy, rồi tách thành nhiều vai khi cần.</p>
 
-    <div class="so">
-      <div class="o"><b>9</b><span>chặng video nền tảng · 38 bài · khoảng 6 giờ 40 phút</span></div>
-      <div class="o"><b>4</b><span>buổi trực tuyến × 2 giờ, làm trên công việc thật của bạn</span></div>
-      <div class="o"><b>0</b><span>dòng code cần biết</span></div>
+  <div class="the noi">
+    <h3 style="margin-top:0">Làm Chủ Hermes Agent — Xây Dựng Đội Ngũ Làm Việc Thay Bạn</h3>
+    <p class="dan-rong">Học trước qua bộ video nền tảng, rồi làm dự án thật trong bốn buổi trực tuyến. Không cần biết lập trình.</p>
+
+    <div class="so-lieu">
+      <div><b>9</b><span>chặng video nền tảng · 38 bài · khoảng 6 giờ 40 phút</span></div>
+      <div><b>4</b><span>buổi trực tuyến × 2 giờ, làm trên công việc thật của bạn</span></div>
+      <div><b>0</b><span>dòng code cần biết</span></div>
     </div>
 
     <h3>Bốn buổi trực tuyến làm gì</h3>
@@ -133,38 +198,48 @@
       <li>Bảng đo trước–sau cho ít nhất ba việc, và danh sách việc nên giao tiếp theo</li>
     </ul>
 
-    <h3>Học phí đang niêm yết trên trang khoá</h3>
     <div class="gia">
       <span class="cu">1.960.000đ</span>
       <span class="moi">588.000đ</span>
-      <span class="dv">Ưu đãi theo đợt khai giảng 05/12/2026 — mức ưu đãi và hạn ưu đãi xem chính xác trên trang khoá học.</span>
+      <span class="dv">Khai giảng 05/12/2026. Mức ưu đãi và hạn ưu đãi xem chính xác trên trang khoá học.</span>
     </div>
 
-    <p style="margin-top:18px">
-      <a class="nut" href="https://iqplus.education/vi/course/lam-chu-hermes-agent-xay-dung-doi-ngu-lam-viec-thay-ban" target="_blank" rel="noopener">Xem trang khoá học &amp; đăng ký</a>
-      <a class="nut phu" href="https://zalo.me/0899320202" target="_blank" rel="noopener">Nhắn Zalo hỏi trước</a>
+    <p style="margin-top:26px;display:flex;gap:12px;flex-wrap:wrap">
+      <a class="nut chinh" href="https://iqplus.education/vi/course/lam-chu-hermes-agent-xay-dung-doi-ngu-lam-viec-thay-ban" target="_blank" rel="noopener">Xem trang khoá học</a>
+      <a class="nut vien" href="https://zalo.me/0899320202" target="_blank" rel="noopener">Nhắn Zalo hỏi trước</a>
     </p>
-    <p style="font-size:15px;color:var(--nhat)">Chưa chắc có phù hợp không thì cứ nhắn Zalo hỏi — tôi trả lời trước khi anh chị quyết.</p>
+    <p class="dan-rong" style="font-size:15.5px;margin-top:16px">Chưa chắc có phù hợp không thì cứ nhắn Zalo hỏi — tôi trả lời trước khi anh chị quyết.</p>
   </div>
 
   <h2>Vài câu hỏi hay gặp</h2>
-  <div class="hop">
-    <div class="cau"><b>Tôi không biết gì về kỹ thuật, làm được không?</b>Được. Việc của anh chị là biết mình muốn gì và kết quả đúng hay sai — phần gõ lệnh làm thay được. Khoá cũng không cần lập trình.</div>
-    <div class="cau"><b>Có cần máy tính khoẻ không?</b>Cần một máy tính dùng được vài giờ mỗi tuần. Việc nặng như dựng video có thể để chạy lúc máy rảnh.</div>
-    <div class="cau"><b>Học xong thì được gì cụ thể?</b>Một việc lặp lại của anh chị được giao hẳn cho hệ thống: có quy trình, có lịch chạy, có nhật ký để kiểm, và biết chỗ nào phải dừng để người quyết.</div>
-    <div class="cau"><b>Xem lại buổi live ở đâu?</b>Ngay trên trang này. Nếu video chưa tải được, anh chị nhắn Zalo, tôi gửi lại đường dẫn khác.</div>
-  </div>
+  <div class="day"></div>
+  <details open>
+    <summary>Tôi không biết gì về kỹ thuật, làm được không?</summary>
+    <p>Được. Việc của anh chị là biết mình muốn gì và kết quả đúng hay sai — phần gõ lệnh làm thay được. Khoá cũng không cần lập trình.</p>
+  </details>
+  <details>
+    <summary>Có cần máy tính khoẻ không?</summary>
+    <p>Cần một máy tính dùng được vài giờ mỗi tuần. Việc nặng như dựng video có thể để chạy lúc máy rảnh.</p>
+  </details>
+  <details>
+    <summary>Học xong thì được gì cụ thể?</summary>
+    <p>Một việc lặp lại của anh chị được giao hẳn cho hệ thống: có quy trình, có lịch chạy, có nhật ký để kiểm, và biết chỗ nào phải dừng để người quyết.</p>
+  </details>
+  <details>
+    <summary>Xem lại buổi live ở đâu?</summary>
+    <p>Ngay trên trang này. Nếu video chưa tải được, anh chị nhắn Zalo, tôi gửi lại đường dẫn khác.</p>
+  </details>
 
   <footer>
-    <p>Văn Hỉ · <a href="https://vanhi.id.vn/" style="color:var(--coral)">vanhi.id.vn</a> · Zalo 0899.320.202</p>
-    <p style="margin-top:6px">Trang này gửi cho người đã đăng ký buổi chia sẻ 24/11. Vui lòng không chia sẻ công khai đường dẫn video.</p>
+    <p>Văn Hỉ · <a href="https://vanhi.id.vn/">vanhi.id.vn</a> · Zalo 0899.320.202</p>
+    <p style="margin-top:8px">Trang này gửi cho người đã đăng ký buổi chia sẻ 24/11. Vui lòng không chia sẻ công khai đường dẫn video.</p>
   </footer>
 
 </main>
 
 <div class="dinh">
   <span class="chu">Khoá “Làm Chủ Hermes Agent” · khai giảng 05/12 · 588.000đ</span>
-  <a class="nut" href="#khoa-hoc">Xem khoá học</a>
+  <a class="nut chinh" href="#khoa-hoc">Xem khoá học</a>
 </div>
 
 </body>
