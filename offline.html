@@ -1,0 +1,322 @@
+<!DOCTYPE html><html lang="vi"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>TẠO NHÂN VIÊN ẢO LÀM VIỆC THAY CHO BẠN — offline, 30 trang</title><style>
+*{box-sizing:border-box;margin:0;padding:0;overflow-wrap:break-word}
+:root{--n:#04204a;--b:#0b5fa5;--c:#38bdf8;--y:#ffd400;--r:#ef4444;--g:#16a34a;--chu:#0d2233}
+html{font-size:clamp(11px,1.2vw,22px)}
+body{font-family:'Be Vietnam Pro','Segoe UI',system-ui,sans-serif;color:var(--chu);background:#f6fbff}
+main{scroll-snap-type:y proximity;height:100vh;overflow-y:auto}
+section{min-height:100vh;scroll-snap-align:start;display:flex;flex-direction:column;justify-content:center;padding:6.5vh 6.5vw;position:relative;overflow:hidden;
+ background:radial-gradient(40% 40% at 92% 8%,rgba(56,189,248,.25),transparent 70%),radial-gradient(35% 35% at 4% 96%,rgba(255,212,0,.14),transparent 70%),#f6fbff}
+section.dam{background:radial-gradient(50% 45% at 80% 12%,rgba(56,189,248,.35),transparent 62%),radial-gradient(35% 35% at 5% 95%,rgba(255,212,0,.12),transparent 70%),linear-gradient(135deg,#04204a,#0a4b93 55%,#062a5c);color:#fff}
+.pg{position:absolute;left:6.5vw;top:3vh;font-size:.8rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--b)}
+.dam .pg{color:var(--y)}
+h1{font-size:4.4rem;line-height:1.03;color:var(--y);letter-spacing:-1px}
+h2{font-size:2.3rem;line-height:1.15;margin-bottom:2.4vh;color:var(--n)}
+.dam h2{color:#fff}
+.big{font-size:1.8rem;font-weight:700;line-height:1.4;color:var(--b)}.dam .big{color:#e0f2fe}
+.nhan{font-size:1rem;font-weight:800;letter-spacing:.14em;color:var(--y);text-transform:uppercase;margin-bottom:2vh}
+.sub{font-size:1.8rem;font-weight:800;color:#bae6fd;margin:2vh 0}
+.note{margin-top:2.4vh;font-size:1.1rem;color:#475569;display:flex;gap:.7rem;align-items:center}.dam .note{color:#cbd5e1}
+.duo{display:grid;grid-template-columns:1.15fr 1fr;gap:3vw;align-items:center}
+.row{display:flex;gap:1rem;align-items:center;justify-content:center;flex-wrap:wrap}
+.ico{width:3.6rem;height:3.6rem;flex:none;border-radius:50%;display:grid;place-items:center;font-size:1.9rem;background:linear-gradient(135deg,#e0f2fe,#bae6fd);box-shadow:0 6px 16px rgba(11,95,165,.2)}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:1.4rem}.cards.q{grid-template-columns:repeat(4,1fr);gap:1rem}
+.c{background:#fff;border:2px solid #cfe7f6;border-radius:22px;padding:1.6rem 1.2rem;position:relative;box-shadow:0 10px 28px rgba(11,95,165,.1);text-align:center}
+.c .ico{margin:0 auto .9rem;width:4.6rem;height:4.6rem;font-size:2.5rem}
+.c b{display:block;font-size:1.4rem;color:var(--b);margin-bottom:.5rem}
+.c p,.c li{font-size:1.08rem;line-height:1.45}.c ul{text-align:left;list-style:none;display:grid;gap:.4rem}
+.c .n{position:absolute;right:1rem;top:.4rem;font-size:2.2rem;font-weight:800;color:#dbeafe}
+.c.rd{border-color:#fecaca}.c.rd b{color:var(--r)}.c.rd .ico{background:#fee2e2}
+.c.gr{border-color:#bbf7d0}.c.gr b{color:var(--g)}.c.gr .ico{background:#dcfce7}
+.lst{list-style:none;display:grid;gap:.9rem}
+.lst li{display:flex;gap:1rem;align-items:center;font-size:1.3rem;font-weight:600;background:#fff;border-radius:18px;padding:.8rem 1.2rem;box-shadow:0 6px 18px rgba(11,95,165,.1);border-left:6px solid var(--c)}
+.lst.rd li{border-left-color:var(--r)}
+.lst .ico{width:2.9rem;height:2.9rem;font-size:1.5rem}
+.chip{display:inline-block;background:#fff;border:2px solid #bae6fd;color:var(--b);border-radius:999px;padding:.35rem 1rem;font-weight:800;font-size:1rem}
+.dam .chip{background:rgba(255,255,255,.14);border-color:rgba(186,230,253,.5);color:#fff}
+.chip.y{background:var(--y);border-color:var(--y);color:var(--n)}.chip.g{background:#dcfce7;border-color:#86efac;color:#166534}.chip.a{background:#fef3c7;border-color:#fcd34d;color:#92400e}
+code,.cmd{font-family:Consolas,'Courier New',monospace}
+code{background:#e0f2fe;color:var(--n);padding:.1rem .45rem;border-radius:8px;font-size:.92em;font-weight:700}
+.cmd{background:#04204a;color:#7dd3fc;border-radius:10px;padding:.45rem .8rem;font-size:.82rem;word-break:break-all;font-weight:400}
+.arr{font-size:1.8rem;color:var(--c);font-weight:800}
+.fl{display:flex;align-items:stretch;gap:.8rem;justify-content:center}.fl .c{flex:1;padding:1.2rem .8rem}.fl .arr{align-self:center}
+.big-ico{font-size:8rem;filter:drop-shadow(0 12px 24px rgba(0,0,0,.3));text-align:center}
+.tb{display:grid;gap:.5rem}
+.r{display:grid;grid-template-columns:var(--k,1fr 1fr 1fr);gap:1rem;align-items:center;background:#fff;border:1px solid #dbeafe;border-radius:14px;padding:.65rem 1.1rem;font-size:1rem;line-height:1.35;box-shadow:0 4px 12px rgba(11,95,165,.07)}
+.r.h{background:none;border:none;box-shadow:none;font-weight:800;font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;color:var(--b);padding-block:0}
+.r.k{border-left:6px solid var(--b);background:#eff8ff}.r.br{opacity:.6;border-left:6px solid #cbd5e1}.r.k b{color:var(--b)}
+.r .t{font-weight:800;color:var(--b)}
+.r.rr span:first-child{font-weight:700;color:var(--r)}.r.rr span:last-child{color:#166534;font-weight:600}
+.dot{display:inline-block;min-width:4.5rem;border-bottom:3px dotted var(--b)}
+.stg{display:flex;gap:.6rem;margin-top:3vh}
+.stg i{width:2.6rem;height:2.6rem;border-radius:50%;display:grid;place-items:center;font-style:normal;font-weight:800;background:rgba(255,255,255,.15);color:#bae6fd}
+.stg i.d{background:#16a34a;color:#fff}.stg i.on{background:var(--y);color:var(--n);transform:scale(1.3)}
+.numc{width:11rem;height:11rem;border-radius:50%;background:var(--y);color:var(--n);display:grid;place-items:center;font-size:7rem;font-weight:800;box-shadow:0 0 0 14px rgba(255,212,0,.25),0 0 0 30px rgba(255,212,0,.12);margin:0 auto}
+ol.steps{list-style:none;display:grid;gap:.7rem;counter-reset:s}
+ol.steps li{counter-increment:s;display:flex;gap:1rem;align-items:center;background:#fff;border-radius:16px;padding:.75rem 1.2rem;font-size:1.2rem;font-weight:600;box-shadow:0 6px 18px rgba(11,95,165,.1);line-height:1.4}
+ol.steps li:before{content:counter(s);width:2.5rem;height:2.5rem;flex:none;border-radius:50%;background:var(--b);color:#fff;display:grid;place-items:center;font-weight:800}
+ol.steps li.warn{border:2px solid var(--y);background:#fffbe6}ol.steps li.warn:before{background:#f59e0b}
+.hop{font-size:1.25rem;font-weight:700;background:#fff;border:3px dashed var(--c);border-radius:18px;padding:1.4rem 1.6rem;line-height:1.6;color:var(--n);position:relative;margin-top:1rem}
+.hop .tg{position:absolute;top:-1.1rem;left:1.2rem;background:var(--b);color:#fff;font-size:.85rem;padding:.2rem .9rem;border-radius:999px;font-weight:800}
+.ph{background:var(--y);padding:0 .35rem;border-radius:6px}.nb{background:#dcfce7;padding:0 .35rem;border-radius:6px}
+.win{background:#fff;border-radius:16px;box-shadow:0 14px 34px rgba(4,32,74,.25);overflow:hidden;font-size:1.05rem}
+.win .tt{background:var(--n);color:#fff;padding:.6rem 1rem;font-weight:800;font-size:.9rem}.win .ln{padding:.9rem 1.1rem;border-top:1px solid #e2e8f0;display:flex;gap:.8rem;align-items:center}
+.tl{display:grid;grid-template-columns:repeat(4,1fr);gap:1.2rem;position:relative}
+.tl:before{content:"";position:absolute;left:6%;right:6%;top:2.2rem;height:6px;background:linear-gradient(90deg,var(--c),var(--y));border-radius:9px}
+.tl .s{position:relative;text-align:center}
+.tl .d{width:4.4rem;height:4.4rem;margin:0 auto 1rem;border-radius:50%;background:var(--n);color:var(--y);display:grid;place-items:center;font-weight:800;font-size:1.1rem;border:5px solid #fff;box-shadow:0 6px 16px rgba(4,32,74,.3);position:relative}
+.tl .c{padding:1rem .8rem;font-size:1.05rem;font-weight:600;line-height:1.4}
+.qm{font-size:9rem;line-height:.6;color:var(--y);font-family:Georgia,serif}
+.ck{display:flex;gap:1rem;align-items:center;background:rgba(255,255,255,.12);border:2px dashed rgba(186,230,253,.6);border-radius:16px;padding:.9rem 1.3rem;font-size:1.3rem;font-weight:700;margin:.6rem 0}
+.ck i{width:2rem;height:2rem;border:3px solid var(--y);border-radius:8px;flex:none}
+.cen{text-align:center}
+@keyframes up{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+.v>*{animation:up .6s both}.v>*:nth-child(2){animation-delay:.1s}.v>*:nth-child(3){animation-delay:.2s}
+@keyframes fl{50%{transform:translateY(-14px)}}.fa{animation:fl 3.5s ease-in-out infinite}
+#thanh{position:fixed;left:0;top:0;height:6px;background:var(--y);width:0;z-index:50}
+#sotrang{position:fixed;right:22px;bottom:18px;font-weight:800;font-size:15px;color:#052a5e;background:rgba(255,255,255,.92);border:1px solid #cfe7f6;border-radius:999px;padding:6px 14px;z-index:50}
+#thoai{position:fixed;left:0;right:0;bottom:0;max-height:38vh;overflow:auto;display:none;background:rgba(3,20,45,.95);color:#e0f2fe;padding:18px 26px;font-size:17px;line-height:1.55;z-index:49}
+#thoai.hien{display:block}
+@media(max-width:800px){html{font-size:14px}h1{font-size:2.5rem}.duo,.cards,.cards.q,.tl{grid-template-columns:1fr}.r{grid-template-columns:1fr!important;gap:.2rem}.r.h{display:none}.tl:before{display:none}.fl{flex-direction:column}.fl .arr{transform:rotate(90deg)}.big-ico{font-size:5rem}}
+@media print{section{min-height:auto;height:100vh;page-break-after:always;-webkit-print-color-adjust:exact;print-color-adjust:exact}#thanh,#sotrang,#thoai{display:none!important}main{height:auto;overflow:visible}}
+</style></head><body>
+<div id="thanh"></div><div id="sotrang">1 / 30</div>
+<main id="san">
+
+<section class="dam" data-notes="Chào anh chị. Buổi này không có phần ngồi nghe. Anh chị mở máy ra ngay từ phút thứ ba mươi, và tôi đi từng bước cùng anh chị. Ai chưa cài xong thì chưa về.">
+<div class="duo"><div><p class="nhan">Offline · Miễn phí · Cầm tay chỉ việc</p>
+<h1>TẠO NHÂN VIÊN ẢO<br>LÀM VIỆC THAY CHO BẠN</h1>
+<p class="sub">Mang máy tới. Ra về với một nhân viên ảo đã chạy.</p>
+<div class="row" style="justify-content:flex-start"><span class="chip y">⏱ 3 giờ</span><span class="chip">💻 Mang laptop</span><span class="chip">🤝 Trợ giảng kèm từng máy</span></div>
+<p style="margin-top:2.5vh;color:#cbd5e1">Văn Hỉ</p></div>
+<div class="big-ico fa" style="font-size:10rem">🤖<br>💻</div></div></section>
+
+<section data-notes="Tôi nói trước để anh chị biết mình đến đây làm gì. Ba điều này là cam kết của tôi, và cuối buổi anh chị kiểm lại xem tôi có làm đủ không.">
+<p class="pg">02 · Buổi này khác gì</p><h2>Buổi này khác gì những buổi khác</h2>
+<div class="cards">
+<div class="c"><span class="n">1</span><span class="ico">🙌</span><b>Không ngồi nghe</b><p>Không ai ngồi nghe. Mở máy ra làm cùng tôi, từng bước.</p></div>
+<div class="c"><span class="n">2</span><span class="ico">🧩</span><b>Không cần code</b><p>Chỉ nối mấy thứ có sẵn. Tôi đọc lệnh, anh chị dán vào máy.</p></div>
+<div class="c"><span class="n">3</span><span class="ico">🆘</span><b>Không cài xong thì chưa về</b><p>Nếu máy anh chị bị tắc, trợ giảng ngồi lại với anh chị tới khi chạy được.</p></div></div></section>
+
+<section data-notes="Cái tôi muốn anh chị mang về không phải là cảm giác hay. Là hai việc đang thật sự chạy trên máy anh chị sau khi ra khỏi phòng này.">
+<p class="pg">03 · Ra về có gì</p><h2>Ra về, anh chị có trong tay</h2>
+<div class="cards">
+<div class="c gr"><span class="ico">🤖</span><b>Một nhân viên ảo</b><p>Cài trên chính máy anh chị, đã biết tên anh chị.</p></div>
+<div class="c gr"><span class="ico">⚙️</span><b>Hai việc tự chạy</b><p>Một việc research và báo cáo mỗi sáng, một việc đăng bài theo giờ.</p></div>
+<div class="c gr"><span class="ico">🧾</span><b>Một phiếu 5 ô</b><p>Đánh dấu từng chặng xong. Đủ 5 ô là buổi này thành công.</p></div></div>
+<p class="note">🎯 Không phải bản demo. Là việc thật của anh chị, chạy trên máy anh chị, có nhật ký để kiểm.</p></section>
+
+<section data-notes="Nếu anh chị thấy mình ở một trong những dòng này thì buổi này đúng. Tôi đi chậm, giải thích bằng tiếng Việt thường, không dùng từ chuyên môn.">
+<p class="pg">04 · Ai phù hợp</p><h2>Buổi này dành cho ai</h2>
+<ul class="lst">
+<li><span class="ico">🤷</span><span>Đã nghe nhiều về AI Agent nhưng <b>chưa từng cài được cái nào</b>.</span></li>
+<li><span class="ico">🏪</span>Chủ shop, spa, quán, người bán online: muốn có mặt mỗi ngày mà không thuê thêm người.</li>
+<li><span class="ico">💬</span>Đã dùng ChatGPT nhưng vẫn tự tìm nguồn, tự hẹn giờ, tự bấm đăng.</li>
+<li><span class="ico">📉</span>Có kênh nhưng đăng không đều: hôm nay hăng, mai bỏ, rồi kênh lại im.</li>
+<li><span class="ico">🐢</span>Ngại công nghệ nhưng chịu mang máy tới và làm theo — buổi này đi chậm, có người kèm.</li></ul></section>
+
+<section data-notes="Tôi nói luôn phần chưa phù hợp để anh chị không mất buổi sáng. Ba nhóm này nên chọn buổi khác phù hợp hơn.">
+<p class="pg">05 · Chưa phù hợp</p><h2>Buổi này chưa phù hợp với</h2>
+<ul class="lst rd">
+<li><span class="ico" style="background:#fee2e2">🚫</span>Người không mang máy tính — buổi này là buổi cài, không có máy thì không làm được gì.</li>
+<li><span class="ico" style="background:#fee2e2">💸</span>Người muốn có sản phẩm bán được ngay trong buổi. Tôi không hứa điều đó.</li>
+<li><span class="ico" style="background:#fee2e2">👨‍💻</span>Người muốn học lập trình. Chúng ta không viết code, chỉ nối các thứ có sẵn.</li></ul></section>
+
+<section data-notes="Anh chị xem dòng nào đúng với máy mình. Nếu máy thuộc nhóm phải cài bằng dòng lệnh, không sao cả — nhưng nhớ ghi chú lúc đăng ký để ban tổ chức xếp trợ giảng ngồi cạnh.">
+<p class="pg">06 · Máy và hệ điều hành</p><h2>Máy tính: kiểm trước khi đến</h2>
+<div class="tb" style="--k:1.3fr 1fr 1.2fr"><div class="r h"><span>Máy của bạn</span><span>Cách cài</span><span>Ghi chú</span></div>
+<div class="r"><span>🍎 macOS 13 trở lên (chip Apple)</span><span>Bản cài sẵn, mở là chạy</span><span class="chip g">Dễ nhất</span></div>
+<div class="r"><span>🪟 Windows 11 từ 22H2</span><span>Bản cài sẵn</span><span class="chip g">Dễ nhất</span></div>
+<div class="r"><span>🪟 Windows 10, 🍎 Mac chip Intel</span><span>Cài bằng dòng lệnh</span><span class="chip a">Vẫn học được — ghi chú khi đăng ký</span></div>
+<div class="r"><span>🐧 Ubuntu / Linux</span><span>Cài bằng dòng lệnh</span><span class="chip a">Được</span></div></div>
+<p class="note">🔌 Máy tính xách tay + sạc. Không dùng điện thoại hay máy tính bảng cho buổi này.</p></section>
+
+<section data-notes="Sáu dòng này tôi gửi trước một ngày. Anh chị đánh dấu đủ sáu ô thì vào buổi làm được ngay, không phải ngồi chờ.">
+<p class="pg">07 · Chuẩn bị</p><h2>Chuẩn bị trước khi đến</h2>
+<div class="tb" style="--k:.2fr 1fr 1.3fr 3rem"><div class="r h"><span></span><span>Thứ cần</span><span>Vì sao</span><span>Xong</span></div>
+<div class="r"><span>💻</span><b>Máy tính + sạc</b><span>Nhân viên ảo chạy trên máy bạn</span><span>☐</span></div>
+<div class="r"><span>✈️</span><b>Tài khoản Telegram</b><span>Để tạo bot giao việc</span><span>☐</span></div>
+<div class="r"><span>📁</span><b>Tài khoản Google</b><span>Để chứa báo cáo, tài liệu</span><span>☐</span></div>
+<div class="r"><span>📣</span><b>Kênh muốn đăng bài</b><span>Facebook Page / TikTok / YouTube</span><span>☐</span></div>
+<div class="r"><span>🔎</span><b>Một chủ đề bạn muốn research</b><span>Ví dụ: chăm sóc da, đọc nhanh, Đà Lạt</span><span>☐</span></div>
+<div class="r"><span>⬇️</span><b>Tải trước bộ cài</b><span>Để không mất 40 phút đầu buổi chờ tải</span><span>☐</span></div></div></section>
+
+<section data-notes="Anh chị nhìn lịch để biết mình đang ở đâu. Chặng nào chưa xong thì giơ tay, trợ giảng tới ngay — chúng ta không chạy theo đồng hồ mà bỏ người ở lại.">
+<p class="pg">08 · Lịch buổi</p><h2 style="margin-bottom:1.4vh">Lịch buổi sáng nay</h2>
+<div class="tb" style="--k:8rem 1.6fr 1fr;gap:.35rem"><div class="r h"><span>Giờ</span><span>Việc</span><span>Kết quả</span></div>
+<div class="r"><span class="t">08:00–08:30</span><span>Đón khách, ổn định máy, kiểm wifi và ổ điện</span><span>Máy mở, phiếu 5 ô trên tay</span></div>
+<div class="r"><span class="t">08:30–08:45</span><span>Mở đầu: nhân viên ảo khác chatbot ở đâu</span><span>Hiểu mình đang làm gì</span></div>
+<div class="r k"><span class="t">08:45–09:45</span><span><b>① Chặng 1</b> — cài Hermes + nối Telegram</span><span>Bot trả lời trên điện thoại</span></div>
+<div class="r br"><span class="t">09:45–10:00</span><span>☕ Nghỉ</span><span>—</span></div>
+<div class="r k"><span class="t">10:00–10:45</span><span><b>② Chặng 2</b> — Google Drive + research YouTube + báo cáo</span><span>Có báo cáo đầu tiên</span></div>
+<div class="r k"><span class="t">10:45–11:20</span><span><b>③ Chặng 3</b> — Buffer + đăng tự động</span><span>Bài đăng theo giờ</span></div>
+<div class="r k"><span class="t">11:20–11:40</span><span><b>④ Chặng 4</b> — đặt lịch tự chạy, cách sửa khi sai</span><span>Mở nhật ký ra kiểm được</span></div>
+<div class="r k"><span class="t">11:40–12:00</span><span><b>⑤ Chặng 5</b> — chốt việc về nhà, đo trước–sau, hỏi đáp</span><span>Phiếu đo đã ghi</span></div></div></section>
+
+<section class="dam" data-notes="Bắt đầu. Chặng này là phần nặng nhất và cũng là phần đáng giá nhất. Làm xong là anh chị đã có nhân viên ảo biết nghe lời.">
+<div class="duo"><div class="cen"><div class="numc">1</div></div><div><p class="nhan">Chặng 1 / 5</p><h2>Cài Hermes Agent và nối Telegram</h2><p class="big">⏱ 45 phút. Xong chặng này, bạn đã giao được việc bằng điện thoại.</p><div class="stg"><i class="on">1</i><i>2</i><i>3</i><i>4</i><i>5</i></div></div></div></section>
+
+<section data-notes="Anh chị tìm đúng dòng của máy mình. Cài xong thì gõ một lệnh để máy tự kiểm — dòng nào báo đỏ thì đừng tự đoán, giơ tay cho trợ giảng.">
+<p class="pg">10 · Cài đặt</p><h2>Cài — chọn đúng dòng cho máy bạn</h2>
+<div class="tb" style="--k:1fr 1.5fr;gap:.7rem">
+<div class="r"><span>🍎🪟 <b>macOS 13+, Windows 11 từ 22H2</b><br>Tải bản cài từ trang chủ Hermes Agent</span><span class="chip g" style="justify-self:start">Mở lên là chạy</span></div>
+<div class="r"><span>🍎🐧 <b>macOS / Linux / WSL2</b><br>Mở dòng lệnh, dán một dòng</span><span class="cmd">curl -fsSL https://hermes-agent.nousresearch.com/install.sh | bash</span></div>
+<div class="r"><span>🪟 <b>Windows 10 (PowerShell)</b><br>Dán một dòng</span><span class="cmd">iex (irm https://hermes-agent.nousresearch.com/install.ps1)</span></div></div>
+<p class="note">🩺 Cài xong gõ: <code>hermes doctor</code> — dòng nào báo đỏ thì giơ tay 🙋</p></section>
+
+<section data-notes="Tôi nói thẳng về tiền ngay từ đầu. Đây là chỗ duy nhất tốn tiền, và nguyên tắc của tôi là để model rẻ chạy trước. Cái làm nên kết quả không phải model xịn, mà là câu giao việc rõ.">
+<p class="pg">11 · Bộ não</p><h2>Chọn bộ não cho nhân viên ảo</h2>
+<ul class="lst">
+<li><span class="ico">🧠</span><span>Gõ <code>hermes model</code> để chọn nhà cung cấp AI và model.</span></li>
+<li><span class="ico">💰</span><span>Đây là chỗ <b>duy nhất</b> tốn tiền trong cả buổi — nên chọn rẻ trước.</span></li>
+<li><span class="ico">🔑</span><span>Chìa khoá (API key) lưu trong tệp <code>~/.hermes/.env</code>, không dán vào tệp cấu hình.</span></li>
+<li><span class="ico">🐣</span>Buổi đầu để model rẻ nhất chạy; thấy cần xịn hơn thì đổi sau, không đổi giữa chừng.</li></ul></section>
+
+<section data-notes="Bốn bước, mười phút. Nhớ bước ba: không thêm ID của mình vào danh sách cho phép thì bot sẽ im lặng, và rất nhiều người tưởng là lỗi.">
+<p class="pg">12 · Telegram</p><h2>Nối Telegram — giao việc bằng điện thoại</h2>
+<ol class="steps">
+<li><span>📱 <b>Điện thoại:</b> mở Telegram → chat với <b>@BotFather</b> → gõ <code>/newbot</code> → nhận token.</span></li>
+<li><span>💻 <b>Máy tính:</b> chạy <code>hermes gateway setup</code> → chọn Telegram → dán token.</span></li>
+<li class="warn"><span>🆔 Lấy <b>ID Telegram của bạn</b> (chat với @userinfobot) và thêm vào danh sách cho phép.</span></li>
+<li><span>🔄 Nạp lại cấu hình, rồi nhắn thử <b>“Xin chào”</b> cho bot.</span></li></ol>
+<div class="row" style="margin-top:2.4vh"><span class="chip y" style="font-size:1.4rem;padding:.6rem 1.6rem">🤖 Bot trả lời = xong Chặng 1 ✅</span></div></section>
+
+<section data-notes="Tôi để bốn lỗi này lên màn hình trước khi anh chị gặp. Biết trước thì mất ba mươi giây, không biết thì mất nửa tiếng và đổ cho máy.">
+<p class="pg">13 · Chỗ hay tắc</p><h2>Bốn chỗ hay tắc ở Chặng 1</h2>
+<div class="tb" style="--k:1fr 1.1fr 1fr"><div class="r h"><span>🔴 Hiện tượng</span><span>Nguyên nhân</span><span>🟢 Cách sửa</span></div>
+<div class="r rr"><span>Bot báo sai token</span><span>Dán token lẫn dấu cách, xuống dòng</span><span>Xoá, dán lại một dòng liền</span></div>
+<div class="r rr"><span>Bot không trả lời</span><span>Thiếu ID Telegram trong danh sách cho phép</span><span>Thêm ID rồi nhắn lại</span></div>
+<div class="r rr"><span>Nối rồi mà vẫn không thấy bot</span><span>Chưa nạp lại cấu hình</span><span>Nạp lại (khởi động lại), thử lại</span></div>
+<div class="r rr"><span>Chạy lỗi lạ khi giao việc</span><span>Chưa chạy hermes doctor, thiếu thư viện</span><span>Chạy doctor, cài phần còn thiếu</span></div></div></section>
+
+<section class="dam" data-notes="Chặng này cho anh chị thứ tôi thích nhất: một việc chạy lúc mình còn đang ngủ, và đọc kết quả trong điện thoại khi vừa mở mắt.">
+<div class="duo"><div class="cen"><div class="numc">2</div></div><div><p class="nhan">Chặng 2 / 5</p><h2>Google Drive + giao việc research YouTube, báo cáo mỗi ngày</h2><p class="big">⏱ 45 phút. Xong chặng này, sáng mai 7 giờ bạn có báo cáo trong điện thoại.</p><div class="stg"><i class="d">✓</i><i class="on">2</i><i>3</i><i>4</i><i>5</i></div></div></div></section>
+
+<section data-notes="Bẫy lớn nhất của người mới nằm ở bước bốn: duyệt quyền bằng tài khoản Google khác thì nó báo không có quyền, và trông như đã nối xong rồi. Anh chị duyệt đúng tài khoản, rồi bắt nó đọc thử ba tệp để chắc chắn.">
+<p class="pg">15 · Nối Google</p><h2>Nối Google Drive — đi chậm chặng này</h2>
+<ol class="steps">
+<li><span>☁️ Vào Google Cloud Console → tạo dự án → bật <b>Google Drive API</b>.</span></li>
+<li><span>🔐 Tạo <b>OAuth client</b> loại <b>Desktop app</b> → tải tệp JSON về máy.</span></li>
+<li><span>📤 Đưa tệp JSON đó cho Hermes (một lệnh, ban tổ chức ghi sẵn trên bảng).</span></li>
+<li class="warn"><span>⚠️ Duyệt quyền bằng <b>đúng tài khoản Google sẽ chứa dữ liệu</b>.</span></li>
+<li><span>🔍 Kiểm: nhờ nó liệt kê 3 tệp trong Drive — <b>thấy tên tệp thật</b> là đã nối đúng.</span></li></ol></section>
+
+<section data-notes="Anh chị chép nguyên câu này, chỉ đổi hai chỗ trong ngoặc. Câu cuối cùng — không được bịa — là câu quan trọng nhất trong cả buổi hôm nay.">
+<p class="pg">16 · Câu giao việc</p><h2>Câu giao việc: research YouTube + báo cáo mỗi ngày</h2>
+<div class="hop"><span class="tg">💬 Dán nguyên câu này</span><span class="chip" style="background:#dcfce7;border-color:#86efac">⏰ Mỗi ngày lúc 7 giờ sáng</span>, tìm 3 video mới nhất về <span class="ph">(chủ đề của tôi)</span> trên YouTube. Với mỗi video: ghi tiêu đề, kênh, ngày đăng, và 5 gạch đầu dòng nội dung chính. Lưu thành một Google Doc trong thư mục <span class="ph">(tên thư mục)</span> và nhắn cho tôi link qua Telegram. <span class="nb">Nếu không tìm đủ 3 video thì nói rõ là thiếu, không được bịa.</span></div>
+<p class="note"><span class="ph">&nbsp;vàng&nbsp;</span> = phần bạn đổi · <span class="nb">&nbsp;xanh&nbsp;</span> = câu chống bịa, giữ nguyên</p></section>
+
+<section data-notes="Bốn điều này áp cho mọi câu giao việc, không riêng gì hôm nay. Tôi dạy một lần để anh chị dùng cho mọi việc về sau.">
+<p class="pg">17 · Bốn điều bắt buộc</p><h2>Bốn điều phải có trong một câu giao việc</h2>
+<div class="cards q">
+<div class="c"><span class="n">1</span><span class="ico">📍</span><b>Đầu ra</b><p>Để ở đâu, đặt tên gì, gửi cho ai. Thiếu phần này là nhận kết quả lạc chỗ.</p></div>
+<div class="c"><span class="n">2</span><span class="ico">⏰</span><b>Giờ chạy</b><p>7 giờ sáng mỗi ngày. Đây là lúc máy tự làm, người ngủ.</p></div>
+<div class="c"><span class="n">3</span><span class="ico">🛡️</span><b>Chống bịa</b><p>“Không đủ thì nói thiếu, không được bịa.”</p></div>
+<div class="c"><span class="n">4</span><span class="ico">📒</span><b>Nhật ký</b><p>Nhờ nó đặt lịch rồi <b>mở danh sách việc tự chạy</b> xem giờ đã chạy — có nhật ký mới kiểm được nó làm thật hay không.</p></div></div></section>
+
+<section class="dam" data-notes="Chặng này là chỗ nhiều người muốn nhất: để máy đăng bài thay mình. Nhưng tôi sẽ nói cả phần khó trước khi anh chị hào hứng.">
+<div class="duo"><div class="cen"><div class="numc">3</div></div><div><p class="nhan">Chặng 3 / 5</p><h2>Nối Buffer để tự đăng lên các kênh</h2><p class="big">⏱ 35 phút. Xong chặng này, 11 giờ 45 mỗi ngày bài tự lên sóng.</p><div class="stg"><i class="d">✓</i><i class="d">✓</i><i class="on">3</i><i>4</i><i>5</i></div></div></div></section>
+
+<section data-notes="Bốn bước. Bước hai ai cũng làm nhanh, nhưng nhớ: chìa khoá lưu vào tệp .env, không dán vào tệp cấu hình — để lần sau muốn đổi thì đổi một chỗ.">
+<p class="pg">19 · Nối Buffer</p><h2>Nối Buffer — bốn bước</h2>
+<ol class="steps">
+<li><span>🔗 Tạo tài khoản <b>Buffer</b> → nối kênh (tuỳ bạn có): <span class="chip">📘 Facebook Page</span> <span class="chip">🎵 TikTok</span> <span class="chip">▶️ YouTube</span> <span class="chip">💼 LinkedIn</span></span></li>
+<li><span>🔑 Lấy <b>chìa khoá API của Buffer</b> → lưu vào tệp <code>~/.hermes/.env</code>.</span></li>
+<li><span>📝 Giao việc viết bài + đăng theo giờ (câu mẫu ở trang sau).</span></li>
+<li><span>💡 Cách tiết kiệm: cho đăng <b>ngay</b> theo lịch trong máy, không dùng lượt đặt lịch của Buffer.</span></li></ol></section>
+
+<section data-notes="Tôi nói cảnh báo trước để anh chị không mất niềm tin với hệ thống khi bài không lên. Hai chỗ này là hai chỗ hay làm người mới thất vọng nhất.">
+<p class="pg">20 · Giao việc đăng bài</p><h2 style="margin-bottom:1vh">Câu giao việc: viết và đăng theo giờ</h2>
+<div class="hop" style="margin-bottom:2vh"><span class="tg">💬 Câu mẫu</span>Viết 3 bài cho tuần này về <span class="ph">(chủ đề của tôi)</span> theo giọng văn trong tệp <span class="ph">(tên tệp)</span>. Đăng lên <span class="ph">(kênh)</span> vào <b>11 giờ 45</b> mỗi ngày. Sau khi đăng xong, <span class="nb">ghi lại mã bài đã đăng vào sổ</span> để tôi kiểm.</div>
+<div class="tb" style="--k:1fr 1.5fr"><div class="r h"><span>⚠️ Cảnh báo thật</span><span>Vì sao</span></div>
+<div class="r"><span><b>Gói miễn phí của Buffer có hạn mức</b></span><span>Vượt hạn mức thì bài không lên mà bạn không biết. Kiểm hạn mức trước khi giao 3 bài mỗi ngày.</span></div>
+<div class="r"><span><b>Kênh chưa xác nhận trong Buffer</b></span><span>Bài bị treo ở trạng thái chờ. Kiểm kênh ngay sau khi nối.</span></div></div></section>
+
+<section class="dam" data-notes="Ai cũng làm được phần cài. Phần này mới là phần giữ cho nó chạy. Tôi để dành riêng vì đây là chỗ người mới hay bỏ qua nhất.">
+<div class="duo"><div class="cen"><div class="numc">4</div></div><div><p class="nhan">Chặng 4 / 5</p><h2>Đặt lịch tự chạy — và cách sửa khi nó làm sai</h2><p class="big">⏱ 20 phút. Đây là phần quyết định nhân viên ảo chạy được một tuần hay bỏ sau ba ngày.</p><div class="stg"><i class="d">✓</i><i class="d">✓</i><i class="d">✓</i><i class="on">4</i><i>5</i></div></div></div></section>
+
+<section data-notes="Đây là thói quen quan trọng nhất: đọc nhật ký chứ đừng nghe nó kể. Máy nói xong việc rất dễ, cái cần là dòng ghi giờ chạy thật.">
+<p class="pg">22 · Đọc nhật ký</p><h2>Làm sao biết nó làm thật hay không</h2>
+<div class="duo"><ul class="lst">
+<li><span class="ico">📋</span>Mở danh sách việc tự chạy — xem giờ nó đã chạy, không phải nghe nó kể.</li>
+<li><span class="ico">🔍</span>Không có nhật ký thì không có kiểm chứng. Tôi không muốn anh chị tin suông.</li>
+<li><span class="ico">2️⃣</span><span>Giờ hiện tại anh chị có <b>hai việc tự chạy</b>: báo cáo 7 giờ sáng, đăng bài 11 giờ 45.</span></li></ul>
+<div class="win"><div class="tt">📋 Việc tự chạy</div><div class="ln"><span class="chip y">07:00</span><b>Báo cáo research YouTube</b><span style="margin-left:auto">✅</span></div><div class="ln"><span class="chip y">11:45</span><b>Đăng bài lên kênh</b><span style="margin-left:auto">✅</span></div></div></div></section>
+
+<section data-notes="Ba lỗi này đều là lỗi thật của tôi trong tuần này, tôi không lấy ví dụ từ đâu xa. Anh chị sẽ gặp y như vậy. Biết trước thì sửa nhanh hơn.">
+<p class="pg">23 · Ba lỗi và cách sửa</p><h2>Ba lỗi hay gặp nhất và cách sửa</h2>
+<div class="tb" style="--k:.9fr 1.1fr 1.2fr;gap:.8rem"><div class="r h"><span>🔴 Lỗi</span><span>Chuyện thật</span><span>🟢 Cách sửa</span></div>
+<div class="r rr" style="padding:1.2rem"><span>🪫 Hết hạn mức model</span><span>Việc chạy nhưng không ra kết quả, không ai báo gì</span><span>Đổi sang nguồn khác + bắt máy nhắn cảnh báo về Telegram</span></div>
+<div class="r rr" style="padding:1.2rem"><span>🔑 Chìa khoá Google bị thu hồi</span><span>Drive báo lỗi quyền, tưởng hỏng cả hệ thống</span><span>Duyệt lại quyền, và cho tự kiểm hằng ngày</span></div>
+<div class="r rr" style="padding:1.2rem"><span>🎬 Đăng trùng cùng một bài</span><span>Một clip lên kênh bốn lần trong hai ngày</span><span>Ghi sổ TRƯỚC khi đăng; đọc lại lịch sử trước khi tạo bài mới</span></div></div></section>
+
+<section data-notes="Ba ranh giới này tôi giữ nguyên mỗi buổi vì đây là chỗ gây thiệt hại thật. Người mới hay bỏ qua phần này, và thường trả giá bằng một bài đăng sai hoặc một danh sách khách bị lộ.">
+<p class="pg">24 · Quy tắc</p><h2 style="margin-bottom:1.5vh">Mỗi lỗi thành một quy tắc</h2>
+<div class="fl" style="margin-bottom:2.4vh"><div class="c rd" style="padding:.8rem"><p>❌ Nó sai một lần</p></div><span class="arr">➜</span><div class="c" style="padding:.8rem"><p>🗣️ Bạn nói rõ chỗ sai</p></div><span class="arr">➜</span><div class="c" style="padding:.8rem"><p>📌 Nó ghi thành quy tắc</p></div><span class="arr">➜</span><div class="c gr" style="padding:.8rem"><p>✅ Lần sau không lỗi lại</p></div></div>
+<div class="cards">
+<div class="c rd"><span class="ico">💰</span><b>Tiền</b><p>Không tự chi, không tự mua, không tự đổi giá. Luôn chờ bạn.</p></div>
+<div class="c rd"><span class="ico">🔑</span><b>Quyền</b><p>Không tự xoá bài, không tự gửi hàng loạt cho khách.</p></div>
+<div class="c rd"><span class="ico">🔒</span><b>Dữ liệu riêng</b><p>Thông tin khách, học viên: chưa có đồng ý thì không đưa lên hình, không gửi đi.</p></div></div></section>
+
+<section data-notes="Bảy ngày này quan trọng hơn cả buổi hôm nay. Tuần đầu ai cũng bỏ nhất — nên tôi sẽ mời anh chị vào nhóm để hỏi, và tôi trả lời trong 7 ngày.">
+<p class="pg">25 · Bảy ngày</p><h2>Việc về nhà — bảy ngày, mỗi ngày 15 phút</h2>
+<div class="tl"><div class="s"><div class="d">1–2</div><div class="c">Giao 3 việc nhỏ, sửa kỹ từng việc</div></div>
+<div class="s"><div class="d">3–4</div><div class="c">Dạy nó biết về bạn: giọng viết, việc đang làm, thứ không muốn nói</div></div>
+<div class="s"><div class="d">5</div><div class="c">Đặt thêm một lịch nhắc, để thấy nó chạy lúc bạn không ngồi máy</div></div>
+<div class="s"><div class="d">6–7</div><div class="c">Chọn một việc lặp mỗi tuần, để nó làm thử, đo thời gian trước–sau</div></div></div>
+<div class="row" style="margin-top:3vh"><span class="chip y">⏱ 15 phút mỗi ngày</span><span class="chip">💬 Nhóm hỏi đáp, trả lời trong 7 ngày</span></div></section>
+
+<section data-notes="Cuối buổi tôi thu phiếu này. Không phải để tôi khoe thành tích, mà để anh chị có con số của chính mình. Tuần sau so lại, anh chị sẽ thấy khác.">
+<p class="pg">26 · Phiếu đo</p><h2>Đo bằng con số, không đo bằng cảm giác</h2>
+<div class="tb" style="--k:1.3fr 1fr 1.2fr;gap:.8rem"><div class="r h"><span>Việc</span><span>⏳ Trước</span><span>⚡ Sau khi giao</span></div>
+<div class="r" style="padding:1.2rem"><b>🔎 Tìm nguồn và tóm tắt mỗi sáng</b><span><span class="dot"></span> phút</span><span><span class="dot"></span> phút đọc báo cáo</span></div>
+<div class="r" style="padding:1.2rem"><b>✍️ Viết và đăng một bài</b><span><span class="dot"></span> phút</span><span><span class="dot"></span> phút đọc và sửa</span></div>
+<div class="r" style="padding:1.2rem"><b>🔔 Nhớ việc phải làm</b><span>🗒️ Giấy nhớ, dễ quên</span><span>⏰ Máy nhắc đúng giờ</span></div></div>
+<p class="note">🧾 Tôi thu phiếu này trước khi anh chị về. Đây là bằng chứng cho chính anh chị, không phải cho tôi.</p></section>
+
+<section class="dam" data-notes="Nếu anh chị chỉ nhớ một câu của buổi này, nhớ câu này. Máy bịa số nhìn rất thật, và cái giá của nó là niềm tin của khách hàng.">
+<div class="cen"><div class="qm">“</div><h2 style="font-size:3.4rem">Không đủ thì nói thiếu,</h2><p class="big" style="font-size:3.4rem;color:var(--y)">không được bịa.”</p>
+<p class="note" style="justify-content:center;margin-top:4vh">📌 Câu này dán lên tường. Mọi lỗi nguy hiểm nhất đều bắt đầu từ chỗ máy nói chắc chắn về điều nó không biết.</p></div></section>
+
+<section data-notes="Ai muốn đi sâu hơn thì khoá này là phần tiếp theo. Nhưng tôi không bán trong buổi miễn phí — anh chị về, thấy hệ thống chạy thật, rồi quyết.">
+<p class="pg">28 · Học tiếp</p><h2>Học tiếp thế nào</h2>
+<div class="cards">
+<div class="c"><span class="ico">📅</span><b>Buổi miễn phí</b><p>Trực tuyến <b>thứ Ba 20:00 hằng tuần</b> — giữ nhịp, hỏi trực tiếp.</p></div>
+<div class="c"><span class="ico">🎓</span><b>Làm chủ Hermes Agent</b><p><b>8 chặng video</b> nền tảng (khoảng 6 giờ), rồi <b>4 buổi trực tuyến</b> làm dự án thật của chính bạn.</p></div>
+<div class="c gr"><span class="ico">🏁</span><b>Cuối khoá bạn có</b><ul><li>🤖 Một agent đã hiểu công việc của bạn</li><li>🔁 Một quy trình chạy được</li><li>📒 Một lịch tự chạy có nhật ký</li><li>📊 Bảng đo trước–sau cho ít nhất 3 việc</li></ul></div></div></section>
+
+<section data-notes="Tôi không giấu chi phí. Chỗ duy nhất tốn tiền là model, và tôi để anh chị chọn mức chi. Không thuê ai thêm là điểm chính của cả hệ thống này.">
+<p class="pg">29 · Chi phí thật</p><h2>Chi phí thật, nói thẳng</h2>
+<div class="tb" style="--k:1fr 2fr;gap:.6rem"><div class="r h"><span>Khoản</span><span>Thực tế</span></div>
+<div class="r"><b>🎟️ Buổi học hôm nay</b><span><span class="chip g">Miễn phí</span> không thu gì tại chỗ</span></div>
+<div class="r"><b>🤖 Chạy nhân viên ảo</b><span><span class="chip a">Theo lượng dùng</span> Model rẻ + ít việc thì chi phí nhỏ; model cao cấp, việc nặng thì tốn hơn nhiều</span></div>
+<div class="r"><b>📣 Buffer</b><span>Có gói miễn phí nhưng hạn mức thấp; nhiều kênh thì phải trả phí</span></div>
+<div class="r"><b>📁 Google Drive / Docs</b><span><span class="chip g">Gói miễn phí</span> đủ cho research và báo cáo</span></div>
+<div class="r"><b>🎨 Designer, người đăng bài</b><span><span class="chip g">Không cần thuê</span></span></div></div></section>
+
+<section class="dam" data-notes="Tối nay anh chị chỉ cần hai việc: ghi ra ba việc đang làm tay, và xác nhận hai việc vừa giao đã có trong danh sách tự chạy. Vào nhóm trước khi về để tuần đầu không bỏ. Tôi nhận câu hỏi tới khi hết giờ.">
+<div class="duo"><div><h2 style="font-size:3.2rem">Cảm ơn anh chị 🙏</h2><p class="big">Việc chốt trước khi về: ghi vào phiếu 3 việc bạn đang làm tay mỗi tuần, và 2 việc bạn vừa giao hôm nay.</p>
+<p class="note" style="margin-top:3vh">💬 Nhóm hỏi đáp 7 ngày mở ngay sau buổi — vào nhóm trước khi ra khỏi phòng.</p></div>
+<div><div class="ck"><i></i>3 việc đang làm tay mỗi tuần</div><div class="ck" style="padding-left:2.6rem"><i></i>… 1 · 2 · 3</div><div class="ck"><i></i>2 việc vừa giao hôm nay</div><div class="ck"><i></i>Đã vào nhóm hỏi đáp</div></div></div></section>
+
+</main><div id="thoai"></div>
+<script>
+const main=document.getElementById('san'),sects=[...document.querySelectorAll('section')],thanh=document.getElementById('thanh'),so=document.getElementById('sotrang'),thoai=document.getElementById('thoai');
+let i=0;
+function cap(n){i=n;so.textContent=(n+1)+' / '+sects.length;thoai.textContent=sects[n].dataset.notes||'';}
+function hien(k){k=Math.max(0,Math.min(sects.length-1,k));sects[k].scrollIntoView({behavior:'smooth'});cap(k);}
+main.addEventListener('scroll',()=>{thanh.style.width=(main.scrollTop/(main.scrollHeight-main.clientHeight||1)*100)+'%';
+ const g=main.scrollTop+main.clientHeight/2;sects.forEach((s,n)=>{if(s.offsetTop<=g&&s.offsetTop+s.clientHeight>g)cap(n);});});
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('v')}),{root:main,threshold:.3});
+sects.forEach(s=>io.observe(s));
+document.addEventListener('keydown',e=>{
+ if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();hien(i+1);}
+ else if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();hien(i-1);}
+ else if(e.key==='Home'){e.preventDefault();hien(0);}
+ else if(e.key==='End'){e.preventDefault();hien(sects.length-1);}
+ else if(e.key==='n'||e.key==='N')thoai.classList.toggle('hien');
+ else if(e.key==='f'||e.key==='F')document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen();});
+main.addEventListener('click',e=>{if(e.clientY>innerHeight*.55)hien(i+1);else if(e.clientY<innerHeight*.2)hien(i-1);});
+cap(0);
+</script></body></html>
